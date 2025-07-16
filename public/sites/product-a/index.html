@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>XX大学年度最佳雇主榜单 - 基于毕业生真实反馈</title>
+    <title>中国高校年度最佳雇主榜单 - 基于毕业生真实反馈</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Google Sans -->
@@ -466,13 +466,6 @@
     </style>
 </head>
 <body class="bg-white text-gray-900">
-    <!-- Loading screen -->
-    <div id="loading-screen" class="fixed inset-0 bg-white z-50 flex items-center justify-center">
-        <div class="text-center">
-            <div class="spinner mx-auto mb-4"></div>
-            <p class="text-gray-600">正在加载...</p>
-        </div>
-    </div>
 
     <!-- Header -->
     <header class="header sticky top-0 z-40 shadow-sm">
@@ -482,8 +475,8 @@
                     <span class="text-white">排</span>
                 </div>
                 <div class="flex flex-col">
-                    <span class="text-lg font-semibold text-white">XX大学排名</span>
-                    <span class="text-sm text-white text-opacity-80 hidden sm:block">年度最佳雇主榜单</span>
+                    <span class="text-lg font-semibold text-white">年度最佳雇主榜单</span>
+                    <span class="text-sm text-white text-opacity-80 hidden sm:block">中国高校排名</span>
                 </div>
             </a>
             
@@ -495,12 +488,13 @@
                 <a href="index.html" class="nav-link active">首页</a>
                 <a href="ranking.html" class="nav-link">雇主排名</a>
                 <a href="insights.html" class="nav-link">企业库</a>
+                <a href="grassroots-guide.html" class="nav-link">基层就业</a>
                 <a href="about.html" class="nav-link">关于榜单</a>
             </div>
 
             <!-- Search Icon -->
             <div class="hidden md:flex items-center ml-4">
-                <button class="p-2 text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all">
+                <button class="flex p-2 text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all">
                     <span class="material-icons-round">search</span>
                 </button>
             </div>
@@ -524,6 +518,7 @@
                     <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-medium">首页</a>
                     <a href="ranking.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">雇主排名</a>
                     <a href="insights.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">企业库</a>
+                    <a href="grassroots-guide.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">基层就业</a>
                     <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">关于榜单</a>
                 </nav>
             </div>
@@ -542,7 +537,7 @@
                                 2025年度最佳雇主榜单
                             </h1>
                             <p class="text-xl mb-4 text-white text-opacity-90" data-aos="fade-right" data-aos-delay="200">
-                                基于毕业生体验指数与企业发展潜力指数综合评定
+                                中国高校 • 基于毕业生体验指数与企业发展潜力指数综合评定
                             </p>
                             <p class="text-white text-opacity-80 mb-8" data-aos="fade-right" data-aos-delay="300">
                                 100%源于本校毕业生身份认证的真实反馈数据
@@ -619,258 +614,250 @@
             </div>
         </section>
 
+
         <!-- Main Content Section -->
         <section class="bg-white py-12">
             <div class="container mx-auto px-6 max-w-6xl">
 
                 <!-- Main Rankings Grid -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-                                    <!-- Comprehensive Ranking -->
-                <div class="lg:col-span-2">
-                    <div class="gt-card shadow-sm" data-aos="fade-right" data-aos-delay="200">
-                        <div class="flex items-center justify-between mb-6">
-                            <div class="flex items-center space-x-3">
-                                <div class="w-10 h-10 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-lg flex items-center justify-center">
-                                    <span class="material-icons-round text-white">emoji_events</span>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-semibold text-gray-900">综合实力榜</h3>
-                                    <p class="text-sm text-gray-500">TOP 5 企业</p>
-                                </div>
-                            </div>
-                            <a href="ranking.html" class="gt-btn-secondary ripple">
-                                查看雇主排名
-                            </a>
-                        </div>
-                        
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer interactive-element">
-                                <div class="flex items-center space-x-4">
-                                    <div class="ranking-number ranking-gold">
-                                        <span class="material-icons-round text-lg">workspace_premium</span>
+                    <!-- Comprehensive Ranking -->
+                    <div class="lg:col-span-2">
+                        <div class="gt-card shadow-sm" data-aos="fade-right" data-aos-delay="200">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-lg flex items-center justify-center">
+                                        <span class="material-icons-round text-white">emoji_events</span>
                                     </div>
-                                    <div class="company-logo logo-tencent">腾</div>
                                     <div>
-                                        <h4 class="font-semibold text-gray-900">腾云科技</h4>
-                                        <p class="text-sm text-gray-500">互联网 • 广东深圳</p>
+                                        <h3 class="text-xl font-semibold text-gray-900">综合实力榜</h3>
+                                        <p class="text-sm text-gray-500">TOP 5 企业</p>
                                     </div>
                                 </div>
-                                <div class="text-right">
-                                    <div class="rating-badge rating-a-plus">A++</div>
-                                    <p class="text-sm text-gray-500 mt-1">GEI: 98.5 • CDI: 95.2</p>
-                                </div>
+                                <a href="ranking.html" class="gt-btn-secondary ripple">
+                                    查看雇主排名
+                                </a>
                             </div>
                             
-                            <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer interactive-element">
-                                <div class="flex items-center space-x-4">
-                                    <div class="ranking-number ranking-silver">
-                                        <span class="material-icons-round text-lg">military_tech</span>
+                            <div class="space-y-3">
+                                <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer interactive-element">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="ranking-number ranking-gold">
+                                            <span class="material-icons-round text-lg">workspace_premium</span>
+                                        </div>
+                                        <div class="company-logo logo-tencent">腾</div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900">腾云科技</h4>
+                                            <p class="text-sm text-gray-500">互联网 • 广东深圳</p>
+                                        </div>
                                     </div>
-                                    <div class="company-logo logo-huaxing">华</div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">华兴资本</h4>
-                                        <p class="text-sm text-gray-500">金融 • 北京</p>
-                                    </div>
-                                </div>
-                                <div class="text-right">
-                                    <div class="rating-badge rating-a-plus">A++</div>
-                                    <p class="text-sm text-gray-500 mt-1">GEI: 97.2 • CDI: 96.8</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer interactive-element">
-                                <div class="flex items-center space-x-4">
-                                    <div class="ranking-number ranking-bronze">
-                                        <span class="material-icons-round text-lg">emoji_events</span>
-                                    </div>
-                                    <div class="company-logo logo-sgcc">国</div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">国网集团</h4>
-                                        <p class="text-sm text-gray-500">央企 • 北京</p>
+                                    <div class="text-right">
+                                        <div class="rating-badge rating-a-plus">A++</div>
+                                        <p class="text-sm text-gray-500 mt-1">GEI: 98.5 • CDI: 95.2</p>
                                     </div>
                                 </div>
-                                <div class="text-right">
-                                    <div class="rating-badge rating-a">A+</div>
-                                    <p class="text-sm text-gray-500 mt-1">GEI: 94.8 • CDI: 98.5</p>
-                                </div>
-                            </div>
-                            
-                            <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer interactive-element">
-                                <div class="flex items-center space-x-4">
-                                    <div class="ranking-number ranking-default">4</div>
-                                    <div class="company-logo logo-ai">安</div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">安声智能</h4>
-                                        <p class="text-sm text-gray-500">AI • 上海</p>
+                                
+                                <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer interactive-element">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="ranking-number ranking-silver">
+                                            <span class="material-icons-round text-lg">military_tech</span>
+                                        </div>
+                                        <div class="company-logo logo-huaxing">华</div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900">华兴资本</h4>
+                                            <p class="text-sm text-gray-500">金融 • 北京</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="rating-badge rating-a-plus">A++</div>
+                                        <p class="text-sm text-gray-500 mt-1">GEI: 97.2 • CDI: 96.8</p>
                                     </div>
                                 </div>
-                                <div class="text-right">
-                                    <div class="rating-badge rating-a">A+</div>
-                                    <p class="text-sm text-gray-500 mt-1">GEI: 95.1 • CDI: 89.3</p>
+                                
+                                <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer interactive-element">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="ranking-number ranking-bronze">
+                                            <span class="material-icons-round text-lg">emoji_events</span>
+                                        </div>
+                                        <div class="company-logo logo-sgcc">国</div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900">国网集团</h4>
+                                            <p class="text-sm text-gray-500">央企 • 北京</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="rating-badge rating-a">A+</div>
+                                        <p class="text-sm text-gray-500 mt-1">GEI: 94.8 • CDI: 98.5</p>
+                                    </div>
                                 </div>
-                            </div>
+                                
+                                <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer interactive-element">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="ranking-number ranking-default">4</div>
+                                        <div class="company-logo logo-ai">安</div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900">安声智能</h4>
+                                            <p class="text-sm text-gray-500">AI • 上海</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="rating-badge rating-a">A+</div>
+                                        <p class="text-sm text-gray-500 mt-1">GEI: 95.1 • CDI: 89.3</p>
+                                    </div>
+                                </div>
 
-                            <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer interactive-element">
-                                <div class="flex items-center space-x-4">
-                                    <div class="ranking-number ranking-default">5</div>
-                                    <div class="company-logo" style="background: linear-gradient(135deg, #ff6d00 0%, #ff8f00 100%);">阿</div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">阿里巴巴</h4>
-                                        <p class="text-sm text-gray-500">互联网 • 杭州</p>
+                                <div class="flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 cursor-pointer interactive-element">
+                                    <div class="flex items-center space-x-4">
+                                        <div class="ranking-number ranking-default">5</div>
+                                        <div class="company-logo" style="background: linear-gradient(135deg, #ff6d00 0%, #ff8f00 100%);">阿</div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900">阿里巴巴</h4>
+                                            <p class="text-sm text-gray-500">互联网 • 杭州</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="rating-badge rating-a">A</div>
+                                        <p class="text-sm text-gray-500 mt-1">GEI: 91.7 • CDI: 94.3</p>
                                     </div>
                                 </div>
-                                <div class="text-right">
-                                    <div class="rating-badge rating-a">A</div>
-                                    <p class="text-sm text-gray-500 mt-1">GEI: 91.7 • CDI: 94.3</p>
-                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Rankings Statistics -->
-                    <div class="space-y-4">
-                        <div class="gt-card text-center shadow-sm" data-aos="fade-left" data-aos-delay="300">
-                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-                                <span class="material-icons-round text-white">trending_up</span>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">TOP 20</h3>
-                            <p class="text-sm text-gray-500">A++级企业</p>
-                            <p class="text-xs text-gray-400 mt-1">综合实力最强</p>
                         </div>
                         
-                        <div class="gt-card text-center shadow-sm" data-aos="fade-left" data-aos-delay="400">
-                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-                                <span class="material-icons-round text-white">star</span>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">92.3</h3>
-                            <p class="text-sm text-gray-500">平均满意度</p>
-                            <p class="text-xs text-gray-400 mt-1">毕业生综合评分</p>
-                        </div>
-                        
-                        <div class="gt-card text-center shadow-sm" data-aos="fade-left" data-aos-delay="500">
-                            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center mx-auto mb-4">
-                                <span class="material-icons-round text-white">work</span>
-                            </div>
-                            <h3 class="text-2xl font-bold text-gray-900 mb-2">78%</h3>
-                            <p class="text-sm text-gray-500">推荐率</p>
-                            <p class="text-xs text-gray-400 mt-1">愿意推荐给学弟学妹</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Evaluation Dimensions -->
-                <div class="mb-8">
-                    <div class="text-center mb-8">
-                        <h2 class="text-2xl font-bold text-gray-900 mb-2">评价体系</h2>
-                        <p class="text-gray-600">毕业生体验指数 (60%) + 企业发展潜力指数 (40%)</p>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <!-- 毕业生体验指数 -->
-                        <div class="gt-card cursor-pointer interactive-element ripple" data-aos="fade-up" data-aos-delay="200">
-                            <div class="flex items-center space-x-3 mb-4">
-                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                        <!-- Rankings Statistics -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                            <div class="gt-card text-center shadow-sm" data-aos="fade-up" data-aos-delay="300">
+                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-4">
                                     <span class="material-icons-round text-white">trending_up</span>
                                 </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-900">职业成长</h3>
-                                    <p class="text-sm text-blue-600 font-medium">权重: 25%</p>
-                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">TOP 20</h3>
+                                <p class="text-sm text-gray-500">A++级企业</p>
+                                <p class="text-xs text-gray-400 mt-1">综合实力最强</p>
                             </div>
-                            <div class="text-sm text-gray-600 space-y-1">
-                                <p>• 新人培养体系</p>
-                                <p>• 核心技能提升</p>
-                                <p>• 晋升路径清晰度</p>
-                            </div>
-                        </div>
-
-                        <div class="gt-card cursor-pointer interactive-element ripple" data-aos="fade-up" data-aos-delay="300">
-                            <div class="flex items-center space-x-3 mb-4">
-                                <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
-                                    <span class="material-icons-round text-white">payments</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-900">薪酬福利</h3>
-                                    <p class="text-sm text-green-600 font-medium">权重: 20%</p>
-                                </div>
-                            </div>
-                            <div class="text-sm text-gray-600 space-y-1">
-                                <p>• 薪资竞争力</p>
-                                <p>• 福利兑现度</p>
-                                <p>• 加班补贴</p>
-                            </div>
-                        </div>
-
-                        <div class="gt-card cursor-pointer interactive-element ripple" data-aos="fade-up" data-aos-delay="400">
-                            <div class="flex items-center space-x-3 mb-4">
-                                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
-                                    <span class="material-icons-round text-white">diversity_3</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-900">工作文化</h3>
-                                    <p class="text-sm text-purple-600 font-medium">权重: 15%</p>
-                                </div>
-                            </div>
-                            <div class="text-sm text-gray-600 space-y-1">
-                                <p>• 工作生活平衡</p>
-                                <p>• 团队氛围</p>
-                                <p>• 承诺兑现度</p>
-                            </div>
-                        </div>
-
-                        <!-- 企业发展潜力指数 -->
-                        <div class="gt-card cursor-pointer interactive-element ripple" data-aos="fade-up" data-aos-delay="500">
-                            <div class="flex items-center space-x-3 mb-4">
-                                <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-                                    <span class="material-icons-round text-white">people_alt</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-900">人才吸引力</h3>
-                                    <p class="text-sm text-orange-600 font-medium">权重: 15%</p>
-                                </div>
-                            </div>
-                            <div class="text-sm text-gray-600 space-y-1">
-                                <p>• 招聘规模</p>
-                                <p>• 专业覆盖度</p>
-                                <p>• 人才留存率</p>
-                            </div>
-                        </div>
-
-                        <div class="gt-card cursor-pointer interactive-element ripple" data-aos="fade-up" data-aos-delay="600">
-                            <div class="flex items-center space-x-3 mb-4">
-                                <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
-                                    <span class="material-icons-round text-white">analytics</span>
-                                </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-900">经营稳定性</h3>
-                                    <p class="text-sm text-red-600 font-medium">权重: 15%</p>
-                                </div>
-                            </div>
-                            <div class="text-sm text-gray-600 space-y-1">
-                                <p>• 企业规模</p>
-                                <p>• 营收增长</p>
-                                <p>• 发展阶段</p>
-                            </div>
-                        </div>
-
-                        <div class="gt-card cursor-pointer interactive-element ripple" data-aos="fade-up" data-aos-delay="700">
-                            <div class="flex items-center space-x-3 mb-4">
-                                <div class="w-10 h-10 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center">
+                            
+                            <div class="gt-card text-center shadow-sm" data-aos="fade-up" data-aos-delay="400">
+                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-600 rounded-lg flex items-center justify-center mx-auto mb-4">
                                     <span class="material-icons-round text-white">star</span>
                                 </div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-900">行业影响力</h3>
-                                    <p class="text-sm text-yellow-600 font-medium">权重: 10%</p>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">92.3</h3>
+                                <p class="text-sm text-gray-500">平均满意度</p>
+                                <p class="text-xs text-gray-400 mt-1">毕业生综合评分</p>
+                            </div>
+                            
+                            <div class="gt-card text-center shadow-sm" data-aos="fade-up" data-aos-delay="500">
+                                <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center mx-auto mb-4">
+                                    <span class="material-icons-round text-white">work</span>
+                                </div>
+                                <h3 class="text-2xl font-bold text-gray-900 mb-2">78%</h3>
+                                <p class="text-sm text-gray-500">推荐率</p>
+                                <p class="text-xs text-gray-400 mt-1">愿意推荐给学弟学妹</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Evaluation System -->
+                    <div class="space-y-4">
+                        <div class="text-center mb-4">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2">评价体系</h3>
+                            <p class="text-sm text-gray-600">毕业生体验指数(60%) + 企业发展潜力指数(40%)</p>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <!-- 毕业生体验指数 -->
+                            <div class="gt-card cursor-pointer interactive-element ripple text-center" data-aos="fade-left" data-aos-delay="200">
+                                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                    <span class="material-icons-round text-white text-sm">trending_up</span>
+                                </div>
+                                <div class="mb-3">
+                                    <h4 class="font-semibold text-gray-900 text-sm mb-1">职业成长</h4>
+                                    <p class="text-xs text-blue-600 font-medium">权重: 25%</p>
+                                </div>
+                                <div class="text-xs text-gray-600 space-y-1">
+                                    <p>• 新人培养体系</p>
+                                    <p>• 核心技能提升</p>
+                                    <p>• 晋升路径清晰度</p>
                                 </div>
                             </div>
-                            <div class="text-sm text-gray-600 space-y-1">
-                                <p>• 行业地位</p>
-                                <p>• 社会声誉</p>
-                                <p>• 创新能力</p>
+
+                            <div class="gt-card cursor-pointer interactive-element ripple text-center" data-aos="fade-left" data-aos-delay="250">
+                                <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                    <span class="material-icons-round text-white text-sm">payments</span>
+                                </div>
+                                <div class="mb-3">
+                                    <h4 class="font-semibold text-gray-900 text-sm mb-1">薪酬福利</h4>
+                                    <p class="text-xs text-green-600 font-medium">权重: 20%</p>
+                                </div>
+                                <div class="text-xs text-gray-600 space-y-1">
+                                    <p>• 薪资竞争力</p>
+                                    <p>• 福利兑现度</p>
+                                    <p>• 加班补贴</p>
+                                </div>
+                            </div>
+
+                            <div class="gt-card cursor-pointer interactive-element ripple text-center" data-aos="fade-left" data-aos-delay="300">
+                                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                    <span class="material-icons-round text-white text-sm">diversity_3</span>
+                                </div>
+                                <div class="mb-3">
+                                    <h4 class="font-semibold text-gray-900 text-sm mb-1">工作文化</h4>
+                                    <p class="text-xs text-purple-600 font-medium">权重: 15%</p>
+                                </div>
+                                <div class="text-xs text-gray-600 space-y-1">
+                                    <p>• 工作生活平衡</p>
+                                    <p>• 团队氛围</p>
+                                    <p>• 承诺兑现度</p>
+                                </div>
+                            </div>
+
+                            <!-- 企业发展潜力指数 -->
+                            <div class="gt-card cursor-pointer interactive-element ripple text-center" data-aos="fade-left" data-aos-delay="350">
+                                <div class="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                    <span class="material-icons-round text-white text-sm">people_alt</span>
+                                </div>
+                                <div class="mb-3">
+                                    <h4 class="font-semibold text-gray-900 text-sm mb-1">人才吸引力</h4>
+                                    <p class="text-xs text-orange-600 font-medium">权重: 15%</p>
+                                </div>
+                                <div class="text-xs text-gray-600 space-y-1">
+                                    <p>• 招聘规模</p>
+                                    <p>• 专业覆盖度</p>
+                                    <p>• 人才留存率</p>
+                                </div>
+                            </div>
+
+                            <div class="gt-card cursor-pointer interactive-element ripple text-center" data-aos="fade-left" data-aos-delay="400">
+                                <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                    <span class="material-icons-round text-white text-sm">analytics</span>
+                                </div>
+                                <div class="mb-3">
+                                    <h4 class="font-semibold text-gray-900 text-sm mb-1">经营稳定性</h4>
+                                    <p class="text-xs text-red-600 font-medium">权重: 15%</p>
+                                </div>
+                                <div class="text-xs text-gray-600 space-y-1">
+                                    <p>• 企业规模</p>
+                                    <p>• 营收增长</p>
+                                    <p>• 发展阶段</p>
+                                </div>
+                            </div>
+
+                            <div class="gt-card cursor-pointer interactive-element ripple text-center" data-aos="fade-left" data-aos-delay="450">
+                                <div class="w-10 h-10 bg-gradient-to-br from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center mx-auto mb-3">
+                                    <span class="material-icons-round text-white text-sm">star</span>
+                                </div>
+                                <div class="mb-3">
+                                    <h4 class="font-semibold text-gray-900 text-sm mb-1">行业影响力</h4>
+                                    <p class="text-xs text-yellow-600 font-medium">权重: 10%</p>
+                                </div>
+                                <div class="text-xs text-gray-600 space-y-1">
+                                    <p>• 行业地位</p>
+                                    <p>• 社会声誉</p>
+                                    <p>• 创新能力</p>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </section>
     </main>
@@ -883,12 +870,12 @@
                     <div class="bg-white text-gray-900 w-10 h-10 rounded-lg flex items-center justify-center font-bold">
                         校
                     </div>
-                    <span class="text-xl font-semibold">XX大学就业指导中心</span>
+                    <span class="text-xl font-semibold">中国高校就业指导中心</span>
                 </div>
                 <p class="text-gray-400 max-w-2xl mx-auto">致力于为应届生提供最权威、最实用的就业指导和企业评价信息</p>
             </div>
             <div class="border-t border-gray-700 pt-6">
-                <p class="text-gray-400">&copy; 2025 XX大学就业指导中心. All Rights Reserved.</p>
+                <p class="text-gray-400">&copy; 2025 中国高校就业指导中心. All Rights Reserved.</p>
                 <p class="text-gray-500 text-sm mt-2">本榜单数据仅供参考，不构成任何投资或求职建议。数据来源：本校毕业生身份认证反馈。</p>
             </div>
         </div>
@@ -900,16 +887,6 @@
             duration: 600,
             once: true,
             offset: 50
-        });
-
-        // Hide loading screen after page loads
-        window.addEventListener('load', function() {
-            setTimeout(() => {
-                document.getElementById('loading-screen').style.opacity = '0';
-                setTimeout(() => {
-                    document.getElementById('loading-screen').style.display = 'none';
-                }, 300);
-            }, 500);
         });
 
         // Mobile menu functionality
