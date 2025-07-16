@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业库 - XX大学年度最佳雇主榜单</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', 'Google Sans', 'Roboto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #f8f9fa;
+            color: #3c4043;
+        }
+
+        .header {
+            height: 64px;
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            border-bottom: none;
+            padding: 0 24px;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+            pointer-events: none;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.87);
+            text-decoration: none;
+            z-index: 10;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            transform: translateY(-1px);
+        }
+
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.16);
+            color: white;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14);
+        }
+
+        .gt-card {
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            background: white;
+            border: none;
+            padding: 24px;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gt-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #1976d2, #1565c0);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gt-card:hover {
+            box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 2px 18px 0 rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .gt-card:hover::before {
+            opacity: 1;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e8eaed;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .stat-card:hover {
+            box-shadow: 0 4px 12px rgba(60, 64, 67, 0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a73e8;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #5f6368;
+        }
+
+        .insight-card {
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e8eaed;
+            padding: 20px;
+            margin-bottom: 16px;
+            transition: all 0.2s ease-in-out;
+        }
+
+        .insight-card:hover {
+            box-shadow: 0 4px 12px rgba(60, 64, 67, 0.15);
+        }
+
+        .insight-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            font-size: 14px;
+            color: #5f6368;
+        }
+
+        .breadcrumb a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .industry-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .industry-name {
+            width: 80px;
+            font-size: 14px;
+            color: #5f6368;
+        }
+
+        .industry-bar-bg {
+            flex: 1;
+            height: 24px;
+            background: #f1f3f4;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 0 12px;
+        }
+
+        .industry-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1a73e8, #4285f4);
+            transition: width 0.8s ease-out;
+        }
+
+        .industry-score {
+            font-size: 14px;
+            font-weight: 500;
+            color: #3c4043;
+            min-width: 40px;
+        }
+
+        .trend-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .trend-item:last-child {
+            border-bottom: none;
+        }
+
+        .trend-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .trend-up {
+            background: #e8f5e8;
+            color: #34a853;
+        }
+
+        .trend-down {
+            background: #fce8e6;
+            color: #ea4335;
+        }
+
+        .trend-stable {
+            background: #fef7e0;
+            color: #f57c00;
+        }
+
+        /* University Cards Styles */
+        .filter-tag {
+            padding: 6px 12px;
+            border: 1px solid #dadce0;
+            border-radius: 20px;
+            background: white;
+            color: #5f6368;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            margin: 2px;
+        }
+
+        .filter-tag:hover {
+            background: #f8f9fa;
+            border-color: #1a73e8;
+        }
+
+        .filter-tag.active {
+            background: #1a73e8;
+            color: white;
+            border-color: #1a73e8;
+        }
+
+        .university-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            position: relative;
+        }
+
+        .university-card:hover {
+            box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 2px 18px 0 rgba(0, 0, 0, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .university-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .university-image img {
+            transition: transform 0.3s ease;
+        }
+
+        .university-card:hover .university-image img {
+            transform: scale(1.05);
+        }
+
+        .university-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .university-card:hover .university-overlay {
+            opacity: 1;
+        }
+
+        .view-details-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .view-details-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .university-info {
+            padding: 16px;
+        }
+
+        .university-badges {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .badge-985 {
+            background: #e8f5e8;
+            color: #34a853;
+        }
+
+        .badge-211 {
+            background: #e8f0fe;
+            color: #1a73e8;
+        }
+
+        .badge-double {
+            background: #fef7e0;
+            color: #f57c00;
+        }
+
+        .university-logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .university-logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .university-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #3c4043;
+            margin-bottom: 4px;
+        }
+
+        .university-english {
+            font-size: 12px;
+            color: #5f6368;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header sticky top-0 z-40 shadow-sm">
+        <nav class="container mx-auto flex items-center max-w-6xl">
+            <a href="index.html" class="flex items-center space-x-3 nav-link">
+                <div
+                    class="bg-white bg-opacity-20 backdrop-blur-sm w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">
+                    <span class="text-white">排</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-semibold text-white">XX大学排名</span>
+                    <span class="text-sm text-white text-opacity-80 hidden sm:block">年度最佳雇主榜单</span>
+                </div>
+            </a>
+
+            <!-- Spacer -->
+            <div class="flex-1"></div>
+
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-2">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="ranking.html" class="nav-link">雇主排名</a>
+                <a href="insights.html" class="nav-link active">企业库</a>
+                <a href="about.html" class="nav-link">关于榜单</a>
+            </div>
+
+            <!-- Search Icon -->
+            <div class="hidden md:flex items-center ml-4">
+                <button
+                    class="p-2 text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all">
+                    <span class="material-icons-round">search</span>
+                </button>
+            </div>
+
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-button"
+                class="md:hidden p-2 text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all">
+                <span class="material-icons-round">menu</span>
+            </button>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 md:hidden">
+            <div class="p-4">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-lg font-medium text-gray-900">菜单</span>
+                    <button id="mobile-menu-close" class="p-2 text-gray-600 hover:text-blue-600">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                <nav class="space-y-2">
+                    <a href="index.html"
+                        class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">首页</a>
+                    <a href="ranking.html"
+                        class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">雇主排名</a>
+                    <a href="insights.html"
+                        class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg font-medium">企业库</a>
+                    <a href="about.html"
+                        class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">关于榜单</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search Bar -->
+    <div class="relative bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-12 overflow-hidden">
+        <!-- Background decorations -->
+        <div class="absolute inset-0 pointer-events-none">
+            <div class="absolute top-4 left-4 w-16 h-16 bg-blue-200 rounded-full opacity-20 animate-pulse"></div>
+            <div class="absolute top-8 right-8 w-12 h-12 bg-purple-200 rounded-full opacity-30 animate-bounce"></div>
+            <div class="absolute bottom-4 left-1/3 w-8 h-8 bg-indigo-200 rounded-full opacity-40"></div>
+        </div>
+
+        <div class="relative z-10 max-w-2xl mx-auto">
+            <input type="text" placeholder="输入搜索企业名称"
+                class="w-full pl-6 pr-20 py-4 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-2xl shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-lg"
+                id="searchInput">
+            <button
+                class="absolute right-1 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-blue-500 to-purple-600 text-white w-14 h-14 rounded-2xl hover:shadow-lg transition-all duration-200 flex items-center justify-center">
+                <span class="material-icons-round">search</span>
+            </button>
+        </div>
+
+        <!-- Hot Search -->
+        <div class="text-center mt-4">
+            <span class="text-sm text-gray-600 mr-4">热门搜索：</span>
+            <span
+                class="inline-block bg-white/60 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-blue-600 mr-2 mb-2 cursor-pointer hover:bg-white/80 transition-all">腾讯科技</span>
+            <span
+                class="inline-block bg-white/60 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-blue-600 mr-2 mb-2 cursor-pointer hover:bg-white/80 transition-all">阿里巴巴</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-6 py-6 max-w-6xl">
+        <!-- Breadcrumb -->
+        <div class="breadcrumb mb-6">
+            <a href="index.html" class="flex items-center">
+                <span class="material-icons-round text-lg mr-1">home</span>
+                首页
+            </a>
+            <span class="material-icons-round mx-2">chevron_right</span>
+            <span>企业库</span>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="gt-card mb-6">
+            <!-- Industry Type Filter -->
+            <div class="flex flex-col md:flex-row md:items-center mb-4">
+                <h3 class="text-sm font-medium text-gray-500 w-24 shrink-0 mb-2 md:mb-0">行业类型:</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-tag active" data-filter="all">全部</button>
+                    <button class="filter-tag" data-filter="internet">互联网</button>
+                    <button class="filter-tag" data-filter="finance">金融</button>
+                    <button class="filter-tag" data-filter="soe">国企央企</button>
+                    <button class="filter-tag" data-filter="manufacturing">制造业</button>
+                    <button class="filter-tag" data-filter="ai">人工智能</button>
+                    <button class="filter-tag" data-filter="education">教育</button>
+                    <button class="filter-tag" data-filter="healthcare">医疗健康</button>
+                    <button class="filter-tag" data-filter="real-estate">房地产</button>
+                    <button class="filter-tag" data-filter="consulting">咨询</button>
+                    <button class="filter-tag" data-filter="media">传媒</button>
+                    <button class="filter-tag" data-filter="retail">零售</button>
+                    <button class="filter-tag" data-filter="energy">能源</button>
+                </div>
+            </div>
+
+            <!-- Company Size Filter -->
+            <div class="flex flex-col md:flex-row md:items-center mb-4">
+                <h3 class="text-sm font-medium text-gray-500 w-24 shrink-0 mb-2 md:mb-0">企业规模:</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-tag active" data-filter="all">全部</button>
+                    <button class="filter-tag" data-filter="large">大型 (>10000人)</button>
+                    <button class="filter-tag" data-filter="medium">中型 (1000-10000人)</button>
+                    <button class="filter-tag" data-filter="small">小型 (<1000人)</button>
+                </div>
+            </div>
+
+            <!-- Province Filter -->
+            <div class="flex flex-col md:flex-row md:items-center">
+                <h3 class="text-sm font-medium text-gray-500 w-24 shrink-0 mb-2 md:mb-0">省份/地区:</h3>
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-tag active" data-filter="all">全部</button>
+                    <button class="filter-tag" data-filter="beijing">北京</button>
+                    <button class="filter-tag" data-filter="shanghai">上海</button>
+                    <button class="filter-tag" data-filter="guangdong">广东</button>
+                    <button class="filter-tag" data-filter="zhejiang">浙江</button>
+                    <button class="filter-tag" data-filter="jiangsu">江苏</button>
+                    <button class="filter-tag" data-filter="tianjin">天津</button>
+                    <button class="filter-tag" data-filter="chongqing">重庆</button>
+                    <button class="filter-tag" data-filter="shandong">山东</button>
+                    <button class="filter-tag" data-filter="hubei">湖北</button>
+                    <button class="filter-tag" data-filter="hunan">湖南</button>
+                    <button class="filter-tag" data-filter="fujian">福建</button>
+                    <button class="filter-tag" data-filter="sichuan">四川</button>
+                    <button class="filter-tag" data-filter="henan">河南</button>
+                    <button class="filter-tag" data-filter="hebei">河北</button>
+                    <button class="filter-tag" data-filter="liaoning">辽宁</button>
+                    <button class="filter-tag" data-filter="shaanxi">陕西</button>
+                    <button class="filter-tag" data-filter="anhui">安徽</button>
+                    <button class="filter-tag" data-filter="jiangxi">江西</button>
+                    <button class="filter-tag" data-filter="shanxi">山西</button>
+                    <button class="filter-tag" data-filter="jilin">吉林</button>
+                    <button class="filter-tag" data-filter="heilongjiang">黑龙江</button>
+                    <button class="filter-tag" data-filter="guangxi">广西</button>
+                    <button class="filter-tag" data-filter="yunnan">云南</button>
+                    <button class="filter-tag" data-filter="guizhou">贵州</button>
+                    <button class="filter-tag" data-filter="xinjiang">新疆</button>
+                    <button class="filter-tag" data-filter="gansu">甘肃</button>
+                    <button class="filter-tag" data-filter="neimenggu">内蒙古</button>
+                    <button class="filter-tag" data-filter="hainan">海南</button>
+                    <button class="filter-tag" data-filter="ningxia">宁夏</button>
+                    <button class="filter-tag" data-filter="qinghai">青海</button>
+                    <button class="filter-tag" data-filter="xizang">西藏</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Company Cards -->
+        <div class="text-sm text-gray-600 mb-4">
+            部分图片非企业官方图片，仅供参考，若企业有图片素材提供，请联系我们！
+        </div>
+
+        <!-- Company Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="companyGrid">
+            <!-- Company Card 1 -->
+            <div class="university-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="university-image">
+                    <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                        alt="腾讯科技" class="w-full h-48 object-cover">
+                    <div class="university-overlay">
+                        <button class="view-details-btn" onclick="viewCompanyDetails('tencent')">
+                            <span class="material-icons-round">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="university-info">
+                    <div class="university-badges">
+                        <span class="badge badge-985">A++</span>
+                        <span class="badge badge-211">互联网</span>
+                        <span class="badge badge-double">大型</span>
+                    </div>
+                    <div class="university-logo-section">
+                        <div
+                            class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                            腾</div>
+                        <div>
+                            <h3 class="university-name">腾讯科技</h3>
+                            <p class="university-english">Tencent Technology</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Card 2 -->
+            <div class="university-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="university-image">
+                    <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                        alt="阿里巴巴" class="w-full h-48 object-cover">
+                    <div class="university-overlay">
+                        <button class="view-details-btn" onclick="viewCompanyDetails('alibaba')">
+                            <span class="material-icons-round">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="university-info">
+                    <div class="university-badges">
+                        <span class="badge badge-985">A+</span>
+                        <span class="badge badge-211">互联网</span>
+                        <span class="badge badge-double">大型</span>
+                    </div>
+                    <div class="university-logo-section">
+                        <div
+                            class="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                            阿</div>
+                        <div>
+                            <h3 class="university-name">阿里巴巴</h3>
+                            <p class="university-english">Alibaba Group</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Card 3 -->
+            <div class="university-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="university-image">
+                    <img src="https://images.unsplash.com/photo-1554774853-aae0a22c8aa4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                        alt="字节跳动" class="w-full h-48 object-cover">
+                    <div class="university-overlay">
+                        <button class="view-details-btn" onclick="viewCompanyDetails('bytedance')">
+                            <span class="material-icons-round">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="university-info">
+                    <div class="university-badges">
+                        <span class="badge badge-985">A+</span>
+                        <span class="badge badge-211">互联网</span>
+                        <span class="badge badge-double">大型</span>
+                    </div>
+                    <div class="university-logo-section">
+                        <div
+                            class="w-12 h-12 bg-black rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                            字</div>
+                        <div>
+                            <h3 class="university-name">字节跳动</h3>
+                            <p class="university-english">ByteDance</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Card 4 -->
+            <div class="university-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="university-image">
+                    <img src="https://images.unsplash.com/photo-1590479773265-7464e5d48118?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                        alt="华兴资本" class="w-full h-48 object-cover">
+                    <div class="university-overlay">
+                        <button class="view-details-btn" onclick="viewCompanyDetails('huaxing')">
+                            <span class="material-icons-round">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="university-info">
+                    <div class="university-badges">
+                        <span class="badge badge-985">A++</span>
+                        <span class="badge badge-211">金融</span>
+                        <span class="badge badge-double">中型</span>
+                    </div>
+                    <div class="university-logo-section">
+                        <div
+                            class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                            华</div>
+                        <div>
+                            <h3 class="university-name">华兴资本</h3>
+                            <p class="university-english">Huaxing Capital</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Card 5 -->
+            <div class="university-card" data-aos="fade-up" data-aos-delay="500">
+                <div class="university-image">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                        alt="国网集团" class="w-full h-48 object-cover">
+                    <div class="university-overlay">
+                        <button class="view-details-btn" onclick="viewCompanyDetails('sgcc')">
+                            <span class="material-icons-round">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="university-info">
+                    <div class="university-badges">
+                        <span class="badge badge-985">A+</span>
+                        <span class="badge badge-211">国企央企</span>
+                        <span class="badge badge-double">大型</span>
+                    </div>
+                    <div class="university-logo-section">
+                        <div
+                            class="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                            国</div>
+                        <div>
+                            <h3 class="university-name">国网集团</h3>
+                            <p class="university-english">State Grid Corporation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Card 6 -->
+            <div class="university-card" data-aos="fade-up" data-aos-delay="600">
+                <div class="university-image">
+                    <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                        alt="美团" class="w-full h-48 object-cover">
+                    <div class="university-overlay">
+                        <button class="view-details-btn" onclick="viewCompanyDetails('meituan')">
+                            <span class="material-icons-round">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="university-info">
+                    <div class="university-badges">
+                        <span class="badge badge-985">A</span>
+                        <span class="badge badge-211">互联网</span>
+                        <span class="badge badge-double">大型</span>
+                    </div>
+                    <div class="university-logo-section">
+                        <div
+                            class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                            美</div>
+                        <div>
+                            <h3 class="university-name">美团</h3>
+                            <p class="university-english">Meituan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 600,
+            once: true,
+            offset: 50
+        });
+
+        // Mobile menu functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Filter functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const filterTags = document.querySelectorAll('.filter-tag');
+
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function () {
+                    // Remove active class from siblings
+                    const siblings = this.parentElement.querySelectorAll('.filter-tag');
+                    siblings.forEach(sibling => sibling.classList.remove('active'));
+
+                    // Add active class to clicked tag
+                    this.classList.add('active');
+
+                    // Filter logic would go here
+                    console.log('Filter by:', this.getAttribute('data-filter'));
+                });
+            });
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function (e) {
+            const searchTerm = e.target.value.toLowerCase();
+            console.log('Searching for:', searchTerm);
+            // Search logic would go here
+        });
+
+        // View company details
+        function viewCompanyDetails(companyId) {
+            // Navigate to company detail page
+            window.location.href = `company-detail.html?id=${companyId}`;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>清华大学 - 企业详情</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', 'Google Sans', 'Roboto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #f8f9fa;
+            color: #3c4043;
+        }
+
+        .header {
+            height: 64px;
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            border-bottom: none;
+            padding: 0 24px;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            pointer-events: none;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.87);
+            text-decoration: none;
+            z-index: 10;
+        }
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            transform: translateY(-1px);
+        }
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.16);
+            color: white;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14);
+        }
+
+        .gt-card {
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            background: white;
+            border: none;
+            padding: 24px;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            position: relative;
+            overflow: hidden;
+        }
+        .gt-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #1976d2, #1565c0);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .gt-card:hover {
+            box-shadow: 0 4px 8px -2px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 2px 18px 0 rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+        .gt-card:hover::before {
+            opacity: 1;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            pointer-events: none;
+        }
+
+        .university-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 16px;
+            object-fit: cover;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .badge-985 {
+            background: rgba(52, 168, 83, 0.2);
+            color: #34a853;
+            border: 1px solid rgba(52, 168, 83, 0.3);
+        }
+        .badge-211 {
+            background: rgba(26, 115, 232, 0.2);
+            color: #1a73e8;
+            border: 1px solid rgba(26, 115, 232, 0.3);
+        }
+        .badge-double {
+            background: rgba(245, 124, 0, 0.2);
+            color: #f57c00;
+            border: 1px solid rgba(245, 124, 0, 0.3);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .info-section {
+            padding: 24px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e8eaed;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 500;
+            color: #5f6368;
+            width: 120px;
+            flex-shrink: 0;
+        }
+        .info-value {
+            color: #3c4043;
+        }
+
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            font-size: 14px;
+            color: #5f6368;
+        }
+        .breadcrumb a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .gallery-item {
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header sticky top-0 z-40 shadow-sm">
+        <nav class="container mx-auto flex items-center max-w-6xl">
+            <a href="index.html" class="flex items-center space-x-3 nav-link">
+                <div class="bg-white bg-opacity-20 backdrop-blur-sm w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">
+                    <span class="text-white">排</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-semibold text-white">XX大学排名</span>
+                    <span class="text-sm text-white text-opacity-80 hidden sm:block">年度最佳雇主榜单</span>
+                </div>
+            </a>
+            
+            <!-- Spacer -->
+            <div class="flex-1"></div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-2">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="ranking.html" class="nav-link">雇主排名</a>
+                <a href="insights.html" class="nav-link">企业库</a>
+                <a href="about.html" class="nav-link">关于榜单</a>
+            </div>
+
+            <!-- Search Icon -->
+            <div class="hidden md:flex items-center ml-4">
+                <button class="p-2 text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all">
+                    <span class="material-icons-round">search</span>
+                </button>
+            </div>
+
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-button" class="md:hidden p-2 text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all">
+                <span class="material-icons-round">menu</span>
+            </button>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 md:hidden">
+            <div class="p-4">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-lg font-medium text-gray-900">菜单</span>
+                    <button id="mobile-menu-close" class="p-2 text-gray-600 hover:text-blue-600">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                <nav class="space-y-2">
+                    <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">首页</a>
+                    <a href="ranking.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">雇主排名</a>
+                    <a href="insights.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">企业库</a>
+                    <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">关于榜单</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section py-16">
+            <div class="container mx-auto px-6 max-w-6xl relative z-10">
+                <div class="mb-6">
+                    <a href="insights.html" class="back-button">
+                        <span class="material-icons-round">arrow_back</span>
+                        返回企业库
+                    </a>
+                </div>
+
+                <div class="flex flex-col lg:flex-row items-start gap-8">
+                    <!-- Left: University Info -->
+                    <div class="flex-1">
+                        <div class="flex items-start gap-6 mb-6">
+                            <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=200&q=80" alt="清华大学校徽" class="university-logo">
+                            <div>
+                                <h1 class="text-4xl font-bold mb-2">清华大学</h1>
+                                <p class="text-xl opacity-90 mb-4">Tsinghua University</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="badge badge-985">985</span>
+                                    <span class="badge badge-211">211</span>
+                                    <span class="badge badge-double">双一流</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-lg opacity-90 leading-relaxed">
+                            清华大学是中国著名高等学府，坐落于北京西北郊风景秀丽的清华园，是中国高层次人才培养和科学技术研究的重要基地。
+                            清华大学的前身清华学堂始建于1911年，1912年更名为清华学校。1928年更名为国立清华大学。
+                        </p>
+                    </div>
+
+                    <!-- Right: Quick Stats -->
+                    <div class="lg:w-80">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="stat-item">
+                                <div class="stat-number">1911</div>
+                                <div class="stat-label">建校年份</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">50,000+</div>
+                                <div class="stat-label">在校学生</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">21</div>
+                                <div class="stat-label">学院数量</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">北京</div>
+                                <div class="stat-label">所在城市</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Section -->
+        <div class="container mx-auto px-6 py-8 max-w-6xl">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="index.html" class="flex items-center">
+                    <span class="material-icons-round text-lg mr-1">home</span>
+                    首页
+                </a>
+                <span class="material-icons-round mx-2">chevron_right</span>
+                <a href="insights.html">企业库</a>
+                <span class="material-icons-round mx-2">chevron_right</span>
+                <span>清华大学</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left Column - Main Info -->
+                <div class="lg:col-span-2">
+                    <!-- Basic Information -->
+                    <div class="info-section" data-aos="fade-up">
+                        <h2 class="text-2xl font-bold mb-6">基本信息</h2>
+                        <div class="info-row">
+                            <div class="info-label">学校全称</div>
+                            <div class="info-value">清华大学</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">英文名称</div>
+                            <div class="info-value">Tsinghua University</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">学校类型</div>
+                            <div class="info-value">综合类、研究型</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">办学层次</div>
+                            <div class="info-value">985工程、211工程、双一流</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">所在地区</div>
+                            <div class="info-value">北京市海淀区</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">建校时间</div>
+                            <div class="info-value">1911年</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">学校网址</div>
+                            <div class="info-value">
+                                <a href="https://www.tsinghua.edu.cn" target="_blank" class="text-blue-600 hover:underline">
+                                    https://www.tsinghua.edu.cn
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- School Introduction -->
+                    <div class="info-section" data-aos="fade-up" data-aos-delay="100">
+                        <h2 class="text-2xl font-bold mb-6">学校简介</h2>
+                        <div class="text-gray-700 leading-relaxed space-y-4">
+                            <p>
+                                清华大学是中国著名高等学府，坐落于北京西北郊风景秀丽的清华园，是中国高层次人才培养和科学技术研究的重要基地。
+                                清华大学的前身清华学堂始建于1911年，1912年更名为清华学校。1928年更名为国立清华大学。
+                            </p>
+                            <p>
+                                1937年抗日战争全面爆发后南迁长沙，与北京大学、南开大学组建国立长沙临时大学，1938年迁至昆明改名为国立西南联合大学。
+                                1946年迁回清华园，设有文、法、理、工、农等5个学院、26个系。
+                            </p>
+                            <p>
+                                1952年全国高等学校院系调整后，清华大学成为一所多科性工业大学，重点为国家培养工程技术人才，被誉为"红色工程师的摇篮"。
+                                改革开放以来，清华大学逐步确立了建设世界一流大学的长远目标，进入了蓬勃发展的新时期。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Campus Gallery -->
+                    <div class="info-section" data-aos="fade-up" data-aos-delay="200">
+                        <h2 class="text-2xl font-bold mb-6">校园风光</h2>
+                        <div class="gallery-grid">
+                            <div class="gallery-item">
+                                <img src="https://images.unsplash.com/photo-1562774053-701939374585?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="清华大学校门">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="清华大学图书馆">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="清华大学教学楼">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80" alt="清华大学实验室">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Sidebar -->
+                <div class="space-y-6">
+                    <!-- Quick Actions -->
+                    <div class="gt-card" data-aos="fade-up">
+                        <h3 class="text-lg font-semibold mb-4">快速操作</h3>
+                        <div class="space-y-3">
+                            <button class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                                查看招生信息
+                            </button>
+                            <button class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                                查看专业设置
+                            </button>
+                            <button class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                                查看就业情况
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Related Universities -->
+                    <div class="gt-card" data-aos="fade-up" data-aos-delay="100">
+                        <h3 class="text-lg font-semibold mb-4">相关院校</h3>
+                        <div class="space-y-3">
+                            <a href="university-detail.html?id=peking" class="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=60&q=80" alt="北京大学" class="w-10 h-10 rounded-lg object-cover">
+                                    <div>
+                                        <div class="font-medium text-gray-900">北京大学</div>
+                                        <div class="text-sm text-gray-600">985 • 211 • 双一流</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="university-detail.html?id=zhejiang" class="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=60&q=80" alt="浙江大学" class="w-10 h-10 rounded-lg object-cover">
+                                    <div>
+                                        <div class="font-medium text-gray-900">浙江大学</div>
+                                        <div class="text-sm text-gray-600">985 • 211 • 双一流</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="university-detail.html?id=fudan" class="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=60&q=80" alt="复旦大学" class="w-10 h-10 rounded-lg object-cover">
+                                    <div>
+                                        <div class="font-medium text-gray-900">复旦大学</div>
+                                        <div class="text-sm text-gray-600">985 • 211 • 双一流</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="gt-card" data-aos="fade-up" data-aos-delay="200">
+                        <h3 class="text-lg font-semibold mb-4">联系信息</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center space-x-3">
+                                <span class="material-icons-round text-gray-500">location_on</span>
+                                <span>北京市海淀区清华园1号</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="material-icons-round text-gray-500">phone</span>
+                                <span>010-62793001</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="material-icons-round text-gray-500">email</span>
+                                <span>info@tsinghua.edu.cn</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="material-icons-round text-gray-500">language</span>
+                                <a href="https://www.tsinghua.edu.cn" target="_blank" class="text-blue-600 hover:underline">
+                                    官方网站
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 600,
+            once: true,
+            offset: 50
+        });
+
+        // Mobile menu functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Get university ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const universityId = urlParams.get('id');
+        
+        // Load university data based on ID
+        if (universityId) {
+            console.log('Loading university data for:', universityId);
+            // Here you would load specific university data
+        }
+    </script>
+</body>
+</html> 

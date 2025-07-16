@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>腾讯科技 - 企业详情</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', 'Google Sans', 'Roboto', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #f8f9fa;
+            color: #3c4043;
+        }
+
+        .header {
+            height: 64px;
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            border-bottom: none;
+            padding: 0 24px;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            pointer-events: none;
+        }
+
+        .nav-link {
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.87);
+            text-decoration: none;
+            z-index: 10;
+        }
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            transform: translateY(-1px);
+        }
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.16);
+            color: white;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14);
+        }
+
+        .gt-card {
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            background: white;
+            border: none;
+            padding: 24px;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            position: relative;
+            overflow: hidden;
+        }
+        .gt-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #1976d2, #1565c0);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .gt-card:hover {
+            box-shadow: 0 4px 8px -2px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 2px 18px 0 rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+        .gt-card:hover::before {
+            opacity: 1;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            pointer-events: none;
+        }
+
+        .company-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        .badge-rating {
+            background: rgba(52, 168, 83, 0.2);
+            color: #34a853;
+            border: 1px solid rgba(52, 168, 83, 0.3);
+        }
+        .badge-industry {
+            background: rgba(26, 115, 232, 0.2);
+            color: #1a73e8;
+            border: 1px solid rgba(26, 115, 232, 0.3);
+        }
+        .badge-size {
+            background: rgba(245, 124, 0, 0.2);
+            color: #f57c00;
+            border: 1px solid rgba(245, 124, 0, 0.3);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .info-section {
+            padding: 24px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #e8eaed;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+        }
+        .info-label {
+            font-weight: 500;
+            color: #5f6368;
+            width: 120px;
+            flex-shrink: 0;
+        }
+        .info-value {
+            color: #3c4043;
+        }
+
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            font-size: 14px;
+            color: #5f6368;
+        }
+        .breadcrumb a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        .gallery-item {
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover {
+            transform: scale(1.02);
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .back-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .rating-star {
+            color: #fbbf24;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header sticky top-0 z-40 shadow-sm">
+        <nav class="container mx-auto flex items-center max-w-6xl">
+            <a href="index.html" class="flex items-center space-x-3 nav-link">
+                <div class="bg-white bg-opacity-20 backdrop-blur-sm w-12 h-12 rounded-xl flex items-center justify-center font-bold text-xl shadow-lg">
+                    <span class="text-white">排</span>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-lg font-semibold text-white">XX大学排名</span>
+                    <span class="text-sm text-white text-opacity-80 hidden sm:block">年度最佳雇主榜单</span>
+                </div>
+            </a>
+            
+            <!-- Spacer -->
+            <div class="flex-1"></div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden md:flex items-center space-x-2">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="ranking.html" class="nav-link">雇主排名</a>
+                <a href="insights.html" class="nav-link">企业库</a>
+                <a href="about.html" class="nav-link">关于榜单</a>
+            </div>
+
+            <!-- Search Icon -->
+            <div class="hidden md:flex items-center ml-4">
+                <button class="p-2 text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all">
+                    <span class="material-icons-round">search</span>
+                </button>
+            </div>
+
+            <!-- Mobile menu button -->
+            <button id="mobile-menu-button" class="md:hidden p-2 text-white text-opacity-80 hover:text-white hover:bg-white hover:bg-opacity-20 rounded-lg transition-all">
+                <span class="material-icons-round">menu</span>
+            </button>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu fixed top-0 left-0 h-full w-64 bg-white shadow-xl z-50 md:hidden">
+            <div class="p-4">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-lg font-medium text-gray-900">菜单</span>
+                    <button id="mobile-menu-close" class="p-2 text-gray-600 hover:text-blue-600">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                <nav class="space-y-2">
+                    <a href="index.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">首页</a>
+                    <a href="ranking.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">雇主排名</a>
+                    <a href="insights.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">企业库</a>
+                    <a href="about.html" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg">关于榜单</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section py-16">
+            <div class="container mx-auto px-6 max-w-6xl relative z-10">
+                <div class="mb-6">
+                    <a href="insights.html" class="back-button">
+                        <span class="material-icons-round">arrow_back</span>
+                        返回企业库
+                    </a>
+                </div>
+
+                <div class="flex flex-col lg:flex-row items-start gap-8">
+                    <!-- Left: Company Info -->
+                    <div class="flex-1">
+                        <div class="flex items-start gap-6 mb-6">
+                            <div class="company-logo bg-blue-500">腾</div>
+                            <div>
+                                <h1 class="text-4xl font-bold mb-2">腾讯科技</h1>
+                                <p class="text-xl opacity-90 mb-4">Tencent Technology</p>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="badge badge-rating">A++</span>
+                                    <span class="badge badge-industry">互联网</span>
+                                    <span class="badge badge-size">大型企业</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <p class="text-lg opacity-90 leading-relaxed">
+                            腾讯成立于1998年11月，是一家以互联网为基础的科技与文化公司。
+                            我们的使命是"用户为本，科技向善"。腾讯秉承着"一切以用户价值为依归"的经营理念，
+                            为亿万网民提供优质的互联网综合服务。
+                        </p>
+                    </div>
+
+                    <!-- Right: Quick Stats -->
+                    <div class="lg:w-80">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="stat-item">
+                                <div class="stat-number">1998</div>
+                                <div class="stat-label">成立年份</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">110,000+</div>
+                                <div class="stat-label">员工数量</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">4.7</div>
+                                <div class="stat-label">员工评分</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">深圳</div>
+                                <div class="stat-label">总部城市</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Section -->
+        <div class="container mx-auto px-6 py-8 max-w-6xl">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb">
+                <a href="index.html" class="flex items-center">
+                    <span class="material-icons-round text-lg mr-1">home</span>
+                    首页
+                </a>
+                <span class="material-icons-round mx-2">chevron_right</span>
+                <a href="insights.html">企业库</a>
+                <span class="material-icons-round mx-2">chevron_right</span>
+                <span>腾讯科技</span>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Left Column - Main Info -->
+                <div class="lg:col-span-2">
+                    <!-- Basic Information -->
+                    <div class="info-section" data-aos="fade-up">
+                        <h2 class="text-2xl font-bold mb-6">基本信息</h2>
+                        <div class="info-row">
+                            <div class="info-label">企业全称</div>
+                            <div class="info-value">深圳市腾讯计算机系统有限公司</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">英文名称</div>
+                            <div class="info-value">Tencent Technology (Shenzhen) Company Limited</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">行业类型</div>
+                            <div class="info-value">互联网科技</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">企业规模</div>
+                            <div class="info-value">大型企业（110,000+人）</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">总部地址</div>
+                            <div class="info-value">广东省深圳市南山区</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">成立时间</div>
+                            <div class="info-value">1998年11月</div>
+                        </div>
+                        <div class="info-row">
+                            <div class="info-label">企业网址</div>
+                            <div class="info-value">
+                                <a href="https://www.tencent.com" target="_blank" class="text-blue-600 hover:underline">
+                                    https://www.tencent.com
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Company Introduction -->
+                    <div class="info-section" data-aos="fade-up" data-aos-delay="100">
+                        <h2 class="text-2xl font-bold mb-6">企业简介</h2>
+                        <div class="text-gray-700 leading-relaxed space-y-4">
+                            <p>
+                                腾讯成立于1998年11月，是一家以互联网为基础的科技与文化公司。
+                                我们的使命是"用户为本，科技向善"。腾讯秉承着"一切以用户价值为依归"的经营理念，
+                                为亿万网民提供优质的互联网综合服务。
+                            </p>
+                            <p>
+                                腾讯把"连接一切"作为战略目标，提供社交平台与数字内容、金融科技与企业服务、
+                                广告营销与其他等多元化的产品组合。通过即时通信工具QQ及微信与WeChat，
+                                腾讯将中国人连接起来，并且正在连接全球。
+                            </p>
+                            <p>
+                                腾讯拥有中国使用人数最多的社交平台，高效的数字营销平台，
+                                以及快速增长的企业服务、金融科技及云服务。腾讯AI Lab、
+                                腾讯优图等前沿科技实验室专注于机器学习、计算机视觉、语音识别和自然语言处理等领域的研究。
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Employee Reviews -->
+                    <div class="info-section" data-aos="fade-up" data-aos-delay="200">
+                        <h2 class="text-2xl font-bold mb-6">员工评价</h2>
+                        <div class="space-y-4">
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center mb-2">
+                                    <div class="flex text-yellow-400 mr-2">
+                                        <span class="rating-star">★★★★★</span>
+                                    </div>
+                                    <span class="text-sm text-gray-600">产品经理 · 2024年</span>
+                                </div>
+                                <p class="text-gray-700">
+                                    "公司文化很好，同事之间氛围融洽，技术氛围浓厚。福利待遇在行业内属于顶尖水平，
+                                    有很多学习成长的机会。工作节奏比较快，但是能学到很多东西。"
+                                </p>
+                            </div>
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <div class="flex items-center mb-2">
+                                    <div class="flex text-yellow-400 mr-2">
+                                        <span class="rating-star">★★★★☆</span>
+                                    </div>
+                                    <span class="text-sm text-gray-600">软件工程师 · 2024年</span>
+                                </div>
+                                <p class="text-gray-700">
+                                    "技术栈比较新，能接触到前沿技术。团队协作效率高，代码质量要求严格。
+                                    加班情况存在，但是相对合理。整体来说是一个不错的成长平台。"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Sidebar -->
+                <div class="space-y-6">
+                    <!-- Quick Actions -->
+                    <div class="gt-card" data-aos="fade-up">
+                        <h3 class="text-lg font-semibold mb-4">快速操作</h3>
+                        <div class="space-y-3">
+                            <button class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors">
+                                查看招聘信息
+                            </button>
+                            <button class="w-full bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700 transition-colors">
+                                查看薪资待遇
+                            </button>
+                            <button class="w-full bg-purple-600 text-white py-2 px-4 rounded-lg hover:bg-purple-700 transition-colors">
+                                查看面试经验
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Related Companies -->
+                    <div class="gt-card" data-aos="fade-up" data-aos-delay="100">
+                        <h3 class="text-lg font-semibold mb-4">相关企业</h3>
+                        <div class="space-y-3">
+                            <a href="company-detail.html?id=alibaba" class="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center text-white font-bold">阿</div>
+                                    <div>
+                                        <div class="font-medium text-gray-900">阿里巴巴</div>
+                                        <div class="text-sm text-gray-600">A+ • 互联网 • 大型</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="company-detail.html?id=bytedance" class="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-black rounded-lg flex items-center justify-center text-white font-bold">字</div>
+                                    <div>
+                                        <div class="font-medium text-gray-900">字节跳动</div>
+                                        <div class="text-sm text-gray-600">A+ • 互联网 • 大型</div>
+                                    </div>
+                                </div>
+                            </a>
+                            <a href="company-detail.html?id=meituan" class="block p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-yellow-500 rounded-lg flex items-center justify-center text-white font-bold">美</div>
+                                    <div>
+                                        <div class="font-medium text-gray-900">美团</div>
+                                        <div class="text-sm text-gray-600">A • 互联网 • 大型</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Contact Info -->
+                    <div class="gt-card" data-aos="fade-up" data-aos-delay="200">
+                        <h3 class="text-lg font-semibold mb-4">联系信息</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center space-x-3">
+                                <span class="material-icons-round text-gray-500">location_on</span>
+                                <span>深圳市南山区科技园</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="material-icons-round text-gray-500">phone</span>
+                                <span>0755-86013388</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="material-icons-round text-gray-500">email</span>
+                                <span>hr@tencent.com</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="material-icons-round text-gray-500">language</span>
+                                <a href="https://www.tencent.com" target="_blank" class="text-blue-600 hover:underline">
+                                    官方网站
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 600,
+            once: true,
+            offset: 50
+        });
+
+        // Mobile menu functionality
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.getElementById('mobile-menu-close');
+
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!mobileMenu.contains(e.target) && !mobileMenuButton.contains(e.target)) {
+                mobileMenu.classList.remove('active');
+            }
+        });
+
+        // Get company ID from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const companyId = urlParams.get('id');
+        
+        // Load company data based on ID
+        if (companyId) {
+            console.log('Loading company data for:', companyId);
+            // Here you would load specific company data
+        }
+    </script>
+</body>
+</html> 

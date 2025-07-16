@@ -1,0 +1,30 @@
+[
+  {
+    "id": "product-a",
+    "title": "企业竞争力排行榜",
+    "description": "基于毕业生真实反馈数据的雇主评价排行榜，综合毕业生体验指数（GEI）与企业发展潜力指数（CDI）进行评定，为学生求职提供权威参考。",
+    "thumbnail": "/demo-images/排行榜.jpg",
+    "path": "product-a/index.html"
+  },
+  {
+    "id": "product-b",
+    "title": "产品B：创意设计工具",
+    "description": "面向设计师和创意工作者的在线设计工具，提供丰富的模板和素材，激发无限创意。",
+    "thumbnail": "/demo-images/product-b.jpg",
+    "path": "product-b/index.html"
+  },
+  {
+    "id": "product-c",
+    "title": "产品C：数据分析平台",
+    "description": "集成先进的数据可视化和分析功能，帮助您从海量数据中发掘商业洞察。",
+    "thumbnail": "/demo-images/product-c.jpg",
+    "path": "product-c/index.html"
+  },
+  {
+    "id": "product-d",
+    "title": "产品D：个人效率应用",
+    "description": "简洁易用的个人待办事项和笔记应用，帮助您更好地组织工作和生活。",
+    "thumbnail": "/demo-images/product-d.jpg",
+    "path": "product-d/index.html"
+  }
+] 
