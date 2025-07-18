@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动态简历 - 就业竞争力仪表盘</title>
+    <!-- 引入Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Google Fonts (Inter) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* 自定义样式 */
+        body {
+            font-family: 'Inter', 'Helvetica Neue', 'Arial', 'sans-serif';
+            background-color: #f0f4f8; /* 亮色背景 */
+        }
+        .card {
+            background-color: white;
+            border-radius: 1rem; /* 更大的圆角 */
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+            transition: all 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+        .main-score {
+            font-weight: 800; /* Extra bold */
+            color: #1e40af; /* 深蓝色 */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background-color: #2563eb; /* 蓝色 */
+            color: white;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #475569;
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #cbd5e1;
+        }
+        /* 雷达图动画 */
+        .radar-chart-polygon {
+            stroke: #2563eb;
+            stroke-width: 2;
+            fill: rgba(37, 99, 235, 0.2);
+            transition: all 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <!-- 页面标题和用户信息 -->
+        <header class="mb-8">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-slate-900">动态简历</h1>
+                    <p class="text-slate-500 mt-1">实时更新你的就业竞争力</p>
+                </div>
+                <div class="text-right mt-4 sm:mt-0">
+                    <p class="font-semibold text-lg">张三</p>
+                    <p class="text-sm text-slate-500">学号: 202312345</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- 主仪表盘网格布局 -->
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- 左侧主区域 -->
+            <div class="lg:col-span-2 space-y-6">
+                <!-- 就业竞争力总览 -->
+                <div class="card p-6 flex flex-col md:flex-row items-center gap-6">
+                    <div class="flex-1 text-center md:text-left">
+                        <h2 class="text-xl font-bold text-slate-800 mb-2">就业竞争力总分</h2>
+                        <p class="main-score text-7xl md:text-8xl">78<span class="text-3xl text-slate-400">/100</span></p>
+                        <p class="mt-3 text-lg font-medium text-amber-600 bg-amber-100 px-4 py-2 rounded-lg inline-block">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.636-1.21 2.37-1.21 3.006 0l4.592 8.778c.636 1.21-.23 2.623-1.503 2.623H5.168c-1.273 0-2.139-1.413-1.503-2.623l4.592-8.778zM10 12a1 1 0 110-2 1 1 0 010 2zm0-5a1 1 0 011 1v2a1 1 0 11-2 0V8a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                            您已具备初步竞争力，继续努力！
+                        </p>
+                    </div>
+                    <div class="w-full md:w-80 h-80">
+                        <!-- SVG 雷达图 -->
+                        <svg viewBox="0 0 200 200" class="w-full h-full">
+                            <defs>
+                                <linearGradient id="radarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" style="stop-color:rgba(59, 130, 246, 0.2)" />
+                                    <stop offset="100%" style="stop-color:rgba(37, 99, 235, 0.4)" />
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- 网格线 -->
+                            <g stroke="#e2e8f0" stroke-width="1">
+                                <circle cx="100" cy="100" r="20"></circle>
+                                <circle cx="100" cy="100" r="40"></circle>
+                                <circle cx="100" cy="100" r="60"></circle>
+                                <circle cx="100" cy="100" r="80"></circle>
+                                <line x1="100" y1="20" x2="100" y2="180"></line>
+                                <line x1="39.4" y1="65" x2="160.6" y2="135"></line>
+                                <line x1="39.4" y1="135" x2="160.6" y2="65"></line>
+                                <line x1="20" y1="100" x2="180" y2="100"></line>
+                            </g>
+
+                            <!-- 数据多边形 -->
+                            <polygon class="radar-chart-polygon" points="100,28 152.5,70 142.4,145 57.6,145 47.5,70" style="fill: url(#radarGradient);"></polygon>
+
+                            <!-- 标签 -->
+                            <g fill="#475569" font-size="10" font-weight="600" text-anchor="middle">
+                                <text x="100" y="12">学术表现 (85)</text>
+                                <text x="175" y="65">实践经验 (70)</text>
+                                <text x="155" y="168">通用技能 (65)</text>
+                                <text x="45" y="168">职业素养 (75)</text>
+                                <text x="25" y="65">课外活动 (60)</text>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 个性化优化提示与行动建议 -->
+                <div class="card p-6">
+                    <h2 class="text-xl font-bold text-slate-800 mb-4">个性化行动建议</h2>
+                    <div class="space-y-6">
+                        <!-- 技能提升建议 -->
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                                技能提升建议
+                            </h3>
+                            <div class="border-l-4 border-blue-200 pl-4 space-y-3">
+                                <div class="bg-slate-50 p-3 rounded-lg">
+                                    <p class="font-semibold">提升 <span class="text-blue-700 bg-blue-100 px-2 py-1 rounded">Python编程</span> 技能</p>
+                                    <p class="text-sm text-slate-600 mt-1">你的目标职业“软件开发工程师”高度依赖此技能。</p>
+                                    <div class="mt-2">
+                                        <a href="#" class="text-sm font-medium text-blue-600 hover:underline">推荐课程：计算机学院《Python入门》 &rarr;</a>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-3 rounded-lg">
+                                    <p class="font-semibold">学习 <span class="text-blue-700 bg-blue-100 px-2 py-1 rounded">数据结构与算法</span></p>
+                                    <p class="text-sm text-slate-600 mt-1">这是技术面试的核心考点。</p>
+                                    <div class="mt-2">
+                                        <a href="#" class="text-sm font-medium text-blue-600 hover:underline">推荐活动：数据科学社团“算法训练营” &rarr;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 实践经验积累 -->
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                实践经验积累
+                            </h3>
+                            <div class="border-l-4 border-green-200 pl-4 space-y-3">
+                                <div class="bg-slate-50 p-3 rounded-lg">
+                                    <p class="font-semibold">参与一个校内项目</p>
+                                    <p class="text-sm text-slate-600 mt-1">你的项目经验目前为空白，这是简历的重要部分。</p>
+                                    <div class="mt-2">
+                                        <a href="#" class="text-sm font-medium text-green-600 hover:underline">查看推荐的“校园信息发布平台”开发项目 &rarr;</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                         <!-- 简历内容优化 -->
+                        <div>
+                            <h3 class="font-semibold text-lg mb-2 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                简历内容优化示例
+                            </h3>
+                            <div class="border-l-4 border-purple-200 pl-4">
+                                <div class="bg-slate-50 p-4 rounded-lg">
+                                    <p class="text-sm text-slate-600 mb-2">针对你的“班级学习委员”经历，可以这样描述以突出职业素养：</p>
+                                    <p class="font-mono text-sm p-3 bg-slate-200 rounded">
+                                        - <span class="font-semibold">优化前:</span> 收发作业和通知。<br>
+                                        - <span class="font-semibold text-purple-700">优化后:</span> 负责<span class="font-bold">35名</span>同学的学业材料沟通与传递，确保信息<span class="font-bold">100%</span>准确触达，有效提升班级作业提报<span class="font-bold">效率15%</span>。
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧边栏 -->
+            <div class="space-y-6">
+                <!-- 目标职业方向 -->
+                <div class="card p-6">
+                    <h2 class="text-xl font-bold text-slate-800 mb-4">目标职业方向</h2>
+                    <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-center">
+                        <p class="text-sm text-blue-800">当前意向</p>
+                        <p class="font-bold text-xl text-blue-900 mt-1">软件开发工程师</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 mt-4">
+                        <button class="btn-primary w-full">修改方向</button>
+                        <button class="btn-secondary w-full">探索职业</button>
+                    </div>
+                </div>
+
+                <!-- 核心优化提示 -->
+                <div class="card p-6">
+                    <h2 class="text-xl font-bold text-slate-800 mb-4">核心优化提示</h2>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 bg-red-100 text-red-600 rounded-full h-8 w-8 flex items-center justify-center font-bold">1</div>
+                            <p class="ml-3 text-slate-700">你的<span class="font-semibold">实践经验</span>得分较低，建议立即寻找校内项目或准备暑期实习。</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 bg-orange-100 text-orange-600 rounded-full h-8 w-8 flex items-center justify-center font-bold">2</div>
+                            <p class="ml-3 text-slate-700">目标方向所需的<span class="font-semibold">编程技能</span>有待提升，建议选修相关课程。</p>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="flex-shrink-0 bg-yellow-100 text-yellow-600 rounded-full h-8 w-8 flex items-center justify-center font-bold">3</div>
+                            <p class="ml-3 text-slate-700">丰富<span class="font-semibold">课外活动</span>经历，在社团中承担角色，锻炼软技能。</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 竞争力趋势 -->
+                <div class="card p-6">
+                    <h2 class="text-xl font-bold text-slate-800 mb-4">竞争力趋势</h2>
+                    <!-- SVG 折线图 -->
+                    <div class="w-full h-48">
+                        <svg width="100%" height="100%" viewBox="0 0 300 150">
+                            <!-- Y轴和网格线 -->
+                            <g stroke="#e2e8f0" stroke-width="1" font-size="10" fill="#94a3b8">
+                                <line x1="30" y1="10" x2="300" y2="10"></line>
+                                <text x="10" y="14">100</text>
+                                <line x1="30" y1="42.5" x2="300" y2="42.5"></line>
+                                <text x="15" y="46.5">75</text>
+                                <line x1="30" y1="75" x2="300" y2="75"></line>
+                                <text x="15" y="79">50</text>
+                                <line x1="30" y1="107.5" x2="300" y2="107.5"></line>
+                                <text x="15" y="111.5">25</text>
+                                <line x1="30" y1="140" x2="300" y2="140"></line>
+                            </g>
+                            <!-- X轴标签 -->
+                            <g font-size="10" fill="#94a3b8" text-anchor="middle">
+                                <text x="60" y="150">大一上</text>
+                                <text x="135" y="150">大一下</text>
+                                <text x="210" y="150">大二上</text>
+                                <text x="285" y="150">当前</text>
+                            </g>
+                            <!-- 折线 -->
+                            <polyline fill="none" stroke="#2563eb" stroke-width="2" points="60,95 135,85 210,65 285,49" />
+                            <!-- 数据点 -->
+                            <g fill="#2563eb">
+                                <circle cx="60" cy="95" r="3"></circle>
+                                <circle cx="135" cy="85" r="3"></circle>
+                                <circle cx="210" cy="65" r="3"></circle>
+                                <circle cx="285" cy="49" r="4" fill="white" stroke="#2563eb" stroke-width="2"></circle>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+</body>
+</html>

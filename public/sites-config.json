@@ -8,9 +8,9 @@
   },
   {
     "id": "product-b",
-    "title": "产品B：创意设计工具",
-    "description": "面向设计师和创意工作者的在线设计工具，提供丰富的模板和素材，激发无限创意。",
-    "thumbnail": "/demo-images/product-b.jpg",
+    "title": "智能简历工具",
+    "description": "AI驱动的简历生成与优化平台，提供智能简历生成、专业诊断评分和个性化优化建议，帮助求职者快速创建专业、高质量的简历。",
+    "thumbnail": "/demo-images/resume.jpg",
     "path": "product-b/index.html"
   },
   {

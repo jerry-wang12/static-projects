@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>智能简历诊断系统</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+    <style>
+        /* 基于设计系统的CSS变量 */
+        :root {
+            /* 主色调 */
+            --primary-50: #e3f2fd;
+            --primary-100: #bbdefb;
+            --primary-200: #90caf9;
+            --primary-300: #64b5f6;
+            --primary-400: #42a5f5;
+            --primary-500: #1976d2;
+            --primary-600: #1565c0;
+            --primary-700: #0d47a1;
+            
+            /* 成功色 */
+            --success-50: #e8f5e8;
+            --success-500: #34a853;
+            --success-600: #2e7d32;
+            
+            /* 警告色 */
+            --warning-50: #fef7e0;
+            --warning-500: #f57c00;
+            --warning-600: #ef6c00;
+            
+            /* 错误色 */
+            --error-50: #fce8e6;
+            --error-500: #ea4335;
+            
+            /* 中性色 */
+            --neutral-50: #fafafa;
+            --neutral-100: #f8f9fa;
+            --neutral-200: #f1f3f4;
+            --neutral-300: #e8eaed;
+            --neutral-400: #dadce0;
+            --neutral-500: #9aa0a6;
+            --neutral-600: #5f6368;
+            --neutral-700: #3c4043;
+            --neutral-800: #2d3134;
+            --neutral-900: #1a1a1a;
+            
+            /* 渐变 */
+            --gradient-primary: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            
+            /* 字体 */
+            --font-family: 'Inter', 'Google Sans', 'Roboto', sans-serif;
+            
+            /* 间距 */
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-10: 40px;
+            --spacing-12: 48px;
+            --spacing-16: 64px;
+            
+            /* 圆角 */
+            --radius-sm: 4px;
+            --radius-base: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            
+            /* 阴影 */
+            --shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            --shadow-base: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            
+            /* 动画 */
+            --duration-fast: 0.15s;
+            --duration-normal: 0.3s;
+            --duration-slow: 0.6s;
+            --easing-material: cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--neutral-100);
+            color: var(--neutral-700);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-6);
+        }
+
+        /* 页面布局 */
+        .page-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: var(--spacing-6);
+            overflow-y: auto;
+        }
+
+        .sidebar {
+            width: 320px;
+            background: white;
+            border-left: 1px solid var(--neutral-300);
+            padding: var(--spacing-6);
+            overflow-y: auto;
+        }
+
+        /* 顶部工具栏 */
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-6);
+        }
+
+        .toolbar h1 {
+            font-size: var(--spacing-6);
+            font-weight: 700;
+            color: var(--neutral-800);
+        }
+
+        .btn-primary {
+            background: var(--primary-500);
+            color: white;
+            padding: var(--spacing-2) var(--spacing-4);
+            border: none;
+            border-radius: var(--radius-base);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--easing-material);
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-600);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* 警告提示 */
+        .alert {
+            display: flex;
+            align-items: start;
+            gap: var(--spacing-3);
+            padding: var(--spacing-4);
+            background: var(--warning-50);
+            border: 1px solid var(--warning-500);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-6);
+        }
+
+        .alert-icon {
+            color: var(--warning-500);
+            flex-shrink: 0;
+        }
+
+        .alert-content {
+            flex: 1;
+        }
+
+        .alert-title {
+            font-weight: 500;
+            color: var(--neutral-800);
+            margin-bottom: var(--spacing-1);
+        }
+
+        .alert-text {
+            font-size: 14px;
+            color: var(--neutral-600);
+        }
+
+        .alert-link {
+            color: var(--primary-500);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .alert-link:hover {
+            text-decoration: underline;
+        }
+
+        /* 简历信息卡片 */
+        .resume-info {
+            background: white;
+            padding: var(--spacing-4);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--neutral-300);
+            margin-bottom: var(--spacing-6);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .resume-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .resume-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: var(--spacing-1);
+        }
+
+        .resume-meta {
+            font-size: 14px;
+            color: var(--neutral-500);
+        }
+
+        /* 评分卡片 */
+        .score-card {
+            background: white;
+            padding: var(--spacing-6);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--neutral-300);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--spacing-6);
+        }
+
+        .score-header {
+            margin-bottom: var(--spacing-6);
+        }
+
+        .score-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--neutral-800);
+            margin-bottom: var(--spacing-2);
+        }
+
+        .score-content {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: var(--spacing-8);
+            align-items: center;
+        }
+
+        /* 分数仪表盘 */
+        .score-gauge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .gauge-container {
+            position: relative;
+            width: 200px;
+            height: 100px;
+            margin-bottom: var(--spacing-4);
+        }
+
+        .score-number {
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--warning-500);
+        }
+
+        .gauge-labels {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-bottom: var(--spacing-4);
+        }
+
+        .vmock-brand {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            font-size: 14px;
+            color: var(--neutral-500);
+        }
+
+        .brand-logo {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-500);
+            color: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* 状态和建议 */
+        .score-status {
+            margin-bottom: var(--spacing-6);
+        }
+
+        .status-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--success-600);
+            margin-bottom: var(--spacing-2);
+        }
+
+        .status-description {
+            color: var(--neutral-600);
+        }
+
+        .status-highlight {
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .green-zone {
+            color: var(--success-600);
+            font-weight: 600;
+        }
+
+        /* 改进建议 */
+        .improvement-suggestions {
+            margin-bottom: var(--spacing-6);
+        }
+
+        .suggestions-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-500);
+            margin-bottom: var(--spacing-4);
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: start;
+            gap: var(--spacing-3);
+            padding: var(--spacing-3);
+            background: var(--primary-50);
+            border-radius: var(--radius-lg);
+            margin-bottom: var(--spacing-3);
+        }
+
+        .suggestion-icon {
+            color: var(--primary-500);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .suggestion-content {
+            flex: 1;
+        }
+
+        .suggestion-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            margin-bottom: var(--spacing-1);
+        }
+
+        .suggestion-title {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--neutral-800);
+        }
+
+        .suggestion-score {
+            background: var(--primary-500);
+            color: white;
+            font-size: 12px;
+            padding: 2px var(--spacing-2);
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .suggestion-description {
+            font-size: 12px;
+            color: var(--neutral-600);
+            line-height: 1.4;
+        }
+
+        /* 分项得分 */
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-6);
+            text-align: center;
+            margin-bottom: var(--spacing-6);
+        }
+
+        .breakdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .breakdown-score {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: var(--spacing-1);
+        }
+
+        .breakdown-label {
+            font-size: 14px;
+            color: var(--neutral-500);
+        }
+
+        .score-impact {
+            color: var(--warning-500);
+        }
+
+        .score-good {
+            color: var(--success-500);
+        }
+
+        /* 详细反馈按钮 */
+        .detailed-feedback-btn {
+            width: 100%;
+            background: var(--primary-500);
+            color: white;
+            padding: var(--spacing-3) var(--spacing-6);
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all var(--duration-normal) var(--easing-material);
+        }
+
+        .detailed-feedback-btn:hover {
+            background: var(--primary-600);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* 社区洞察侧边栏 */
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: var(--spacing-6);
+        }
+
+        .insight-item {
+            display: flex;
+            align-items: start;
+            gap: var(--spacing-3);
+            margin-bottom: var(--spacing-6);
+        }
+
+        .insight-icon {
+            color: var(--neutral-500);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .insight-text {
+            font-size: 14px;
+            color: var(--neutral-600);
+            line-height: 1.5;
+        }
+
+        /* 模态框 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: var(--spacing-6);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-6);
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-6);
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--neutral-500);
+            cursor: pointer;
+            padding: var(--spacing-1);
+        }
+
+        .modal-close:hover {
+            color: var(--neutral-700);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1024px) {
+            .page-layout {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-left: none;
+                border-top: 1px solid var(--neutral-300);
+            }
+            
+            .score-content {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-6);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--spacing-4);
+            }
+            
+            .main-content,
+            .sidebar {
+                padding: var(--spacing-4);
+            }
+            
+            .score-breakdown {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-4);
+            }
+        }
+
+        /* 隐藏类 */
+        .hidden {
+            display: none !important;
+        }
+
+        /* 加载动画 */
+        .loading {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--neutral-300);
+            border-top: 4px solid var(--primary-500);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
+
+        .loading-text {
+            margin-top: var(--spacing-4);
+            color: var(--neutral-600);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 加载动画 -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading"></div>
+        <div class="loading-text">正在分析您的简历...</div>
+    </div>
+
+    <div class="page-layout">
+        <!-- 主要内容区域 -->
+        <main class="main-content">
+            <!-- 顶部工具栏 -->
+            <div class="toolbar">
+                <div>
+                    <h1>简历诊断模块</h1>
+                </div>
+                <button class="btn-primary">
+                    获取更多上传次数
+                </button>
+            </div>
+
+            <!-- 警告提示 -->
+            <div class="alert">
+                <i data-lucide="alert-triangle" class="alert-icon"></i>
+                <div class="alert-content">
+                    <div class="alert-title">格式转换提醒</div>
+                    <div class="alert-text">
+                        我们的系统识别到您上传的简历可能存在格式转换问题。
+                        <a href="#" class="alert-link">点击了解更多</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 简历信息 -->
+            <div class="resume-info">
+                <div class="resume-info-header">
+                    <div>
+                        <div class="resume-title" id="resume-title">个人简历</div>
+                        <div class="resume-meta">上传时间 - 2025年7月17日 下午5:40</div>
+                    </div>
+                    <button style="background: none; border: none; color: var(--neutral-500); cursor: pointer;">
+                        <i data-lucide="more-horizontal"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 评分卡片 -->
+            <div class="score-card">
+                <div class="score-header">
+                    <h2 class="score-title">您的简历得分</h2>
+                </div>
+
+                <div class="score-content">
+                    <!-- 分数仪表盘 -->
+                    <div class="score-gauge">
+                        <div class="gauge-container">
+                            <svg viewBox="0 0 200 100" style="width: 100%; height: 100%;">
+                                <!-- 背景弧 -->
+                                <path d="M 20 80 A 80 80 0 0 1 180 80" 
+                                      stroke="var(--neutral-300)" 
+                                      stroke-width="12" 
+                                      fill="none"/>
+                                <!-- 分数弧 -->
+                                <path id="score-arc" 
+                                      d="M 20 80 A 80 80 0 0 1 180 80" 
+                                      stroke="var(--warning-500)" 
+                                      stroke-width="12" 
+                                      fill="none" 
+                                      stroke-dasharray="251.3" 
+                                      stroke-dashoffset="125.65" 
+                                      style="transition: stroke-dashoffset 1s ease-in-out;"/>
+                            </svg>
+                            <div class="score-number" id="score-number">65</div>
+                        </div>
+                        
+                        <div class="gauge-labels">
+                            <span>需要改进</span>
+                            <span>进展良好</span>
+                            <span>表现优秀</span>
+                        </div>
+                        
+                        <div class="vmock-brand">
+                            <div class="brand-logo">智</div>
+                            <span>基于百万份简历的智能分析</span>
+                        </div>
+                    </div>
+
+                    <!-- 状态和建议 -->
+                    <div>
+                        <div class="score-status">
+                            <div class="status-title">您的表现不错！</div>
+                            <div class="status-description">
+                                您只需要 <span class="status-highlight">11分</span> 就能达到 
+                                <span class="green-zone">优秀区间</span>
+                            </div>
+                        </div>
+
+                        <!-- 改进建议 -->
+                        <div class="improvement-suggestions">
+                            <div class="suggestions-title">提升建议</div>
+                            
+                            <div class="suggestion-item">
+                                <i data-lucide="arrow-up" class="suggestion-icon"></i>
+                                <div class="suggestion-content">
+                                    <div class="suggestion-header">
+                                        <span class="suggestion-title">优化项目描述结构</span>
+                                        <span class="suggestion-score">+10</span>
+                                    </div>
+                                    <div class="suggestion-description">
+                                        建议在项目描述中使用行动动词开头，并量化您的工作成果。
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="suggestion-item">
+                                <i data-lucide="arrow-up" class="suggestion-icon"></i>
+                                <div class="suggestion-content">
+                                    <div class="suggestion-header">
+                                        <span class="suggestion-title">删除冗余和填充词汇</span>
+                                        <span class="suggestion-score">+8</span>
+                                    </div>
+                                    <div class="suggestion-description">
+                                        避免在简历中使用重复词汇和无意义的填充词。
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="suggestion-item">
+                                <i data-lucide="arrow-up" class="suggestion-icon"></i>
+                                <div class="suggestion-content">
+                                    <div class="suggestion-header">
+                                        <span class="suggestion-title">丰富项目经历描述</span>
+                                        <span class="suggestion-score">+6</span>
+                                    </div>
+                                    <div class="suggestion-description">
+                                        某些项目描述过于简短，建议增加更多具体细节。
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分项得分 -->
+                <div class="score-breakdown">
+                    <div class="breakdown-item">
+                        <div class="breakdown-score score-impact" id="impact-score">14<span style="font-size: 14px; color: var(--neutral-500);">/40</span></div>
+                        <div class="breakdown-label">影响力</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-score score-good" id="presentation-score">26<span style="font-size: 14px; color: var(--neutral-500);">/30</span></div>
+                        <div class="breakdown-label">呈现方式</div>
+                    </div>
+                    <div class="breakdown-item">
+                        <div class="breakdown-score score-good" id="competencies-score">25<span style="font-size: 14px; color: var(--neutral-500);">/30</span></div>
+                        <div class="breakdown-label">专业能力</div>
+                    </div>
+                </div>
+
+                <!-- 详细反馈按钮 -->
+                <button class="detailed-feedback-btn" id="detailed-feedback-btn">
+                    查看详细反馈报告
+                </button>
+            </div>
+        </main>
+
+        <!-- 社区洞察侧边栏 -->
+        <aside class="sidebar">
+            <h3 class="sidebar-title">社区洞察</h3>
+            
+            <div class="insight-item">
+                <i data-lucide="trending-up" class="insight-icon"></i>
+                <div class="insight-text">
+                    简历平均得分为74分，基于智能分析平台的数据统计。
+                </div>
+            </div>
+            
+            <div class="insight-item">
+                <i data-lucide="trending-up" class="insight-icon"></i>
+                <div class="insight-text">
+                    用户采纳系统反馈建议后，分数平均提升16分。
+                </div>
+            </div>
+            
+            <div class="insight-item">
+                <i data-lucide="brain" class="insight-icon"></i>
+                <div class="insight-text">
+                    数据分析技能是用户简历中体现最多的核心技能。
+                </div>
+            </div>
+            
+            <div class="insight-item">
+                <i data-lucide="file-text" class="insight-icon"></i>
+                <div class="insight-text">
+                    优秀简历的平均字数为450字，结构清晰且重点突出。
+                </div>
+            </div>
+            
+            <div class="insight-item">
+                <i data-lucide="zap" class="insight-icon"></i>
+                <div class="insight-text">
+                    "负责"和"管理"是简历中最常使用的行动动词。
+                </div>
+            </div>
+            
+            <div class="insight-item">
+                <i data-lucide="list" class="insight-icon"></i>
+                <div class="insight-text">
+                    大多数优秀简历包含15-20个清晰的要点描述。
+                </div>
+            </div>
+            
+            <div class="insight-item">
+                <i data-lucide="users" class="insight-icon"></i>
+                <div class="insight-text">
+                    突出团队协作和领导能力的简历获得更高评分。
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- 详细反馈模态框 -->
+    <div id="detailed-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">详细反馈报告</h3>
+                <button class="modal-close" id="modal-close">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div id="modal-body">
+                <!-- 详细反馈内容将在这里动态插入 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 初始化图标
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            
+            // 模拟数据和初始化
+            initializeAnalysis();
+            
+            // 事件监听
+            document.getElementById('detailed-feedback-btn').addEventListener('click', showDetailedFeedback);
+            document.getElementById('modal-close').addEventListener('click', hideDetailedFeedback);
+            
+            // 点击模态框外部关闭
+            document.getElementById('detailed-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideDetailedFeedback();
+                }
+            });
+        });
+
+        // 初始化分析数据
+        function initializeAnalysis() {
+            // 模拟从localStorage或API获取简历数据
+            const resumeData = getResumeData();
+            
+            // 更新简历标题
+            if (resumeData.name) {
+                document.getElementById('resume-title').textContent = `${resumeData.name}的简历`;
+            }
+            
+            // 计算并显示评分
+            const scores = calculateScores(resumeData);
+            updateScoreDisplay(scores);
+        }
+
+        // 获取简历数据（模拟）
+        function getResumeData() {
+            // 这里可以从localStorage、URL参数或API获取数据
+            return {
+                name: '王大布',
+                title: '前端开发工程师',
+                email: 'jerry.wang.niu@example.com',
+                phone: '15996235223',
+                summary: '8年全栈及前端开发经验，精通React/Vue等框架应用与复杂业务逻辑构建，擅长低代码平台搭建、高并发检票测试平台及各端适配。',
+                experience: '在ABC公司（2021-至今）担任前端开发工程师，主要负责电商平台的PC和移动端维护。使用React和Vue框架，优化了产品性能，提升了用户体验。\n在XYZ公司（2019-2021）担任初级开发工程师，参与了公司内部CRM系统的开发，学习并实践了组件化开发思想。'
+            };
+        }
+
+        // 计算评分
+        function calculateScores(resumeData) {
+            let impactScore = 14;
+            let presentationScore = 26;
+            let competenciesScore = 25;
+
+            // 基于简历内容的评分逻辑
+            if (resumeData.experience && resumeData.experience.length > 100) {
+                impactScore += 5;
+            }
+            
+            if (resumeData.summary && resumeData.summary.length > 50) {
+                competenciesScore += 3;
+            }
+            
+            // 检查是否有完整的基础信息
+            if (resumeData.name && resumeData.title && resumeData.email && resumeData.phone) {
+                presentationScore += 2;
+            } else {
+                presentationScore -= 3;
+            }
+
+            const totalScore = Math.min(impactScore + presentationScore + competenciesScore, 99);
+
+            return {
+                total: totalScore,
+                impact: impactScore,
+                presentation: presentationScore,
+                competencies: competenciesScore
+            };
+        }
+
+        // 更新评分显示
+        function updateScoreDisplay(scores) {
+            // 更新总分
+            document.getElementById('score-number').textContent = scores.total;
+            
+            // 更新分项得分
+            document.getElementById('impact-score').innerHTML = `${scores.impact}<span style="font-size: 14px; color: var(--neutral-500);">/40</span>`;
+            document.getElementById('presentation-score').innerHTML = `${scores.presentation}<span style="font-size: 14px; color: var(--neutral-500);">/30</span>`;
+            document.getElementById('competencies-score').innerHTML = `${scores.competencies}<span style="font-size: 14px; color: var(--neutral-500);">/30</span>`;
+            
+            // 更新弧形图
+            updateScoreArc(scores.total);
+            
+            // 更新分项得分颜色
+            updateScoreColors(scores);
+        }
+
+        // 更新弧形图
+        function updateScoreArc(score) {
+            const arc = document.getElementById('score-arc');
+            const arcLength = 251.3; // 半圆弧长
+            const dashOffset = arcLength - (score / 100) * arcLength;
+            
+            arc.style.strokeDashoffset = dashOffset;
+            
+            // 根据分数设置颜色
+            if (score >= 85) {
+                arc.style.stroke = 'var(--success-500)';
+            } else if (score >= 60) {
+                arc.style.stroke = 'var(--warning-500)';
+            } else {
+                arc.style.stroke = 'var(--error-500)';
+            }
+        }
+
+        // 更新分项得分颜色
+        function updateScoreColors(scores) {
+            const impactElement = document.getElementById('impact-score');
+            const presentationElement = document.getElementById('presentation-score');
+            const competenciesElement = document.getElementById('competencies-score');
+            
+            // 影响力评分颜色
+            if (scores.impact >= 30) {
+                impactElement.className = 'breakdown-score score-good';
+            } else if (scores.impact >= 20) {
+                impactElement.className = 'breakdown-score score-impact';
+            } else {
+                impactElement.className = 'breakdown-score score-impact';
+            }
+            
+            // 呈现方式评分颜色
+            if (scores.presentation >= 25) {
+                presentationElement.className = 'breakdown-score score-good';
+            } else {
+                presentationElement.className = 'breakdown-score score-impact';
+            }
+            
+            // 专业能力评分颜色
+            if (scores.competencies >= 25) {
+                competenciesElement.className = 'breakdown-score score-good';
+            } else {
+                competenciesElement.className = 'breakdown-score score-impact';
+            }
+        }
+
+        // 显示详细反馈
+        function showDetailedFeedback() {
+            const modalBody = document.getElementById('modal-body');
+            const resumeData = getResumeData();
+            const scores = calculateScores(resumeData);
+            
+            modalBody.innerHTML = `
+                <div style="margin-bottom: var(--spacing-6);">
+                    <h4 style="font-weight: 600; margin-bottom: var(--spacing-4); color: var(--neutral-800);">评分详情</h4>
+                    
+                    <div style="margin-bottom: var(--spacing-4); padding: var(--spacing-4); border: 1px solid var(--neutral-300); border-radius: var(--radius-lg);">
+                        <h5 style="font-weight: 600; color: var(--warning-600); margin-bottom: var(--spacing-2);">影响力评分: ${scores.impact}/40</h5>
+                        <ul style="margin-left: var(--spacing-4); color: var(--neutral-600); font-size: 14px; line-height: 1.6;">
+                            <li style="margin-bottom: var(--spacing-1);">建议在项目经历中添加更多量化数据，如具体的业绩提升百分比</li>
+                            <li style="margin-bottom: var(--spacing-1);">使用更多行动动词来描述您的职责和成就</li>
+                            <li style="margin-bottom: var(--spacing-1);">强调您在项目中的主导作用和具体贡献</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-bottom: var(--spacing-4); padding: var(--spacing-4); border: 1px solid var(--neutral-300); border-radius: var(--radius-lg);">
+                        <h5 style="font-weight: 600; color: var(--success-600); margin-bottom: var(--spacing-2);">呈现方式评分: ${scores.presentation}/30</h5>
+                        <ul style="margin-left: var(--spacing-4); color: var(--neutral-600); font-size: 14px; line-height: 1.6;">
+                            <li style="margin-bottom: var(--spacing-1);">简历格式整体良好，信息组织清晰</li>
+                            <li style="margin-bottom: var(--spacing-1);">建议优化项目符号的一致性</li>
+                            <li style="margin-bottom: var(--spacing-1);">可以考虑调整段落间距以提高可读性</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-bottom: var(--spacing-4); padding: var(--spacing-4); border: 1px solid var(--neutral-300); border-radius: var(--radius-lg);">
+                        <h5 style="font-weight: 600; color: var(--success-600); margin-bottom: var(--spacing-2);">专业能力评分: ${scores.competencies}/30</h5>
+                        <ul style="margin-left: var(--spacing-4); color: var(--neutral-600); font-size: 14px; line-height: 1.6;">
+                            <li style="margin-bottom: var(--spacing-1);">技能关键词覆盖良好，符合行业要求</li>
+                            <li style="margin-bottom: var(--spacing-1);">建议在核心竞争力部分添加更多具体示例</li>
+                            <li style="margin-bottom: var(--spacing-1);">可以增加一些软技能的描述</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="padding-top: var(--spacing-4); border-top: 1px solid var(--neutral-300);">
+                    <h4 style="font-weight: 600; margin-bottom: var(--spacing-3); color: var(--neutral-800);">推荐改进方案</h4>
+                    <div style="font-size: 14px; color: var(--neutral-600); line-height: 1.6;">
+                        <div style="display: flex; align-items: center; margin-bottom: var(--spacing-2);">
+                            <span style="width: 8px; height: 8px; background: var(--primary-500); border-radius: 50%; margin-right: var(--spacing-2);"></span>
+                            <span><strong>优先级1:</strong> 添加量化数据和具体成就</span>
+                        </div>
+                        <div style="display: flex; align-items: center; margin-bottom: var(--spacing-2);">
+                            <span style="width: 8px; height: 8px; background: var(--primary-500); border-radius: 50%; margin-right: var(--spacing-2);"></span>
+                            <span><strong>优先级2:</strong> 优化描述语言，使用更强的行动动词</span>
+                        </div>
+                        <div style="display: flex; align-items: center;">
+                            <span style="width: 8px; height: 8px; background: var(--primary-500); border-radius: 50%; margin-right: var(--spacing-2);"></span>
+                            <span><strong>优先级3:</strong> 完善技能描述和软技能展示</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('detailed-modal').classList.add('show');
+            lucide.createIcons();
+        }
+
+        // 隐藏详细反馈
+        function hideDetailedFeedback() {
+            document.getElementById('detailed-modal').classList.remove('show');
+        }
+
+        // 模拟分析过程
+        function simulateAnalysis() {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            loadingOverlay.classList.remove('hidden');
+            
+            setTimeout(() => {
+                loadingOverlay.classList.add('hidden');
+                initializeAnalysis();
+            }, 2000);
+        }
+
+        // 如果需要重新分析，可以调用这个函数
+        // simulateAnalysis();
+    </script>
+</body>
+</html>
