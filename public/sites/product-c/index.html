@@ -3,271 +3,1043 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>动态简历 - 就业竞争力仪表盘</title>
-    <!-- 引入Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入Google Fonts (Inter) -->
+    <title>智能简历规划平台 - 动态学生简历规划平台</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
-        /* 自定义样式 */
+        :root {
+            /* Design System Colors */
+            --primary-50: #e3f2fd;
+            --primary-100: #bbdefb;
+            --primary-200: #90caf9;
+            --primary-300: #64b5f6;
+            --primary-400: #42a5f5;
+            --primary-500: #1976d2;
+            --primary-600: #1565c0;
+            --primary-700: #0d47a1;
+            --primary-800: #0a3d91;
+            --primary-900: #082f73;
+            
+            --secondary-500: #9c27b0;
+            --secondary-600: #8e24aa;
+            
+            --success-500: #34a853;
+            --warning-500: #f57c00;
+            --error-500: #ea4335;
+            
+            --neutral-50: #fafafa;
+            --neutral-100: #f8f9fa;
+            --neutral-200: #f1f3f4;
+            --neutral-300: #e8eaed;
+            --neutral-400: #dadce0;
+            --neutral-500: #9aa0a6;
+            --neutral-600: #5f6368;
+            --neutral-700: #3c4043;
+            --neutral-800: #2d3134;
+            --neutral-900: #1a1a1a;
+            
+            /* Typography */
+            --font-family: 'Inter', 'Google Sans', 'Roboto', sans-serif;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-base: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 20px;
+            --font-size-2xl: 24px;
+            --font-size-3xl: 32px;
+            --font-size-4xl: 40px;
+            --font-size-5xl: 48px;
+            --font-size-6xl: 60px;
+            
+            /* Spacing */
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-10: 40px;
+            --spacing-12: 48px;
+            --spacing-16: 64px;
+            --spacing-20: 80px;
+            --spacing-24: 96px;
+            
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius-base: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+            --radius-full: 50%;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            --shadow-base: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 8px -2px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 2px 18px 0 rgba(0,0,0,0.12);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0,0,0,0.25);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            --gradient-tech: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-holographic: linear-gradient(45deg, #ff6b6b 0%, #4ecdc4 25%, #45b7d1 50%, #96ceb4 75%, #feca57 100%);
+            --gradient-neon: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+            --gradient-cosmic: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --gradient-surface: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            --gradient-background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Inter', 'Helvetica Neue', 'Arial', 'sans-serif';
-            background-color: #f0f4f8; /* 亮色背景 */
+            font-family: var(--font-family);
+            background: var(--neutral-50);
+            color: var(--neutral-700);
+            line-height: 1.5;
+            overflow-x: hidden;
         }
-        .card {
-            background-color: white;
-            border-radius: 1rem; /* 更大的圆角 */
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-            transition: all 0.3s ease-in-out;
+        
+        /* Particle Background */
+        .particle-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
         }
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            box-shadow: var(--shadow-base);
+            padding: 0 var(--spacing-6);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            height: 64px;
         }
-        .main-score {
-            font-weight: 800; /* Extra bold */
-            color: #1e40af; /* 深蓝色 */
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
         }
-        .btn-primary {
-            background-color: #2563eb; /* 蓝色 */
+        
+        .logo {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
             color: white;
-            font-weight: 600;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            transition: background-color 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
         }
+        
+        .logo-icon {
+            font-size: 28px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .nav {
+            display: flex;
+            gap: var(--spacing-2);
+        }
+        
+        .nav-link {
+            border-radius: 20px;
+            padding: var(--spacing-2) var(--spacing-4);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.87);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.16);
+            color: white;
+            box-shadow: var(--shadow-base);
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background: var(--gradient-cosmic);
+        }
+        
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-20) var(--spacing-6);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-16);
+            align-items: center;
+        }
+        
+        .hero-text {
+            z-index: 2;
+        }
+        
+        .hero-title {
+            font-size: var(--font-size-6xl);
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--spacing-6);
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .hero-subtitle {
+            font-size: var(--font-size-xl);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--spacing-8);
+            line-height: 1.6;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: var(--spacing-4);
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: var(--spacing-4) var(--spacing-6);
+            border-radius: var(--radius-2xl);
+            font-weight: 500;
+            font-size: var(--font-size-base);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+        
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--primary-600);
+            box-shadow: var(--shadow-md);
+        }
+        
         .btn-primary:hover {
-            background-color: #1d4ed8;
+            background: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
+        
         .btn-secondary {
-            background-color: #e2e8f0;
-            color: #475569;
-            font-weight: 600;
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            transition: background-color 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
         }
+        
         .btn-secondary:hover {
-            background-color: #cbd5e1;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
-        /* 雷达图动画 */
-        .radar-chart-polygon {
-            stroke: #2563eb;
-            stroke-width: 2;
-            fill: rgba(37, 99, 235, 0.2);
-            transition: all 0.5s ease-in-out;
+        
+        /* 3D Radar Container */
+        .radar-container {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+        
+        .radar-sphere {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotate 20s linear infinite;
+        }
+        
+        .radar-ring {
+            position: absolute;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+        }
+        
+        .radar-ring:nth-child(1) {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        
+        .radar-ring:nth-child(2) {
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            transform: rotateX(60deg);
+        }
+        
+        .radar-ring:nth-child(3) {
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            transform: rotateY(60deg);
+        }
+        
+        .radar-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .radar-label {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--neutral-700);
+            padding: var(--spacing-1) var(--spacing-2);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            white-space: nowrap;
+            transform: translateZ(50px);
+        }
+        
+        /* Features Section */
+        .features {
+            padding: var(--spacing-20) var(--spacing-6);
+            background: var(--gradient-background);
+        }
+        
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: var(--spacing-16);
+        }
+        
+        .section-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .section-subtitle {
+            font-size: var(--font-size-xl);
+            color: var(--neutral-600);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--spacing-8);
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-8);
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+        
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-holographic);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+        
+        .feature-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--spacing-4);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .feature-icon .material-icons {
+            font-size: 28px;
+            color: white;
+        }
+        
+        .feature-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-3);
+        }
+        
+        .feature-description {
+            color: var(--neutral-600);
+            line-height: 1.6;
+        }
+        
+        /* Demo Section */
+        .demo {
+            padding: var(--spacing-20) var(--spacing-6);
+            background: var(--gradient-tech);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .demo-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .demo-header {
+            text-align: center;
+            margin-bottom: var(--spacing-16);
+        }
+        
+        .demo-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .demo-subtitle {
+            font-size: var(--font-size-xl);
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .demo-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-16);
+            align-items: center;
+        }
+        
+        .demo-preview {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-8);
+            backdrop-filter: blur(10px);
+            position: relative;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .demo-3d-container {
+            width: 300px;
+            height: 300px;
+            position: relative;
+            perspective: 1000px;
+        }
+        
+        .demo-features {
+            color: white;
+        }
+        
+        .demo-feature {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+            margin-bottom: var(--spacing-4);
+            padding: var(--spacing-4);
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            backdrop-filter: blur(5px);
+        }
+        
+        .demo-feature-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: var(--radius-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .demo-feature-text h3 {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            margin-bottom: var(--spacing-1);
+        }
+        
+        .demo-feature-text p {
+            font-size: var(--font-size-sm);
+            opacity: 0.9;
+        }
+        
+        /* CTA Section */
+        .cta {
+            padding: var(--spacing-20) var(--spacing-6);
+            background: var(--gradient-primary);
+            text-align: center;
+        }
+        
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: white;
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .cta-subtitle {
+            font-size: var(--font-size-xl);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--spacing-8);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: var(--spacing-4);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--neutral-900);
+            color: white;
+            padding: var(--spacing-12) var(--spacing-6) var(--spacing-6);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-6);
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: white;
+        }
+        
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-8);
+                text-align: center;
+            }
+            
+            .hero-title {
+                font-size: var(--font-size-4xl);
+            }
+            
+            .radar-container {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .demo-content {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-8);
+            }
+            
+            .nav {
+                display: none;
+            }
+        }
+        
+        /* Parallax Effect */
+        .parallax-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .parallax-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .parallax-background {
+            transform: translateZ(-1px) scale(1.5);
+            filter: blur(2px);
+        }
+        
+        .parallax-midground {
+            transform: translateZ(-0.5px) scale(1.2);
+        }
+        
+        .parallax-foreground {
+            transform: translateZ(0px) scale(1);
         }
     </style>
 </head>
-<body class="antialiased text-slate-800">
+<body>
+    <!-- Particle Background -->
+    <canvas class="particle-background" id="particleCanvas"></canvas>
 
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <!-- 页面标题和用户信息 -->
-        <header class="mb-8">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-                <div>
-                    <h1 class="text-3xl font-bold text-slate-900">动态简历</h1>
-                    <p class="text-slate-500 mt-1">实时更新你的就业竞争力</p>
-                </div>
-                <div class="text-right mt-4 sm:mt-0">
-                    <p class="font-semibold text-lg">张三</p>
-                    <p class="text-sm text-slate-500">学号: 202312345</p>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="#" class="logo">
+                <span class="material-icons logo-icon">psychology</span>
+                智能简历规划
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link active">首页</a>
+                <a href="cases.html" class="nav-link">案例</a>
+                <a href="dashboard.html" class="nav-link">我的仪表板</a>
+                <a href="#" class="nav-link">关于</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">智能简历规划<br>重新定义职业发展</h1>
+                <p class="hero-subtitle">基于AI驱动的动态简历平台，整合校友案例库和职业发展数据，为学生提供个性化的职业规划指导和实时简历优化建议。</p>
+                <div class="hero-buttons">
+                    <a href="dashboard.html" class="btn btn-primary">
+                        <span class="material-icons">rocket_launch</span>
+                        开始体验
+                    </a>
+                    <a href="cases.html" class="btn btn-secondary">
+                        <span class="material-icons">group</span>
+                        查看案例
+                    </a>
                 </div>
             </div>
-        </header>
+            <div class="radar-container">
+                <div class="radar-sphere">
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-ring"></div>
+                    <div class="radar-point" style="top: 20%; left: 80%;"></div>
+                    <div class="radar-point" style="top: 60%; left: 20%;"></div>
+                    <div class="radar-point" style="top: 80%; left: 60%;"></div>
+                    <div class="radar-point" style="top: 30%; left: 40%;"></div>
+                    <div class="radar-point" style="top: 70%; left: 70%;"></div>
+                    <div class="radar-label" style="top: 15%; left: 85%;">技术能力</div>
+                    <div class="radar-label" style="top: 55%; left: 15%;">沟通能力</div>
+                    <div class="radar-label" style="top: 75%; left: 65%;">领导能力</div>
+                    <div class="radar-label" style="top: 25%; left: 35%;">创新能力</div>
+                    <div class="radar-label" style="top: 65%; left: 75%;">分析能力</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <!-- 主仪表盘网格布局 -->
-        <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-            <!-- 左侧主区域 -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- 就业竞争力总览 -->
-                <div class="card p-6 flex flex-col md:flex-row items-center gap-6">
-                    <div class="flex-1 text-center md:text-left">
-                        <h2 class="text-xl font-bold text-slate-800 mb-2">就业竞争力总分</h2>
-                        <p class="main-score text-7xl md:text-8xl">78<span class="text-3xl text-slate-400">/100</span></p>
-                        <p class="mt-3 text-lg font-medium text-amber-600 bg-amber-100 px-4 py-2 rounded-lg inline-block">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-1" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M8.257 3.099c.636-1.21 2.37-1.21 3.006 0l4.592 8.778c.636 1.21-.23 2.623-1.503 2.623H5.168c-1.273 0-2.139-1.413-1.503-2.623l4.592-8.778zM10 12a1 1 0 110-2 1 1 0 010 2zm0-5a1 1 0 011 1v2a1 1 0 11-2 0V8a1 1 0 011-1z" clip-rule="evenodd" /></svg>
-                            您已具备初步竞争力，继续努力！
-                        </p>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="features-container">
+            <div class="section-header">
+                <h2 class="section-title">强大功能，重塑职业规划</h2>
+                <p class="section-subtitle">通过AI技术和3D可视化，为每位学生提供个性化的职业发展解决方案</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">auto_awesome</span>
                     </div>
-                    <div class="w-full md:w-80 h-80">
-                        <!-- SVG 雷达图 -->
-                        <svg viewBox="0 0 200 200" class="w-full h-full">
-                            <defs>
-                                <linearGradient id="radarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                    <stop offset="0%" style="stop-color:rgba(59, 130, 246, 0.2)" />
-                                    <stop offset="100%" style="stop-color:rgba(37, 99, 235, 0.4)" />
-                                </linearGradient>
-                            </defs>
+                    <h3 class="feature-title">AI智能分析</h3>
+                    <p class="feature-description">基于大数据和机器学习算法，实时分析个人能力特征，提供精准的职业发展建议和简历优化方案。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">3d_rotation</span>
+                    </div>
+                    <h3 class="feature-title">3D能力雷达</h3>
+                    <p class="feature-description">创新的3D球形雷达图，360度展示个人能力维度，直观了解自身优势和发展空间。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">timeline</span>
+                    </div>
+                    <h3 class="feature-title">动态成长轨迹</h3>
+                    <p class="feature-description">可视化个人成长历程，追踪关键里程碑，制定阶段性目标和具体行动计划。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">group</span>
+                    </div>
+                    <h3 class="feature-title">校友案例匹配</h3>
+                    <p class="feature-description">基于相似度算法匹配校友案例，学习成功经验，获得个性化的职业发展路径建议。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">description</span>
+                    </div>
+                    <h3 class="feature-title">智能简历构建</h3>
+                    <p class="feature-description">AI辅助生成简历内容，根据目标职位实时优化，支持多版本管理和个性化定制。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">insights</span>
+                    </div>
+                    <h3 class="feature-title">数据洞察分析</h3>
+                    <p class="feature-description">深度分析个人发展趋势，行业招聘动态，提供基于数据的职业规划决策支持。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo">
+        <div class="demo-container">
+            <div class="demo-header">
+                <h2 class="demo-title">沉浸式体验</h2>
+                <p class="demo-subtitle">通过3D交互和动态可视化，让职业规划变得生动有趣</p>
+            </div>
+            <div class="demo-content">
+                <div class="demo-preview">
+                    <div class="demo-3d-container">
+                        <div id="threejs-container" style="width: 100%; height: 100%;"></div>
+                    </div>
+                </div>
+                <div class="demo-features">
+                    <div class="demo-feature">
+                        <div class="demo-feature-icon">
+                            <span class="material-icons">view_in_ar</span>
+                        </div>
+                        <div class="demo-feature-text">
+                            <h3>AR风格预览</h3>
+                            <p>简历以3D卡片形式悬浮展示，支持手势操作和实时编辑</p>
+                        </div>
+                    </div>
+                    <div class="demo-feature">
+                        <div class="demo-feature-icon">
+                            <span class="material-icons">account_tree</span>
+                        </div>
+                        <div class="demo-feature-text">
+                            <h3>职业路径图</h3>
+                            <p>立体的职业发展树状图，可视化探索不同发展方向</p>
+                        </div>
+                    </div>
+                    <div class="demo-feature">
+                        <div class="demo-feature-icon">
+                            <span class="material-icons">psychology</span>
+                        </div>
+                        <div class="demo-feature-text">
+                            <h3>智能推荐</h3>
+                            <p>基于个人特征和目标，推荐最适合的职位和发展路径</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2 class="cta-title">开启您的职业规划之旅</h2>
+            <p class="cta-subtitle">加入我们，体验最前沿的AI驱动职业规划平台</p>
+            <div class="cta-buttons">
+                <a href="dashboard.html" class="btn btn-primary">
+                    <span class="material-icons">login</span>
+                    立即体验
+                </a>
+                <a href="cases.html" class="btn btn-secondary">
+                    <span class="material-icons">group</span>
+                    查看案例
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">&copy; 2024 南京大学就业指导中心. 保留所有权利.</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">隐私政策</a>
+                <a href="#" class="footer-link">使用条款</a>
+                <a href="#" class="footer-link">联系我们</a>
+                <a href="#" class="footer-link">帮助中心</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Particle System
+        class ParticleSystem {
+            constructor(canvas) {
+                this.canvas = canvas;
+                this.ctx = canvas.getContext('2d');
+                this.particles = [];
+                this.mouse = { x: 0, y: 0 };
+                
+                this.resize();
+                this.createParticles();
+                this.bindEvents();
+                this.animate();
+            }
+            
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+            
+            createParticles() {
+                const count = Math.min(100, Math.floor(this.canvas.width * this.canvas.height / 15000));
+                for (let i = 0; i < count; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        size: Math.random() * 3 + 1,
+                        opacity: Math.random() * 0.5 + 0.3
+                    });
+                }
+            }
+            
+            bindEvents() {
+                window.addEventListener('resize', () => this.resize());
+                this.canvas.addEventListener('mousemove', (e) => {
+                    this.mouse.x = e.clientX;
+                    this.mouse.y = e.clientY;
+                });
+            }
+            
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach((particle, index) => {
+                    // Update position
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    // Bounce off edges
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+                    
+                    // Mouse interaction
+                    const dx = this.mouse.x - particle.x;
+                    const dy = this.mouse.y - particle.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance < 100) {
+                        const force = (100 - distance) / 100;
+                        particle.vx += dx * force * 0.001;
+                        particle.vy += dy * force * 0.001;
+                    }
+                    
+                    // Draw particle
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    this.ctx.fillStyle = `rgba(25, 118, 210, ${particle.opacity})`;
+                    this.ctx.fill();
+                    
+                    // Draw connections
+                    this.particles.forEach((other, otherIndex) => {
+                        if (index !== otherIndex) {
+                            const dx = particle.x - other.x;
+                            const dy = particle.y - other.y;
+                            const distance = Math.sqrt(dx * dx + dy * dy);
                             
-                            <!-- 网格线 -->
-                            <g stroke="#e2e8f0" stroke-width="1">
-                                <circle cx="100" cy="100" r="20"></circle>
-                                <circle cx="100" cy="100" r="40"></circle>
-                                <circle cx="100" cy="100" r="60"></circle>
-                                <circle cx="100" cy="100" r="80"></circle>
-                                <line x1="100" y1="20" x2="100" y2="180"></line>
-                                <line x1="39.4" y1="65" x2="160.6" y2="135"></line>
-                                <line x1="39.4" y1="135" x2="160.6" y2="65"></line>
-                                <line x1="20" y1="100" x2="180" y2="100"></line>
-                            </g>
-
-                            <!-- 数据多边形 -->
-                            <polygon class="radar-chart-polygon" points="100,28 152.5,70 142.4,145 57.6,145 47.5,70" style="fill: url(#radarGradient);"></polygon>
-
-                            <!-- 标签 -->
-                            <g fill="#475569" font-size="10" font-weight="600" text-anchor="middle">
-                                <text x="100" y="12">学术表现 (85)</text>
-                                <text x="175" y="65">实践经验 (70)</text>
-                                <text x="155" y="168">通用技能 (65)</text>
-                                <text x="45" y="168">职业素养 (75)</text>
-                                <text x="25" y="65">课外活动 (60)</text>
-                            </g>
-                        </svg>
-                    </div>
-                </div>
-
-                <!-- 个性化优化提示与行动建议 -->
-                <div class="card p-6">
-                    <h2 class="text-xl font-bold text-slate-800 mb-4">个性化行动建议</h2>
-                    <div class="space-y-6">
-                        <!-- 技能提升建议 -->
-                        <div>
-                            <h3 class="font-semibold text-lg mb-2 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
-                                技能提升建议
-                            </h3>
-                            <div class="border-l-4 border-blue-200 pl-4 space-y-3">
-                                <div class="bg-slate-50 p-3 rounded-lg">
-                                    <p class="font-semibold">提升 <span class="text-blue-700 bg-blue-100 px-2 py-1 rounded">Python编程</span> 技能</p>
-                                    <p class="text-sm text-slate-600 mt-1">你的目标职业“软件开发工程师”高度依赖此技能。</p>
-                                    <div class="mt-2">
-                                        <a href="#" class="text-sm font-medium text-blue-600 hover:underline">推荐课程：计算机学院《Python入门》 &rarr;</a>
-                                    </div>
-                                </div>
-                                <div class="bg-slate-50 p-3 rounded-lg">
-                                    <p class="font-semibold">学习 <span class="text-blue-700 bg-blue-100 px-2 py-1 rounded">数据结构与算法</span></p>
-                                    <p class="text-sm text-slate-600 mt-1">这是技术面试的核心考点。</p>
-                                    <div class="mt-2">
-                                        <a href="#" class="text-sm font-medium text-blue-600 hover:underline">推荐活动：数据科学社团“算法训练营” &rarr;</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- 实践经验积累 -->
-                        <div>
-                            <h3 class="font-semibold text-lg mb-2 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
-                                实践经验积累
-                            </h3>
-                            <div class="border-l-4 border-green-200 pl-4 space-y-3">
-                                <div class="bg-slate-50 p-3 rounded-lg">
-                                    <p class="font-semibold">参与一个校内项目</p>
-                                    <p class="text-sm text-slate-600 mt-1">你的项目经验目前为空白，这是简历的重要部分。</p>
-                                    <div class="mt-2">
-                                        <a href="#" class="text-sm font-medium text-green-600 hover:underline">查看推荐的“校园信息发布平台”开发项目 &rarr;</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         <!-- 简历内容优化 -->
-                        <div>
-                            <h3 class="font-semibold text-lg mb-2 flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-                                简历内容优化示例
-                            </h3>
-                            <div class="border-l-4 border-purple-200 pl-4">
-                                <div class="bg-slate-50 p-4 rounded-lg">
-                                    <p class="text-sm text-slate-600 mb-2">针对你的“班级学习委员”经历，可以这样描述以突出职业素养：</p>
-                                    <p class="font-mono text-sm p-3 bg-slate-200 rounded">
-                                        - <span class="font-semibold">优化前:</span> 收发作业和通知。<br>
-                                        - <span class="font-semibold text-purple-700">优化后:</span> 负责<span class="font-bold">35名</span>同学的学业材料沟通与传递，确保信息<span class="font-bold">100%</span>准确触达，有效提升班级作业提报<span class="font-bold">效率15%</span>。
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 右侧边栏 -->
-            <div class="space-y-6">
-                <!-- 目标职业方向 -->
-                <div class="card p-6">
-                    <h2 class="text-xl font-bold text-slate-800 mb-4">目标职业方向</h2>
-                    <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg text-center">
-                        <p class="text-sm text-blue-800">当前意向</p>
-                        <p class="font-bold text-xl text-blue-900 mt-1">软件开发工程师</p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 mt-4">
-                        <button class="btn-primary w-full">修改方向</button>
-                        <button class="btn-secondary w-full">探索职业</button>
-                    </div>
-                </div>
-
-                <!-- 核心优化提示 -->
-                <div class="card p-6">
-                    <h2 class="text-xl font-bold text-slate-800 mb-4">核心优化提示</h2>
-                    <ul class="space-y-4">
-                        <li class="flex items-start">
-                            <div class="flex-shrink-0 bg-red-100 text-red-600 rounded-full h-8 w-8 flex items-center justify-center font-bold">1</div>
-                            <p class="ml-3 text-slate-700">你的<span class="font-semibold">实践经验</span>得分较低，建议立即寻找校内项目或准备暑期实习。</p>
-                        </li>
-                        <li class="flex items-start">
-                            <div class="flex-shrink-0 bg-orange-100 text-orange-600 rounded-full h-8 w-8 flex items-center justify-center font-bold">2</div>
-                            <p class="ml-3 text-slate-700">目标方向所需的<span class="font-semibold">编程技能</span>有待提升，建议选修相关课程。</p>
-                        </li>
-                        <li class="flex items-start">
-                            <div class="flex-shrink-0 bg-yellow-100 text-yellow-600 rounded-full h-8 w-8 flex items-center justify-center font-bold">3</div>
-                            <p class="ml-3 text-slate-700">丰富<span class="font-semibold">课外活动</span>经历，在社团中承担角色，锻炼软技能。</p>
-                        </li>
-                    </ul>
-                </div>
-
-                <!-- 竞争力趋势 -->
-                <div class="card p-6">
-                    <h2 class="text-xl font-bold text-slate-800 mb-4">竞争力趋势</h2>
-                    <!-- SVG 折线图 -->
-                    <div class="w-full h-48">
-                        <svg width="100%" height="100%" viewBox="0 0 300 150">
-                            <!-- Y轴和网格线 -->
-                            <g stroke="#e2e8f0" stroke-width="1" font-size="10" fill="#94a3b8">
-                                <line x1="30" y1="10" x2="300" y2="10"></line>
-                                <text x="10" y="14">100</text>
-                                <line x1="30" y1="42.5" x2="300" y2="42.5"></line>
-                                <text x="15" y="46.5">75</text>
-                                <line x1="30" y1="75" x2="300" y2="75"></line>
-                                <text x="15" y="79">50</text>
-                                <line x1="30" y1="107.5" x2="300" y2="107.5"></line>
-                                <text x="15" y="111.5">25</text>
-                                <line x1="30" y1="140" x2="300" y2="140"></line>
-                            </g>
-                            <!-- X轴标签 -->
-                            <g font-size="10" fill="#94a3b8" text-anchor="middle">
-                                <text x="60" y="150">大一上</text>
-                                <text x="135" y="150">大一下</text>
-                                <text x="210" y="150">大二上</text>
-                                <text x="285" y="150">当前</text>
-                            </g>
-                            <!-- 折线 -->
-                            <polyline fill="none" stroke="#2563eb" stroke-width="2" points="60,95 135,85 210,65 285,49" />
-                            <!-- 数据点 -->
-                            <g fill="#2563eb">
-                                <circle cx="60" cy="95" r="3"></circle>
-                                <circle cx="135" cy="85" r="3"></circle>
-                                <circle cx="210" cy="65" r="3"></circle>
-                                <circle cx="285" cy="49" r="4" fill="white" stroke="#2563eb" stroke-width="2"></circle>
-                            </g>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
+                            if (distance < 120) {
+                                const opacity = (120 - distance) / 120 * 0.3;
+                                this.ctx.beginPath();
+                                this.ctx.moveTo(particle.x, particle.y);
+                                this.ctx.lineTo(other.x, other.y);
+                                this.ctx.strokeStyle = `rgba(25, 118, 210, ${opacity})`;
+                                this.ctx.lineWidth = 1;
+                                this.ctx.stroke();
+                            }
+                        }
+                    });
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+        
+        // Initialize particle system
+        const particleCanvas = document.getElementById('particleCanvas');
+        const particleSystem = new ParticleSystem(particleCanvas);
+        
+        // Three.js Demo
+        let scene, camera, renderer, cube;
+        
+        function initThreeJS() {
+            const container = document.getElementById('threejs-container');
+            
+            // Scene
+            scene = new THREE.Scene();
+            
+            // Camera
+            camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+            camera.position.z = 5;
+            
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(300, 300);
+            container.appendChild(renderer.domElement);
+            
+            // Geometry
+            const geometry = new THREE.BoxGeometry(2, 2, 2);
+            const material = new THREE.MeshBasicMaterial({ 
+                color: 0x1976d2,
+                transparent: true,
+                opacity: 0.8,
+                wireframe: true
+            });
+            cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+            
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.01;
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+        }
+        
+        // Initialize Three.js when page loads
+        window.addEventListener('load', initThreeJS);
+        
+        // Scroll animations
+        function handleScroll() {
+            const scrolled = window.pageYOffset;
+            const rate = scrolled * -0.5;
+            
+            const heroContent = document.querySelector('.hero-content');
+            if (heroContent) {
+                heroContent.style.transform = `translateY(${rate}px)`;
+            }
+        }
+        
+        window.addEventListener('scroll', handleScroll);
+        
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                }
+            });
+        }, observerOptions);
+        
+        // Observe feature cards
+        document.querySelectorAll('.feature-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
 </body>
 </html>

@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校友案例 - 智能简历规划平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            /* Design System Colors */
+            --primary-50: #e3f2fd;
+            --primary-100: #bbdefb;
+            --primary-200: #90caf9;
+            --primary-300: #64b5f6;
+            --primary-400: #42a5f5;
+            --primary-500: #1976d2;
+            --primary-600: #1565c0;
+            --primary-700: #0d47a1;
+            --primary-800: #0a3d91;
+            --primary-900: #082f73;
+            
+            --secondary-500: #9c27b0;
+            --secondary-600: #8e24aa;
+            
+            --success-500: #34a853;
+            --warning-500: #f57c00;
+            --error-500: #ea4335;
+            
+            --neutral-50: #fafafa;
+            --neutral-100: #f8f9fa;
+            --neutral-200: #f1f3f4;
+            --neutral-300: #e8eaed;
+            --neutral-400: #dadce0;
+            --neutral-500: #9aa0a6;
+            --neutral-600: #5f6368;
+            --neutral-700: #3c4043;
+            --neutral-800: #2d3134;
+            --neutral-900: #1a1a1a;
+            
+            /* Typography */
+            --font-family: 'Inter', 'Google Sans', 'Roboto', sans-serif;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-base: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 20px;
+            --font-size-2xl: 24px;
+            --font-size-3xl: 32px;
+            --font-size-4xl: 40px;
+            
+            /* Spacing */
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-10: 40px;
+            --spacing-12: 48px;
+            --spacing-16: 64px;
+            --spacing-20: 80px;
+            --spacing-24: 96px;
+            
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius-base: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+            --radius-full: 50%;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            --shadow-base: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 8px -2px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 2px 18px 0 rgba(0,0,0,0.12);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            --gradient-tech: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-surface: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            --gradient-background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background: var(--neutral-50);
+            color: var(--neutral-700);
+            line-height: 1.5;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            box-shadow: var(--shadow-base);
+            padding: 0 var(--spacing-6);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            height: 64px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+        
+        .logo {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+        
+        .logo-icon {
+            font-size: 28px;
+        }
+        
+        .nav {
+            display: flex;
+            gap: var(--spacing-2);
+        }
+        
+        .nav-link {
+            border-radius: 20px;
+            padding: var(--spacing-2) var(--spacing-4);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.87);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.16);
+            color: white;
+            box-shadow: var(--shadow-base);
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-8) var(--spacing-6);
+        }
+        
+        .page-header {
+            text-align: center;
+            margin-bottom: var(--spacing-12);
+        }
+        
+        .page-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .page-subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--neutral-600);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Filter Section */
+        .filter-section {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-6);
+            box-shadow: var(--shadow-base);
+            margin-bottom: var(--spacing-8);
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-4);
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-2);
+        }
+        
+        .filter-label {
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--neutral-700);
+        }
+        
+        .filter-select {
+            padding: var(--spacing-2) var(--spacing-3);
+            border: 1px solid var(--neutral-300);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-sm);
+            background: white;
+            color: var(--neutral-700);
+            transition: all 0.2s ease;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+        
+        /* Cases Grid */
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--spacing-6);
+        }
+        
+        .case-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-6);
+            box-shadow: var(--shadow-base);
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .case-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .case-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            transform: translateY(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .case-card:hover::before {
+            transform: translateY(0);
+        }
+        
+        .case-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .case-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-tech);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .case-info {
+            flex: 1;
+        }
+        
+        .case-name {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-1);
+        }
+        
+        .case-basic {
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+            margin-bottom: var(--spacing-1);
+        }
+        
+        .case-current {
+            font-size: var(--font-size-sm);
+            color: var(--primary-600);
+            font-weight: 500;
+        }
+        
+        .case-journey {
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .journey-title {
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--neutral-700);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .journey-path {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            flex-wrap: wrap;
+        }
+        
+        .journey-step {
+            background: var(--neutral-100);
+            padding: var(--spacing-1) var(--spacing-2);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            color: var(--neutral-600);
+        }
+        
+        .journey-arrow {
+            color: var(--neutral-400);
+            font-size: var(--font-size-xs);
+        }
+        
+        .case-skills {
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .skills-title {
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--neutral-700);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .skills-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-1);
+        }
+        
+        .skill-tag {
+            background: var(--primary-50);
+            color: var(--primary-600);
+            padding: var(--spacing-1) var(--spacing-2);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+        }
+        
+        .case-highlights {
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .highlights-title {
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: var(--neutral-700);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .highlight-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-2);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .highlight-icon {
+            color: var(--success-500);
+            font-size: 16px;
+            margin-top: 2px;
+        }
+        
+        .highlight-text {
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+            flex: 1;
+        }
+        
+        .case-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .similarity-score {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+        }
+        
+        .score-value {
+            font-weight: 600;
+            color: var(--primary-600);
+        }
+        
+        .view-btn {
+            background: var(--primary-500);
+            color: white;
+            border: none;
+            padding: var(--spacing-2) var(--spacing-4);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .view-btn:hover {
+            background: var(--primary-600);
+            transform: translateY(-1px);
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-6);
+            box-shadow: var(--shadow-base);
+            margin-bottom: var(--spacing-8);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-6);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: var(--font-size-3xl);
+            font-weight: 700;
+            color: var(--primary-500);
+            margin-bottom: var(--spacing-1);
+        }
+        
+        .stat-label {
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--neutral-900);
+            color: white;
+            padding: var(--spacing-12) var(--spacing-6) var(--spacing-6);
+            margin-top: var(--spacing-20);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-6);
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            
+            .main-content {
+                padding: var(--spacing-6) var(--spacing-4);
+            }
+            
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span class="material-icons logo-icon">psychology</span>
+                智能简历规划
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="cases.html" class="nav-link active">案例</a>
+                <a href="dashboard.html" class="nav-link">我的仪表板</a>
+                <a href="#" class="nav-link">关于</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">校友职业发展案例</h1>
+            <p class="page-subtitle">学习成功校友的职业发展经验，找到最适合您的职业路径</p>
+        </div>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value">356</div>
+                    <div class="stat-label">校友案例</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">15</div>
+                    <div class="stat-label">行业覆盖</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">28</div>
+                    <div class="stat-label">职能分类</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">98%</div>
+                    <div class="stat-label">成功匹配率</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filter Section -->
+        <section class="filter-section">
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label class="filter-label">行业领域</label>
+                    <select class="filter-select" id="industryFilter">
+                        <option value="">全部行业</option>
+                        <option value="tech">互联网科技</option>
+                        <option value="finance">金融投资</option>
+                        <option value="consulting">管理咨询</option>
+                        <option value="manufacturing">制造业</option>
+                        <option value="education">教育培训</option>
+                        <option value="healthcare">医疗健康</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">职能分类</label>
+                    <select class="filter-select" id="functionFilter">
+                        <option value="">全部职能</option>
+                        <option value="engineer">技术开发</option>
+                        <option value="product">产品管理</option>
+                        <option value="marketing">市场营销</option>
+                        <option value="finance">财务分析</option>
+                        <option value="hr">人力资源</option>
+                        <option value="operations">运营管理</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">毕业年份</label>
+                    <select class="filter-select" id="yearFilter">
+                        <option value="">全部年份</option>
+                        <option value="2024">2024届</option>
+                        <option value="2023">2023届</option>
+                        <option value="2022">2022届</option>
+                        <option value="2021">2021届</option>
+                        <option value="2020">2020届</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label class="filter-label">专业背景</label>
+                    <select class="filter-select" id="majorFilter">
+                        <option value="">全部专业</option>
+                        <option value="cs">计算机科学</option>
+                        <option value="business">工商管理</option>
+                        <option value="finance">金融学</option>
+                        <option value="engineering">工程技术</option>
+                        <option value="literature">文学</option>
+                        <option value="science">理学</option>
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <!-- Cases Grid -->
+        <section class="cases-grid">
+            <!-- Case 1 -->
+            <div class="case-card" onclick="openCaseDetail(1)">
+                <div class="case-header">
+                    <div class="case-avatar">张</div>
+                    <div class="case-info">
+                        <div class="case-name">张明华</div>
+                        <div class="case-basic">计算机科学 · 2022届 · 南京</div>
+                        <div class="case-current">字节跳动 · 高级产品经理</div>
+                    </div>
+                </div>
+                <div class="case-journey">
+                    <div class="journey-title">职业路径</div>
+                    <div class="journey-path">
+                        <span class="journey-step">实习生</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">产品助理</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">产品经理</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">高级产品经理</span>
+                    </div>
+                </div>
+                <div class="case-skills">
+                    <div class="skills-title">核心技能</div>
+                    <div class="skills-tags">
+                        <span class="skill-tag">产品设计</span>
+                        <span class="skill-tag">用户研究</span>
+                        <span class="skill-tag">数据分析</span>
+                        <span class="skill-tag">项目管理</span>
+                        <span class="skill-tag">Python</span>
+                    </div>
+                </div>
+                <div class="case-highlights">
+                    <div class="highlights-title">关键成就</div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">star</span>
+                        <span class="highlight-text">主导开发的产品功能月活用户增长200%</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">trending_up</span>
+                        <span class="highlight-text">2年内完成3次职级晋升</span>
+                    </div>
+                </div>
+                <div class="case-actions">
+                    <div class="similarity-score">
+                        <span class="material-icons">psychology</span>
+                        <span>匹配度: <span class="score-value">92%</span></span>
+                    </div>
+                    <button class="view-btn">查看详情</button>
+                </div>
+            </div>
+
+            <!-- Case 2 -->
+            <div class="case-card" onclick="openCaseDetail(2)">
+                <div class="case-header">
+                    <div class="case-avatar">李</div>
+                    <div class="case-info">
+                        <div class="case-name">李雪琪</div>
+                        <div class="case-basic">金融学 · 2021届 · 上海</div>
+                        <div class="case-current">摩根大通 · 投资分析师</div>
+                    </div>
+                </div>
+                <div class="case-journey">
+                    <div class="journey-title">职业路径</div>
+                    <div class="journey-path">
+                        <span class="journey-step">暑期实习</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">分析师</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">高级分析师</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">投资分析师</span>
+                    </div>
+                </div>
+                <div class="case-skills">
+                    <div class="skills-title">核心技能</div>
+                    <div class="skills-tags">
+                        <span class="skill-tag">财务建模</span>
+                        <span class="skill-tag">行业分析</span>
+                        <span class="skill-tag">Excel</span>
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">英语</span>
+                    </div>
+                </div>
+                <div class="case-highlights">
+                    <div class="highlights-title">关键成就</div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">star</span>
+                        <span class="highlight-text">参与完成3个IPO项目，总融资额超100亿</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">school</span>
+                        <span class="highlight-text">获得CFA一级证书</span>
+                    </div>
+                </div>
+                <div class="case-actions">
+                    <div class="similarity-score">
+                        <span class="material-icons">psychology</span>
+                        <span>匹配度: <span class="score-value">88%</span></span>
+                    </div>
+                    <button class="view-btn">查看详情</button>
+                </div>
+            </div>
+
+            <!-- Case 3 -->
+            <div class="case-card" onclick="openCaseDetail(3)">
+                <div class="case-header">
+                    <div class="case-avatar">王</div>
+                    <div class="case-info">
+                        <div class="case-name">王志强</div>
+                        <div class="case-basic">工商管理 · 2020届 · 北京</div>
+                        <div class="case-current">麦肯锡 · 咨询顾问</div>
+                    </div>
+                </div>
+                <div class="case-journey">
+                    <div class="journey-title">职业路径</div>
+                    <div class="journey-path">
+                        <span class="journey-step">实习生</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">初级顾问</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">咨询顾问</span>
+                    </div>
+                </div>
+                <div class="case-skills">
+                    <div class="skills-title">核心技能</div>
+                    <div class="skills-tags">
+                        <span class="skill-tag">战略规划</span>
+                        <span class="skill-tag">商业分析</span>
+                        <span class="skill-tag">PPT</span>
+                        <span class="skill-tag">沟通表达</span>
+                        <span class="skill-tag">团队协作</span>
+                    </div>
+                </div>
+                <div class="case-highlights">
+                    <div class="highlights-title">关键成就</div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">star</span>
+                        <span class="highlight-text">主导某知名企业数字化转型项目</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">language</span>
+                        <span class="highlight-text">获得英语托福110分高分</span>
+                    </div>
+                </div>
+                <div class="case-actions">
+                    <div class="similarity-score">
+                        <span class="material-icons">psychology</span>
+                        <span>匹配度: <span class="score-value">85%</span></span>
+                    </div>
+                    <button class="view-btn">查看详情</button>
+                </div>
+            </div>
+
+            <!-- Case 4 -->
+            <div class="case-card" onclick="openCaseDetail(4)">
+                <div class="case-header">
+                    <div class="case-avatar">陈</div>
+                    <div class="case-info">
+                        <div class="case-name">陈美琳</div>
+                        <div class="case-basic">新闻传播 · 2023届 · 深圳</div>
+                        <div class="case-current">腾讯 · 品牌营销经理</div>
+                    </div>
+                </div>
+                <div class="case-journey">
+                    <div class="journey-title">职业路径</div>
+                    <div class="journey-path">
+                        <span class="journey-step">内容实习</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">营销专员</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">品牌经理</span>
+                    </div>
+                </div>
+                <div class="case-skills">
+                    <div class="skills-title">核心技能</div>
+                    <div class="skills-tags">
+                        <span class="skill-tag">内容策划</span>
+                        <span class="skill-tag">品牌管理</span>
+                        <span class="skill-tag">社交媒体</span>
+                        <span class="skill-tag">创意设计</span>
+                        <span class="skill-tag">数据分析</span>
+                    </div>
+                </div>
+                <div class="case-highlights">
+                    <div class="highlights-title">关键成就</div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">star</span>
+                        <span class="highlight-text">策划的营销活动获得千万级曝光</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">emoji_events</span>
+                        <span class="highlight-text">获得公司年度最佳营销案例奖</span>
+                    </div>
+                </div>
+                <div class="case-actions">
+                    <div class="similarity-score">
+                        <span class="material-icons">psychology</span>
+                        <span>匹配度: <span class="score-value">78%</span></span>
+                    </div>
+                    <button class="view-btn">查看详情</button>
+                </div>
+            </div>
+
+            <!-- Case 5 -->
+            <div class="case-card" onclick="openCaseDetail(5)">
+                <div class="case-header">
+                    <div class="case-avatar">刘</div>
+                    <div class="case-info">
+                        <div class="case-name">刘建国</div>
+                        <div class="case-basic">软件工程 · 2022届 · 杭州</div>
+                        <div class="case-current">阿里巴巴 · 技术专家</div>
+                    </div>
+                </div>
+                <div class="case-journey">
+                    <div class="journey-title">职业路径</div>
+                    <div class="journey-path">
+                        <span class="journey-step">实习开发</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">初级工程师</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">高级工程师</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">技术专家</span>
+                    </div>
+                </div>
+                <div class="case-skills">
+                    <div class="skills-title">核心技能</div>
+                    <div class="skills-tags">
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">分布式系统</span>
+                        <span class="skill-tag">微服务</span>
+                        <span class="skill-tag">系统架构</span>
+                        <span class="skill-tag">团队管理</span>
+                    </div>
+                </div>
+                <div class="case-highlights">
+                    <div class="highlights-title">关键成就</div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">star</span>
+                        <span class="highlight-text">主导核心交易系统重构，性能提升300%</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">people</span>
+                        <span class="highlight-text">带领10人技术团队</span>
+                    </div>
+                </div>
+                <div class="case-actions">
+                    <div class="similarity-score">
+                        <span class="material-icons">psychology</span>
+                        <span>匹配度: <span class="score-value">95%</span></span>
+                    </div>
+                    <button class="view-btn">查看详情</button>
+                </div>
+            </div>
+
+            <!-- Case 6 -->
+            <div class="case-card" onclick="openCaseDetail(6)">
+                <div class="case-header">
+                    <div class="case-avatar">周</div>
+                    <div class="case-info">
+                        <div class="case-name">周思涵</div>
+                        <div class="case-basic">国际贸易 · 2021届 · 广州</div>
+                        <div class="case-current">华为 · 海外市场总监</div>
+                    </div>
+                </div>
+                <div class="case-journey">
+                    <div class="journey-title">职业路径</div>
+                    <div class="journey-path">
+                        <span class="journey-step">销售实习</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">销售代表</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">区域经理</span>
+                        <span class="journey-arrow">→</span>
+                        <span class="journey-step">市场总监</span>
+                    </div>
+                </div>
+                <div class="case-skills">
+                    <div class="skills-title">核心技能</div>
+                    <div class="skills-tags">
+                        <span class="skill-tag">商务谈判</span>
+                        <span class="skill-tag">市场拓展</span>
+                        <span class="skill-tag">英语</span>
+                        <span class="skill-tag">跨文化沟通</span>
+                        <span class="skill-tag">团队管理</span>
+                    </div>
+                </div>
+                <div class="case-highlights">
+                    <div class="highlights-title">关键成就</div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">star</span>
+                        <span class="highlight-text">拓展东南亚市场，年销售额达5000万</span>
+                    </div>
+                    <div class="highlight-item">
+                        <span class="material-icons highlight-icon">public</span>
+                        <span class="highlight-text">负责6个国家的业务拓展</span>
+                    </div>
+                </div>
+                <div class="case-actions">
+                    <div class="similarity-score">
+                        <span class="material-icons">psychology</span>
+                        <span>匹配度: <span class="score-value">82%</span></span>
+                    </div>
+                    <button class="view-btn">查看详情</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">&copy; 2024 南京大学就业指导中心. 保留所有权利.</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">隐私政策</a>
+                <a href="#" class="footer-link">使用条款</a>
+                <a href="#" class="footer-link">联系我们</a>
+                <a href="#" class="footer-link">帮助中心</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function openCaseDetail(caseId) {
+            // 这里可以实现案例详情页面的跳转
+            console.log('打开案例详情:', caseId);
+            // 示例：window.location.href = `case-detail.html?id=${caseId}`;
+        }
+
+        // 筛选功能
+        document.getElementById('industryFilter').addEventListener('change', filterCases);
+        document.getElementById('functionFilter').addEventListener('change', filterCases);
+        document.getElementById('yearFilter').addEventListener('change', filterCases);
+        document.getElementById('majorFilter').addEventListener('change', filterCases);
+
+        function filterCases() {
+            const industry = document.getElementById('industryFilter').value;
+            const func = document.getElementById('functionFilter').value;
+            const year = document.getElementById('yearFilter').value;
+            const major = document.getElementById('majorFilter').value;
+
+            // 这里可以实现实际的筛选逻辑
+            console.log('筛选条件:', { industry, func, year, major });
+            
+            // 示例：根据筛选条件隐藏/显示案例卡片
+            const caseCards = document.querySelectorAll('.case-card');
+            caseCards.forEach(card => {
+                // 根据筛选条件决定是否显示
+                card.style.display = 'block';
+            });
+        }
+
+        // 添加页面加载动画
+        window.addEventListener('load', () => {
+            const caseCards = document.querySelectorAll('.case-card');
+            caseCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+    </script>
+</body>
+</html>
