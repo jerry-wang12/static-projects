@@ -15,9 +15,9 @@
   },
   {
     "id": "product-c",
-    "title": "产品C：数据分析平台",
-    "description": "集成先进的数据可视化和分析功能，帮助您从海量数据中发掘商业洞察。",
-    "thumbnail": "/demo-images/product-c.jpg",
+    "title": "动态学生简历规划平台",
+    "description": "基于AI驱动的动态简历规划平台，整合简历分析优化、校友案例库和职业发展数据，为学生提供个性化的职业规划指导和实时简历优化建议。采用3D可视化和交互式设计，打造沉浸式的职业发展体验。",
+    "thumbnail": "/demo-images/动态简历.jpg",
     "path": "product-c/index.html"
   },
   {
