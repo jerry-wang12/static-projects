@@ -22,9 +22,9 @@
   },
   {
     "id": "product-d",
-    "title": "产品D：个人效率应用",
-    "description": "简洁易用的个人待办事项和笔记应用，帮助您更好地组织工作和生活。",
-    "thumbnail": "/demo-images/product-d.jpg",
+    "title": "校友生涯故事集",
+    "description": "汇聚南大校友真实职业发展经历的动态案例库，涵盖互联网、金融、咨询等多个行业，通过AI智能生成和结构化展示，为在校生提供可信赖的求职指导和职业规划参考。",
+    "thumbnail": "/demo-images/案例库.jpg",
     "path": "product-d/index.html"
   }
 ] 

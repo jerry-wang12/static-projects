@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>案例库 - 校友生涯故事集</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+    <style>
+        /* CSS Variables from Design System */
+        :root {
+            /* Colors */
+            --primary-50: #e3f2fd;
+            --primary-100: #bbdefb;
+            --primary-200: #90caf9;
+            --primary-300: #64b5f6;
+            --primary-400: #42a5f5;
+            --primary-500: #1976d2;
+            --primary-600: #1565c0;
+            --primary-700: #0d47a1;
+            --primary-800: #0a3d91;
+            --primary-900: #082f73;
+            
+            --success-50: #e8f5e8;
+            --success-100: #c8e6c9;
+            --success-200: #a5d6a7;
+            --success-300: #81c784;
+            --success-400: #66bb6a;
+            --success-500: #34a853;
+            --success-600: #2e7d32;
+            --success-700: #1b5e20;
+            
+            --warning-50: #fef7e0;
+            --warning-100: #feecb3;
+            --warning-200: #fdd835;
+            --warning-300: #fbc02d;
+            --warning-400: #f9a825;
+            --warning-500: #f57c00;
+            --warning-600: #ef6c00;
+            --warning-700: #e65100;
+            
+            --neutral-50: #fafafa;
+            --neutral-100: #f8f9fa;
+            --neutral-200: #f1f3f4;
+            --neutral-300: #e8eaed;
+            --neutral-400: #dadce0;
+            --neutral-500: #9aa0a6;
+            --neutral-600: #5f6368;
+            --neutral-700: #3c4043;
+            --neutral-800: #2d3134;
+            --neutral-900: #1a1a1a;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            --gradient-surface: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            --gradient-background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            
+            /* Typography */
+            --font-family: Inter, 'Google Sans', 'Roboto', sans-serif;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-base: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 20px;
+            --font-size-2xl: 24px;
+            --font-size-3xl: 32px;
+            --font-size-4xl: 40px;
+            --font-size-5xl: 48px;
+            
+            --font-weight-light: 300;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+            
+            /* Spacing */
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-10: 40px;
+            --spacing-12: 48px;
+            --spacing-16: 64px;
+            --spacing-20: 80px;
+            --spacing-24: 96px;
+            
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius-base: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+            --radius-full: 50%;
+            
+            /* Box Shadow */
+            --shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            --shadow-base: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 8px -2px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 2px 18px 0 rgba(0,0,0,0.12);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            
+            /* Animation */
+            --duration-fast: 0.15s;
+            --duration-normal: 0.3s;
+            --duration-slow: 0.6s;
+            --easing-material: cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background: var(--gradient-background);
+            color: var(--neutral-700);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+        
+        /* Header */
+        .header {
+            height: 64px;
+            background: var(--gradient-primary);
+            box-shadow: var(--shadow-base);
+            padding: 0 var(--spacing-6);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-8);
+            width: 100%;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            color: white;
+            text-decoration: none;
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-lg);
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+            margin-left: auto;
+        }
+        
+        .nav-link {
+            border-radius: 20px;
+            padding: var(--spacing-2) var(--spacing-4);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            color: rgba(255, 255, 255, 0.87);
+            text-decoration: none;
+            transition: all var(--duration-normal) var(--easing-material);
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.16);
+            color: white;
+            box-shadow: var(--shadow-base);
+        }
+        
+        /* Main Layout */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-8) var(--spacing-6);
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: var(--spacing-8);
+        }
+        
+        /* Breadcrumb */
+        .breadcrumb {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+            margin-bottom: var(--spacing-6);
+        }
+        
+        .breadcrumb a {
+            color: var(--primary-600);
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Sidebar Filters */
+        .sidebar {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-6);
+            box-shadow: var(--shadow-base);
+            height: fit-content;
+            position: sticky;
+            top: calc(64px + var(--spacing-8));
+        }
+        
+        .filter-section {
+            margin-bottom: var(--spacing-6);
+        }
+        
+        .filter-title {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            color: var(--neutral-800);
+            margin-bottom: var(--spacing-4);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+        
+        .search-container {
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-300);
+            border-radius: var(--radius-base);
+            padding: var(--spacing-2) var(--spacing-3);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            margin-bottom: var(--spacing-6);
+        }
+        
+        .search-input {
+            border: none;
+            background: transparent;
+            outline: none;
+            flex: 1;
+            font-size: var(--font-size-sm);
+            color: var(--neutral-700);
+        }
+        
+        .search-input::placeholder {
+            color: var(--neutral-500);
+        }
+        
+        .filter-group {
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .filter-label {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            color: var(--neutral-700);
+            margin-bottom: var(--spacing-2);
+            display: block;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-2);
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            padding: var(--spacing-2);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: background-color var(--duration-normal);
+        }
+        
+        .filter-option:hover {
+            background: var(--neutral-50);
+        }
+        
+        .filter-checkbox {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--neutral-400);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--duration-normal);
+        }
+        
+        .filter-checkbox.checked {
+            background: var(--primary-500);
+            border-color: var(--primary-500);
+            color: white;
+        }
+        
+        .filter-text {
+            flex: 1;
+            font-size: var(--font-size-sm);
+            color: var(--neutral-700);
+        }
+        
+        .filter-count {
+            font-size: var(--font-size-xs);
+            color: var(--neutral-500);
+            background: var(--neutral-100);
+            padding: var(--spacing-1) var(--spacing-2);
+            border-radius: var(--radius-base);
+        }
+        
+        .clear-filters {
+            background: none;
+            border: 1px solid var(--neutral-300);
+            color: var(--neutral-600);
+            padding: var(--spacing-2) var(--spacing-4);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            transition: all var(--duration-normal);
+            width: 100%;
+        }
+        
+        .clear-filters:hover {
+            background: var(--neutral-50);
+            border-color: var(--neutral-400);
+        }
+        
+        /* Content Area */
+        .content {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-6);
+            flex-wrap: wrap;
+            gap: var(--spacing-4);
+        }
+        
+        .results-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+        }
+        
+        .results-count {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            color: var(--neutral-800);
+        }
+        
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-2);
+        }
+        
+        .active-filter {
+            background: var(--primary-50);
+            color: var(--primary-700);
+            border: 1px solid var(--primary-200);
+            padding: var(--spacing-1) var(--spacing-2);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-xs);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-1);
+        }
+        
+        .remove-filter {
+            background: none;
+            border: none;
+            color: var(--primary-700);
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .sort-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+        }
+        
+        .sort-label {
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+        }
+        
+        .sort-select {
+            padding: var(--spacing-2) var(--spacing-3);
+            border: 1px solid var(--neutral-300);
+            border-radius: var(--radius-base);
+            background: white;
+            font-size: var(--font-size-sm);
+            color: var(--neutral-700);
+            cursor: pointer;
+        }
+        
+        .view-toggle {
+            display: flex;
+            background: var(--neutral-100);
+            border-radius: var(--radius-base);
+            padding: var(--spacing-1);
+        }
+        
+        .view-btn {
+            background: none;
+            border: none;
+            padding: var(--spacing-2);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            color: var(--neutral-600);
+            transition: all var(--duration-normal);
+        }
+        
+        .view-btn.active {
+            background: white;
+            color: var(--primary-600);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        /* Case Grid */
+        .cases-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--spacing-6);
+        }
+        
+        .cases-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-4);
+        }
+        
+        .story-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-6);
+            box-shadow: var(--shadow-base);
+            transition: all var(--duration-normal) var(--easing-material);
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .story-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .story-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-4px);
+        }
+        
+        .story-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .alumni-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: var(--font-weight-bold);
+            font-size: var(--font-size-lg);
+        }
+        
+        .alumni-info {
+            flex: 1;
+        }
+        
+        .alumni-name {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            color: var(--neutral-800);
+            margin-bottom: var(--spacing-1);
+        }
+        
+        .alumni-meta {
+            font-size: var(--font-size-xs);
+            color: var(--neutral-600);
+        }
+        
+        .story-title {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            color: var(--neutral-800);
+            margin-bottom: var(--spacing-3);
+            line-height: 1.4;
+        }
+        
+        .story-summary {
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .story-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-2);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .story-tag {
+            background: rgba(52, 168, 83, 0.1);
+            color: var(--success-600);
+            border: 1px solid rgba(52, 168, 83, 0.3);
+            border-radius: var(--radius-base);
+            padding: var(--spacing-1) var(--spacing-2);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .story-tag.industry {
+            background: rgba(156, 39, 176, 0.1);
+            color: #9c27b0;
+            border-color: rgba(156, 39, 176, 0.3);
+        }
+        
+        .story-tag.company {
+            background: rgba(245, 124, 0, 0.1);
+            color: var(--warning-600);
+            border-color: rgba(245, 124, 0, 0.3);
+        }
+        
+        .story-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: var(--font-size-xs);
+            color: var(--neutral-500);
+        }
+        
+        .read-time {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-1);
+        }
+        
+        /* List View Specific Styles */
+        .story-card.list-view {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: var(--spacing-4);
+            align-items: center;
+            padding: var(--spacing-4);
+        }
+        
+        .story-card.list-view .story-header {
+            margin-bottom: 0;
+        }
+        
+        .story-card.list-view .story-content {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-2);
+        }
+        
+        .story-card.list-view .story-title {
+            margin-bottom: var(--spacing-1);
+            font-size: var(--font-size-base);
+        }
+        
+        .story-card.list-view .story-summary {
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .story-card.list-view .story-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: var(--spacing-2);
+        }
+        
+        /* Pagination */
+        .pagination {
+            margin-top: var(--spacing-12);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+        
+        .page-btn {
+            background: white;
+            border: 1px solid var(--neutral-300);
+            color: var(--neutral-700);
+            padding: var(--spacing-2) var(--spacing-3);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            transition: all var(--duration-normal);
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .page-btn:hover {
+            background: var(--neutral-50);
+            border-color: var(--neutral-400);
+        }
+        
+        .page-btn.active {
+            background: var(--primary-500);
+            border-color: var(--primary-500);
+            color: white;
+        }
+        
+        .page-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Loading State */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: var(--spacing-16);
+            color: var(--neutral-500);
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--neutral-300);
+            border-radius: 50%;
+            border-top-color: var(--primary-500);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: var(--spacing-2);
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-16);
+            color: var(--neutral-500);
+        }
+        
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto var(--spacing-4);
+            color: var(--neutral-400);
+        }
+        
+        .empty-title {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-semibold);
+            color: var(--neutral-700);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .empty-description {
+            font-size: var(--font-size-base);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .empty-action {
+            background: var(--primary-500);
+            color: white;
+            border: none;
+            border-radius: var(--radius-base);
+            padding: var(--spacing-3) var(--spacing-6);
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            transition: background-color var(--duration-normal);
+        }
+        
+        .empty-action:hover {
+            background: var(--primary-600);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .main {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-6);
+            }
+            
+            .sidebar {
+                position: static;
+                order: -1;
+            }
+            
+            .filter-section {
+                margin-bottom: var(--spacing-4);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 var(--spacing-4);
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .main {
+                padding: var(--spacing-6) var(--spacing-4);
+            }
+            
+            .content-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .sort-controls {
+                justify-content: space-between;
+            }
+            
+            .cases-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .story-card.list-view {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-3);
+            }
+            
+            .story-card.list-view .story-actions {
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <i data-lucide="graduation-cap" style="width: 24px; height: 24px;"></i>
+                <span>校友生涯故事集</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="cases.html" class="nav-link active">案例库</a>
+                <a href="categories.html" class="nav-link">分类浏览</a>
+                <a href="about.html" class="nav-link">关于我们</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Breadcrumb -->
+        <nav class="breadcrumb">
+            <a href="index.html">首页</a>
+            <i data-lucide="chevron-right" style="width: 14px; height: 14px;"></i>
+            <span>案例库</span>
+        </nav>
+
+        <!-- Sidebar Filters -->
+        <aside class="sidebar">
+            <div class="filter-section">
+                <h3 class="filter-title">
+                    <i data-lucide="filter" style="width: 20px; height: 20px;"></i>
+                    筛选条件
+                </h3>
+                
+                <!-- Search -->
+                <div class="search-container">
+                    <i data-lucide="search" style="width: 16px; height: 16px; color: var(--neutral-500);"></i>
+                    <input type="text" class="search-input" placeholder="搜索关键词..." id="searchInput">
+                </div>
+
+                <!-- Industry Filter -->
+                <div class="filter-group">
+                    <label class="filter-label">行业领域</label>
+                    <div class="filter-options" id="industryFilters">
+                        <div class="filter-option" data-filter="industry" data-value="互联网">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">互联网科技</span>
+                            <span class="filter-count">42</span>
+                        </div>
+                        <div class="filter-option" data-filter="industry" data-value="金融">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">金融投资</span>
+                            <span class="filter-count">28</span>
+                        </div>
+                        <div class="filter-option" data-filter="industry" data-value="咨询">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">咨询顾问</span>
+                            <span class="filter-count">18</span>
+                        </div>
+                        <div class="filter-option" data-filter="industry" data-value="快消">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">快消品牌</span>
+                            <span class="filter-count">15</span>
+                        </div>
+                        <div class="filter-option" data-filter="industry" data-value="医疗">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">医疗健康</span>
+                            <span class="filter-count">12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- College Filter -->
+                <div class="filter-group">
+                    <label class="filter-label">学院</label>
+                    <div class="filter-options" id="collegeFilters">
+                        <div class="filter-option" data-filter="college" data-value="软件学院">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">软件学院</span>
+                            <span class="filter-count">35</span>
+                        </div>
+                        <div class="filter-option" data-filter="college" data-value="商学院">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">商学院</span>
+                            <span class="filter-count">28</span>
+                        </div>
+                        <div class="filter-option" data-filter="college" data-value="工学院">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">工学院</span>
+                            <span class="filter-count">22</span>
+                        </div>
+                        <div class="filter-option" data-filter="college" data-value="文学院">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">文学院</span>
+                            <span class="filter-count">18</span>
+                        </div>
+                        <div class="filter-option" data-filter="college" data-value="医学院">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">医学院</span>
+                            <span class="filter-count">12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Graduation Year Filter -->
+                <div class="filter-group">
+                    <label class="filter-label">毕业年份</label>
+                    <div class="filter-options" id="yearFilters">
+                        <div class="filter-option" data-filter="year" data-value="2023">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">2023届</span>
+                            <span class="filter-count">24</span>
+                        </div>
+                        <div class="filter-option" data-filter="year" data-value="2022">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">2022届</span>
+                            <span class="filter-count">28</span>
+                        </div>
+                        <div class="filter-option" data-filter="year" data-value="2021">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">2021届</span>
+                            <span class="filter-count">32</span>
+                        </div>
+                        <div class="filter-option" data-filter="year" data-value="2020">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">2020届</span>
+                            <span class="filter-count">25</span>
+                        </div>
+                        <div class="filter-option" data-filter="year" data-value="2019">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">2019届及之前</span>
+                            <span class="filter-count">36</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Career Stage Filter -->
+                <div class="filter-group">
+                    <label class="filter-label">生涯阶段</label>
+                    <div class="filter-options" id="stageFilters">
+                        <div class="filter-option" data-filter="stage" data-value="新人">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">职场新人 (1-3年)</span>
+                            <span class="filter-count">58</span>
+                        </div>
+                        <div class="filter-option" data-filter="stage" data-value="骨干">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">骨干精英 (3-8年)</span>
+                            <span class="filter-count">67</span>
+                        </div>
+                        <div class="filter-option" data-filter="stage" data-value="领袖">
+                            <div class="filter-checkbox"></div>
+                            <span class="filter-text">行业领袖 (8年以上)</span>
+                            <span class="filter-count">20</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="clear-filters" onclick="clearAllFilters()">
+                    清除所有筛选
+                </button>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="content">
+            <!-- Content Header -->
+            <div class="content-header">
+                <div class="results-info">
+                    <div class="results-count" id="resultsCount">共找到 145 个案例</div>
+                    <div class="active-filters" id="activeFilters">
+                        <!-- Active filters will be populated here -->
+                    </div>
+                </div>
+                
+                <div class="sort-controls">
+                    <span class="sort-label">排序：</span>
+                    <select class="sort-select" id="sortSelect">
+                        <option value="latest">最新发布</option>
+                        <option value="popular">最受欢迎</option>
+                        <option value="name">姓名 A-Z</option>
+                        <option value="year">毕业年份</option>
+                    </select>
+                    
+                    <div class="view-toggle">
+                        <button class="view-btn active" id="gridView" onclick="toggleView('grid')">
+                            <i data-lucide="grid-3x3" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <button class="view-btn" id="listView" onclick="toggleView('list')">
+                            <i data-lucide="list" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cases Grid/List -->
+            <div class="cases-grid" id="casesContainer">
+                <!-- Cases will be populated here -->
+            </div>
+
+            <!-- Loading State -->
+            <div class="loading" id="loadingState" style="display: none;">
+                <div class="loading-spinner"></div>
+                正在加载案例...
+            </div>
+
+            <!-- Empty State -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <i data-lucide="search-x" class="empty-icon"></i>
+                <h3 class="empty-title">没有找到匹配的案例</h3>
+                <p class="empty-description">尝试调整筛选条件或搜索关键词</p>
+                <button class="empty-action" onclick="clearAllFilters()">清除筛选条件</button>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination" id="pagination">
+                <!-- Pagination will be populated here -->
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Sample data - in a real application, this would come from an API
+        const sampleCases = [
+            {
+                id: 1,
+                name: "张三",
+                title: "从南大到AI独角兽：我的算法工程师之路",
+                summary: "分享从校园学习到进入AI行业头部公司的求职经历与成长感悟，包括技术栈建设、实习规划、面试准备等实用建议。",
+                year: "2018",
+                college: "软件学院",
+                major: "计算机科学与技术",
+                industry: "互联网",
+                company: "字节跳动",
+                position: "算法工程师",
+                stage: "骨干",
+                readTime: 8,
+                views: 1024,
+                publishDate: "2024-01-15"
+            },
+            {
+                id: 2,
+                name: "李四",
+                title: "从校园到华尔街：投行分析师的成长记录",
+                summary: "详述如何从零基础进入投资银行，包括CFA考证、实习申请、网申技巧以及投行工作的真实体验。",
+                year: "2020",
+                college: "商学院",
+                major: "工商管理",
+                industry: "金融",
+                company: "高盛",
+                position: "投资银行分析师",
+                stage: "新人",
+                readTime: 12,
+                views: 856,
+                publishDate: "2024-01-10"
+            },
+            // Add more sample cases here...
+        ];
+
+        // State management
+        let currentFilters = {
+            search: '',
+            industry: [],
+            college: [],
+            year: [],
+            stage: []
+        };
+        let currentSort = 'latest';
+        let currentView = 'grid';
+        let currentPage = 1;
+        let casesPerPage = 12;
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            initializeFilters();
+            loadCases();
+            
+            // Parse URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchParam = urlParams.get('search');
+            const categoryParam = urlParams.get('category');
+            
+            if (searchParam) {
+                document.getElementById('searchInput').value = searchParam;
+                currentFilters.search = searchParam;
+            }
+            
+            if (categoryParam) {
+                // Auto-select category filter
+                const categoryMap = {
+                    'tech': '互联网',
+                    'finance': '金融',
+                    'consulting': '咨询',
+                    'fmcg': '快消',
+                    'government': '公共部门',
+                    'startup': '创业'
+                };
+                if (categoryMap[categoryParam]) {
+                    currentFilters.industry = [categoryMap[categoryParam]];
+                    updateFilterUI();
+                }
+            }
+            
+            applyFilters();
+        });
+
+        // Initialize filter event listeners
+        function initializeFilters() {
+            // Search input
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', debounce(function() {
+                currentFilters.search = this.value;
+                applyFilters();
+            }, 300));
+
+            // Filter options
+            document.querySelectorAll('.filter-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const filterType = this.dataset.filter;
+                    const filterValue = this.dataset.value;
+                    const checkbox = this.querySelector('.filter-checkbox');
+                    
+                    if (checkbox.classList.contains('checked')) {
+                        // Remove filter
+                        currentFilters[filterType] = currentFilters[filterType].filter(v => v !== filterValue);
+                        checkbox.classList.remove('checked');
+                        checkbox.innerHTML = '';
+                    } else {
+                        // Add filter
+                        currentFilters[filterType].push(filterValue);
+                        checkbox.classList.add('checked');
+                        checkbox.innerHTML = '<i data-lucide="check" style="width: 12px; height: 12px;"></i>';
+                    }
+                    
+                    lucide.createIcons();
+                    applyFilters();
+                });
+            });
+
+            // Sort select
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                currentSort = this.value;
+                applyFilters();
+            });
+        }
+
+        // Update filter UI based on current filters
+        function updateFilterUI() {
+            Object.entries(currentFilters).forEach(([filterType, values]) => {
+                if (Array.isArray(values)) {
+                    values.forEach(value => {
+                        const option = document.querySelector(`[data-filter="${filterType}"][data-value="${value}"]`);
+                        if (option) {
+                            const checkbox = option.querySelector('.filter-checkbox');
+                            checkbox.classList.add('checked');
+                            checkbox.innerHTML = '<i data-lucide="check" style="width: 12px; height: 12px;"></i>';
+                        }
+                    });
+                }
+            });
+            lucide.createIcons();
+        }
+
+        // Apply filters and update results
+        function applyFilters() {
+            showLoading();
+            
+            // Simulate API delay
+            setTimeout(() => {
+                const filteredCases = filterCases(sampleCases);
+                const sortedCases = sortCases(filteredCases);
+                displayCases(sortedCases);
+                updateActiveFilters();
+                updateResultsCount(filteredCases.length);
+                updatePagination(filteredCases.length);
+                hideLoading();
+            }, 500);
+        }
+
+        // Filter cases based on current filters
+        function filterCases(cases) {
+            return cases.filter(case_ => {
+                // Search filter
+                if (currentFilters.search) {
+                    const searchTerm = currentFilters.search.toLowerCase();
+                    const searchableText = `${case_.name} ${case_.title} ${case_.summary} ${case_.company} ${case_.industry} ${case_.college}`.toLowerCase();
+                    if (!searchableText.includes(searchTerm)) {
+                        return false;
+                    }
+                }
+
+                // Industry filter
+                if (currentFilters.industry.length > 0 && !currentFilters.industry.includes(case_.industry)) {
+                    return false;
+                }
+
+                // College filter
+                if (currentFilters.college.length > 0 && !currentFilters.college.includes(case_.college)) {
+                    return false;
+                }
+
+                // Year filter
+                if (currentFilters.year.length > 0 && !currentFilters.year.includes(case_.year)) {
+                    return false;
+                }
+
+                // Stage filter
+                if (currentFilters.stage.length > 0 && !currentFilters.stage.includes(case_.stage)) {
+                    return false;
+                }
+
+                return true;
+            });
+        }
+
+        // Sort cases based on current sort option
+        function sortCases(cases) {
+            const sorted = [...cases];
+            
+            switch (currentSort) {
+                case 'latest':
+                    return sorted.sort((a, b) => new Date(b.publishDate) - new Date(a.publishDate));
+                case 'popular':
+                    return sorted.sort((a, b) => b.views - a.views);
+                case 'name':
+                    return sorted.sort((a, b) => a.name.localeCompare(b.name));
+                case 'year':
+                    return sorted.sort((a, b) => b.year - a.year);
+                default:
+                    return sorted;
+            }
+        }
+
+        // Display cases in the current view
+        function displayCases(cases) {
+            const container = document.getElementById('casesContainer');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (cases.length === 0) {
+                container.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            container.style.display = currentView === 'grid' ? 'grid' : 'flex';
+            container.className = currentView === 'grid' ? 'cases-grid' : 'cases-list';
+            emptyState.style.display = 'none';
+            
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * casesPerPage;
+            const endIndex = startIndex + casesPerPage;
+            const paginatedCases = cases.slice(startIndex, endIndex);
+            
+            container.innerHTML = paginatedCases.map(case_ => createCaseCard(case_, currentView)).join('');
+            lucide.createIcons();
+        }
+
+        // Create a case card HTML
+        function createCaseCard(case_, view) {
+            const listViewClass = view === 'list' ? 'list-view' : '';
+            
+            return `
+                <a href="story-detail.html?id=${case_.id}" class="story-card ${listViewClass}">
+                    <div class="story-header">
+                        <div class="alumni-avatar">${case_.name.charAt(0)}</div>
+                        <div class="alumni-info">
+                            <div class="alumni-name">${case_.name}</div>
+                            <div class="alumni-meta">${case_.year}届 • ${case_.college} • ${case_.major}</div>
+                        </div>
+                    </div>
+                    
+                    ${view === 'list' ? '<div class="story-content">' : ''}
+                    <h3 class="story-title">${case_.title}</h3>
+                    <p class="story-summary">${case_.summary}</p>
+                    <div class="story-tags">
+                        <span class="story-tag industry">${case_.industry}</span>
+                        <span class="story-tag company">${case_.company}</span>
+                        <span class="story-tag">${case_.position}</span>
+                    </div>
+                    ${view === 'list' ? '</div>' : ''}
+                    
+                    ${view === 'list' ? '<div class="story-actions">' : ''}
+                    <div class="story-meta">
+                        <span class="read-time">
+                            <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                            ${case_.readTime}分钟阅读
+                        </span>
+                        <span>${case_.views} 阅读</span>
+                    </div>
+                    ${view === 'list' ? '</div>' : ''}
+                </a>
+            `;
+        }
+
+        // Update active filters display
+        function updateActiveFilters() {
+            const container = document.getElementById('activeFilters');
+            const activeFilters = [];
+            
+            // Add search filter
+            if (currentFilters.search) {
+                activeFilters.push({
+                    type: 'search',
+                    value: currentFilters.search,
+                    display: `搜索: ${currentFilters.search}`
+                });
+            }
+            
+            // Add other filters
+            Object.entries(currentFilters).forEach(([type, values]) => {
+                if (Array.isArray(values) && values.length > 0) {
+                    values.forEach(value => {
+                        activeFilters.push({
+                            type: type,
+                            value: value,
+                            display: value
+                        });
+                    });
+                }
+            });
+            
+            container.innerHTML = activeFilters.map(filter => `
+                <div class="active-filter">
+                    ${filter.display}
+                    <button class="remove-filter" onclick="removeFilter('${filter.type}', '${filter.value}')">
+                        <i data-lucide="x" style="width: 12px; height: 12px;"></i>
+                    </button>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+
+        // Remove a specific filter
+        function removeFilter(type, value) {
+            if (type === 'search') {
+                currentFilters.search = '';
+                document.getElementById('searchInput').value = '';
+            } else {
+                currentFilters[type] = currentFilters[type].filter(v => v !== value);
+                
+                // Update UI
+                const option = document.querySelector(`[data-filter="${type}"][data-value="${value}"]`);
+                if (option) {
+                    const checkbox = option.querySelector('.filter-checkbox');
+                    checkbox.classList.remove('checked');
+                    checkbox.innerHTML = '';
+                }
+            }
+            
+            applyFilters();
+        }
+
+        // Clear all filters
+        function clearAllFilters() {
+            currentFilters = {
+                search: '',
+                industry: [],
+                college: [],
+                year: [],
+                stage: []
+            };
+            
+            document.getElementById('searchInput').value = '';
+            
+            // Clear all checkboxes
+            document.querySelectorAll('.filter-checkbox.checked').forEach(checkbox => {
+                checkbox.classList.remove('checked');
+                checkbox.innerHTML = '';
+            });
+            
+            applyFilters();
+        }
+
+        // Toggle between grid and list view
+        function toggleView(view) {
+            currentView = view;
+            
+            // Update view buttons
+            document.getElementById('gridView').classList.toggle('active', view === 'grid');
+            document.getElementById('listView').classList.toggle('active', view === 'list');
+            
+            applyFilters();
+        }
+
+        // Update results count
+        function updateResultsCount(count) {
+            document.getElementById('resultsCount').textContent = `共找到 ${count} 个案例`;
+        }
+
+        // Update pagination
+        function updatePagination(totalResults) {
+            const totalPages = Math.ceil(totalResults / casesPerPage);
+            const container = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'flex';
+            
+            const pagination = [];
+            
+            // Previous button
+            pagination.push(`
+                <button class="page-btn" onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                    <i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i>
+                </button>
+            `);
+            
+            // Page numbers
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
+                    pagination.push(`
+                        <button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">
+                            ${i}
+                        </button>
+                    `);
+                } else if (i === currentPage - 3 || i === currentPage + 3) {
+                    pagination.push('<span class="page-btn" style="border: none; cursor: default;">...</span>');
+                }
+            }
+            
+            // Next button
+            pagination.push(`
+                <button class="page-btn" onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                    <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                </button>
+            `);
+            
+            container.innerHTML = pagination.join('');
+            lucide.createIcons();
+        }
+
+        // Change page
+        function changePage(page) {
+            currentPage = page;
+            applyFilters();
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Show loading state
+        function showLoading() {
+            document.getElementById('loadingState').style.display = 'flex';
+            document.getElementById('casesContainer').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+        }
+
+        // Hide loading state
+        function hideLoading() {
+            document.getElementById('loadingState').style.display = 'none';
+        }
+
+        // Load initial cases (simulating API call)
+        function loadCases() {
+            // In a real application, this would fetch data from an API
+            // For now, we'll use the sample data
+        }
+
+        // Utility function for debouncing
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        // Analytics tracking
+        function trackEvent(eventName, properties) {
+            console.log('Event tracked:', eventName, properties);
+        }
+
+        // Track filter usage
+        document.querySelectorAll('.filter-option').forEach(option => {
+            option.addEventListener('click', () => {
+                trackEvent('filter_used', {
+                    type: option.dataset.filter,
+                    value: option.dataset.value
+                });
+            });
+        });
+
+        // Track view toggle
+        function trackViewToggle(view) {
+            trackEvent('view_toggled', { view: view });
+        }
+    </script>
+</body>
+</html>

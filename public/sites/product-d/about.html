@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - 校友生涯故事集</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            /* Design System Colors */
+            --primary-50: #e3f2fd;
+            --primary-100: #bbdefb;
+            --primary-200: #90caf9;
+            --primary-300: #64b5f6;
+            --primary-400: #42a5f5;
+            --primary-500: #1976d2;
+            --primary-600: #1565c0;
+            --primary-700: #0d47a1;
+            --primary-800: #0a3d91;
+            --primary-900: #082f73;
+            
+            --secondary-500: #9c27b0;
+            --secondary-600: #8e24aa;
+            
+            --success-500: #34a853;
+            --warning-500: #f57c00;
+            --error-500: #ea4335;
+            
+            --neutral-50: #fafafa;
+            --neutral-100: #f8f9fa;
+            --neutral-200: #f1f3f4;
+            --neutral-300: #e8eaed;
+            --neutral-400: #dadce0;
+            --neutral-500: #9aa0a6;
+            --neutral-600: #5f6368;
+            --neutral-700: #3c4043;
+            --neutral-800: #2d3134;
+            --neutral-900: #1a1a1a;
+            
+            /* Typography */
+            --font-family: 'Inter', 'Google Sans', 'Roboto', sans-serif;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-base: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 20px;
+            --font-size-2xl: 24px;
+            --font-size-3xl: 32px;
+            --font-size-4xl: 40px;
+            
+            /* Spacing */
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-10: 40px;
+            --spacing-12: 48px;
+            --spacing-16: 64px;
+            --spacing-20: 80px;
+            --spacing-24: 96px;
+            
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius-base: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+            --radius-full: 50%;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            --shadow-base: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 8px -2px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 2px 18px 0 rgba(0,0,0,0.12);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            --gradient-surface: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background: var(--neutral-50);
+            color: var(--neutral-700);
+            line-height: 1.5;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            box-shadow: var(--shadow-base);
+            padding: 0 var(--spacing-6);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            height: 64px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+        
+        .logo {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .nav {
+            display: flex;
+            gap: var(--spacing-2);
+        }
+        
+        .nav-link {
+            border-radius: 20px;
+            padding: var(--spacing-2) var(--spacing-4);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.87);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.16);
+            color: white;
+            box-shadow: var(--shadow-base);
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-8) var(--spacing-6);
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: var(--spacing-16) 0;
+            background: var(--gradient-surface);
+            border-radius: var(--radius-2xl);
+            margin-bottom: var(--spacing-16);
+        }
+        
+        .hero-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .hero-subtitle {
+            font-size: var(--font-size-xl);
+            color: var(--neutral-600);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Section */
+        .section {
+            margin-bottom: var(--spacing-16);
+        }
+        
+        .section-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-6);
+        }
+        
+        .section-content {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-8);
+            box-shadow: var(--shadow-base);
+        }
+        
+        .section-text {
+            font-size: var(--font-size-base);
+            line-height: 1.8;
+            color: var(--neutral-700);
+            margin-bottom: var(--spacing-6);
+        }
+        
+        .section-text:last-child {
+            margin-bottom: 0;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-6);
+            margin-top: var(--spacing-8);
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-6);
+            box-shadow: var(--shadow-base);
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .feature-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            background: var(--primary-50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .feature-icon .material-icons {
+            font-size: 24px;
+            color: var(--primary-500);
+        }
+        
+        .feature-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .feature-description {
+            color: var(--neutral-600);
+            line-height: 1.6;
+        }
+        
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-6);
+            margin-top: var(--spacing-8);
+        }
+        
+        .team-member {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-6);
+            box-shadow: var(--shadow-base);
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .team-member:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .member-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: var(--radius-full);
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-4);
+            color: white;
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+        }
+        
+        .member-name {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-1);
+        }
+        
+        .member-role {
+            color: var(--neutral-600);
+            font-size: var(--font-size-sm);
+        }
+        
+        /* Contact Section */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-6);
+            margin-top: var(--spacing-8);
+        }
+        
+        .contact-card {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-6);
+            box-shadow: var(--shadow-base);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+        }
+        
+        .contact-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-md);
+            background: var(--primary-50);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .contact-icon .material-icons {
+            font-size: 24px;
+            color: var(--primary-500);
+        }
+        
+        .contact-details h3 {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-1);
+        }
+        
+        .contact-details p {
+            color: var(--neutral-600);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--neutral-900);
+            color: white;
+            padding: var(--spacing-12) var(--spacing-6) var(--spacing-6);
+            margin-top: var(--spacing-20);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .footer-text {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: var(--spacing-6);
+            flex-wrap: wrap;
+        }
+        
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-link:hover {
+            color: white;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 var(--spacing-4);
+            }
+            
+            .nav {
+                display: none;
+            }
+            
+            .main-content {
+                padding: var(--spacing-6) var(--spacing-4);
+            }
+            
+            .hero-title {
+                font-size: var(--font-size-3xl);
+            }
+            
+            .hero-section {
+                padding: var(--spacing-12) var(--spacing-4);
+            }
+            
+            .section-content {
+                padding: var(--spacing-6);
+            }
+            
+            .features-grid, .team-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-4);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">校友生涯故事集</a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="cases.html" class="nav-link">案例库</a>
+                <a href="categories.html" class="nav-link">分类浏览</a>
+                <a href="about.html" class="nav-link active">关于我们</a>
+                <a href="admin.html" class="nav-link">管理后台</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">关于校友生涯故事集</h1>
+            <p class="hero-subtitle">致力于为南大学子提供最真实、最有价值的校友职业发展案例，助力每一个梦想的实现</p>
+        </section>
+
+        <!-- Mission Section -->
+        <section class="section">
+            <h2 class="section-title">我们的使命</h2>
+            <div class="section-content">
+                <p class="section-text">
+                    校友生涯故事集是南京大学就业指导中心倾力打造的综合性职业发展案例平台。我们深信，每一个成功的职业故事都是一盏明灯，能够照亮后来者前进的道路。通过汇集南大校友的真实职业发展经历，我们希望为在校学生提供最具参考价值的求职指导和职业规划参考。
+                </p>
+                <p class="section-text">
+                    我们不仅关注那些光鲜亮丽的成功故事，更重视那些充满挑战与转折的真实经历。因为我们相信，真正的成长来自于对困难的克服，真正的智慧来自于对失败的反思。
+                </p>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section">
+            <h2 class="section-title">平台特色</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">verified</span>
+                    </div>
+                    <h3 class="feature-title">真实可信</h3>
+                    <p class="feature-description">所有案例均来自南大校友的亲身经历，经过严格验证，确保内容的真实性和可信度。</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">insights</span>
+                    </div>
+                    <h3 class="feature-title">深度解析</h3>
+                    <p class="feature-description">每个案例都包含详细的成长轨迹、关键决策点分析和实用的经验总结。</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">diversity_3</span>
+                    </div>
+                    <h3 class="feature-title">多元覆盖</h3>
+                    <p class="feature-description">涵盖15+行业、28+职能、42+城市，满足不同专业和兴趣方向的需求。</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">auto_awesome</span>
+                    </div>
+                    <h3 class="feature-title">AI辅助</h3>
+                    <p class="feature-description">运用人工智能技术，提供智能推荐、关键词提取和个性化内容筛选。</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">update</span>
+                    </div>
+                    <h3 class="feature-title">持续更新</h3>
+                    <p class="feature-description">定期收集新的校友案例，保持内容的时效性和前沿性。</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <span class="material-icons">search</span>
+                    </div>
+                    <h3 class="feature-title">精准搜索</h3>
+                    <p class="feature-description">支持多维度筛选和智能搜索，快速找到最符合需求的案例。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="section">
+            <h2 class="section-title">团队介绍</h2>
+            <div class="team-grid">
+                <div class="team-member">
+                    <div class="member-avatar">李</div>
+                    <h3 class="member-name">李明华</h3>
+                    <p class="member-role">项目负责人 / 就业指导中心主任</p>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-avatar">王</div>
+                    <h3 class="member-name">王晓雯</h3>
+                    <p class="member-role">内容运营 / 校友联络专员</p>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-avatar">张</div>
+                    <h3 class="member-name">张志强</h3>
+                    <p class="member-role">技术开发 / 平台架构师</p>
+                </div>
+                
+                <div class="team-member">
+                    <div class="member-avatar">陈</div>
+                    <h3 class="member-name">陈美琳</h3>
+                    <p class="member-role">数据分析 / 用户体验设计师</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Values Section -->
+        <section class="section">
+            <h2 class="section-title">我们的价值观</h2>
+            <div class="section-content">
+                <p class="section-text">
+                    <strong>真实为本：</strong>我们坚持以真实的校友经历为基础，拒绝任何虚假或夸大的内容。每一个故事都经过严格的核实，确保为学生提供最可靠的参考。
+                </p>
+                <p class="section-text">
+                    <strong>服务至上：</strong>学生的需求是我们工作的出发点和落脚点。我们不断优化平台功能，改进用户体验，确保每一位使用者都能从中受益。
+                </p>
+                <p class="section-text">
+                    <strong>开放共享：</strong>我们鼓励校友分享自己的职业经历，无论成功与否。因为每一个真实的故事都有其独特的价值，都能为他人提供启发。
+                </p>
+                <p class="section-text">
+                    <strong>持续创新：</strong>我们积极拥抱新技术，不断探索更好的内容呈现方式和服务模式，致力于打造最优秀的职业发展案例平台。
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="section">
+            <h2 class="section-title">联系我们</h2>
+            <div class="contact-info">
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <span class="material-icons">location_on</span>
+                    </div>
+                    <div class="contact-details">
+                        <h3>办公地址</h3>
+                        <p>南京市栖霞区仙林大道163号<br>南京大学仙林校区学生就业指导中心</p>
+                    </div>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <span class="material-icons">phone</span>
+                    </div>
+                    <div class="contact-details">
+                        <h3>联系电话</h3>
+                        <p>025-89684518<br>工作时间：周一至周五 8:30-17:30</p>
+                    </div>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <span class="material-icons">email</span>
+                    </div>
+                    <div class="contact-details">
+                        <h3>电子邮箱</h3>
+                        <p>career@nju.edu.cn<br>欢迎校友分享职业故事</p>
+                    </div>
+                </div>
+                
+                <div class="contact-card">
+                    <div class="contact-icon">
+                        <span class="material-icons">web</span>
+                    </div>
+                    <div class="contact-details">
+                        <h3>官方网站</h3>
+                        <p>career.nju.edu.cn<br>更多就业服务信息</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">&copy; 2024 南京大学就业指导中心. 保留所有权利.</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">隐私政策</a>
+                <a href="#" class="footer-link">使用条款</a>
+                <a href="#" class="footer-link">联系我们</a>
+                <a href="#" class="footer-link">帮助中心</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

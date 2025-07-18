@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理后台 - 校友生涯故事集</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    
+    <style>
+        /* CSS Variables from Design System */
+        :root {
+            /* Colors */
+            --primary-50: #e3f2fd;
+            --primary-100: #bbdefb;
+            --primary-200: #90caf9;
+            --primary-300: #64b5f6;
+            --primary-400: #42a5f5;
+            --primary-500: #1976d2;
+            --primary-600: #1565c0;
+            --primary-700: #0d47a1;
+            --primary-800: #0a3d91;
+            --primary-900: #082f73;
+            
+            --success-50: #e8f5e8;
+            --success-100: #c8e6c9;
+            --success-200: #a5d6a7;
+            --success-300: #81c784;
+            --success-400: #66bb6a;
+            --success-500: #34a853;
+            --success-600: #2e7d32;
+            --success-700: #1b5e20;
+            
+            --warning-50: #fef7e0;
+            --warning-100: #feecb3;
+            --warning-200: #fdd835;
+            --warning-300: #fbc02d;
+            --warning-400: #f9a825;
+            --warning-500: #f57c00;
+            --warning-600: #ef6c00;
+            --warning-700: #e65100;
+            
+            --error-50: #fce8e6;
+            --error-100: #f8bbd9;
+            --error-200: #f48fb1;
+            --error-300: #f06292;
+            --error-400: #ec407a;
+            --error-500: #ea4335;
+            --error-600: #e53935;
+            --error-700: #d32f2f;
+            
+            --neutral-50: #fafafa;
+            --neutral-100: #f8f9fa;
+            --neutral-200: #f1f3f4;
+            --neutral-300: #e8eaed;
+            --neutral-400: #dadce0;
+            --neutral-500: #9aa0a6;
+            --neutral-600: #5f6368;
+            --neutral-700: #3c4043;
+            --neutral-800: #2d3134;
+            --neutral-900: #1a1a1a;
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            --gradient-surface: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            --gradient-background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            
+            /* Typography */
+            --font-family: Inter, 'Google Sans', 'Roboto', sans-serif;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-base: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 20px;
+            --font-size-2xl: 24px;
+            --font-size-3xl: 32px;
+            --font-size-4xl: 40px;
+            --font-size-5xl: 48px;
+            
+            --font-weight-light: 300;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --font-weight-bold: 700;
+            
+            /* Spacing */
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-10: 40px;
+            --spacing-12: 48px;
+            --spacing-16: 64px;
+            --spacing-20: 80px;
+            --spacing-24: 96px;
+            
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius-base: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+            --radius-full: 50%;
+            
+            /* Box Shadow */
+            --shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            --shadow-base: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 8px -2px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 2px 18px 0 rgba(0,0,0,0.12);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            
+            /* Animation */
+            --duration-fast: 0.15s;
+            --duration-normal: 0.3s;
+            --duration-slow: 0.6s;
+            --easing-material: cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+            line-height: 1.5;
+        }
+        
+        /* Layout */
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            box-shadow: var(--shadow-base);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 30;
+        }
+        
+        .sidebar-header {
+            padding: var(--spacing-6);
+            border-bottom: 1px solid var(--neutral-200);
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
+            color: var(--primary-600);
+        }
+        
+        .sidebar-nav {
+            flex: 1;
+            padding: var(--spacing-6) 0;
+        }
+        
+        .nav-section {
+            margin-bottom: var(--spacing-6);
+        }
+        
+        .nav-section-title {
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-semibold);
+            color: var(--neutral-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--spacing-3);
+            padding: 0 var(--spacing-6);
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            padding: var(--spacing-3) var(--spacing-6);
+            color: var(--neutral-700);
+            text-decoration: none;
+            transition: all var(--duration-normal);
+            cursor: pointer;
+        }
+        
+        .nav-item:hover {
+            background: var(--neutral-50);
+            color: var(--primary-600);
+        }
+        
+        .nav-item.active {
+            background: var(--primary-50);
+            color: var(--primary-600);
+            border-right: 3px solid var(--primary-500);
+        }
+        
+        .nav-item-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        
+        .nav-item-text {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .header {
+            background: white;
+            box-shadow: var(--shadow-sm);
+            padding: var(--spacing-4) var(--spacing-6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+        
+        .header-title {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--neutral-800);
+        }
+        
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            background: var(--primary-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: var(--font-weight-bold);
+        }
+        
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .user-name {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            color: var(--neutral-800);
+        }
+        
+        .user-role {
+            font-size: var(--font-size-xs);
+            color: var(--neutral-600);
+        }
+        
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: var(--spacing-6);
+        }
+        
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-base);
+            overflow: hidden;
+        }
+        
+        .card-header {
+            padding: var(--spacing-6);
+            border-bottom: 1px solid var(--neutral-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-title {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            color: var(--neutral-800);
+        }
+        
+        .card-body {
+            padding: var(--spacing-6);
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            padding: var(--spacing-3) var(--spacing-4);
+            border: none;
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--duration-normal);
+            white-space: nowrap;
+        }
+        
+        .btn-primary {
+            background: var(--primary-500);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-600);
+            transform: translateY(-1px);
+        }
+        
+        .btn-secondary {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+            border: 1px solid var(--neutral-300);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--neutral-200);
+            border-color: var(--neutral-400);
+        }
+        
+        .btn-success {
+            background: var(--success-500);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: var(--success-600);
+        }
+        
+        .btn-warning {
+            background: var(--warning-500);
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: var(--warning-600);
+        }
+        
+        .btn-danger {
+            background: var(--error-500);
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: var(--error-600);
+        }
+        
+        .btn-sm {
+            padding: var(--spacing-2) var(--spacing-3);
+            font-size: var(--font-size-xs);
+        }
+        
+        /* Forms */
+        .form-group {
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .form-label {
+            display: block;
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            color: var(--neutral-700);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: var(--spacing-3);
+            border: 1px solid var(--neutral-300);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-sm);
+            color: var(--neutral-700);
+            transition: all var(--duration-normal);
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-500);
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        /* Tables */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th,
+        .table td {
+            padding: var(--spacing-3) var(--spacing-4);
+            text-align: left;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+        
+        .table th {
+            background: var(--neutral-50);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--neutral-700);
+        }
+        
+        .table td {
+            font-size: var(--font-size-sm);
+            color: var(--neutral-700);
+        }
+        
+        .table tbody tr:hover {
+            background: var(--neutral-50);
+        }
+        
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-1);
+            padding: var(--spacing-1) var(--spacing-2);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+        }
+        
+        .status-draft {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+        }
+        
+        .status-pending {
+            background: var(--warning-100);
+            color: var(--warning-700);
+        }
+        
+        .status-published {
+            background: var(--success-100);
+            color: var(--success-700);
+        }
+        
+        .status-archived {
+            background: var(--error-100);
+            color: var(--error-700);
+        }
+        
+        /* Statistics */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-6);
+            margin-bottom: var(--spacing-8);
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-6);
+            box-shadow: var(--shadow-base);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+        
+        .stat-value {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--neutral-800);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .stat-label {
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .stat-change {
+            font-size: var(--font-size-xs);
+            font-weight: var(--font-weight-medium);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-1);
+        }
+        
+        .stat-change.positive {
+            color: var(--success-600);
+        }
+        
+        .stat-change.negative {
+            color: var(--error-600);
+        }
+        
+        /* AI Generation */
+        .ai-generation-area {
+            margin-bottom: var(--spacing-8);
+        }
+        
+        .ai-input {
+            background: var(--gradient-surface);
+            border: 1px solid var(--primary-200);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-6);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .ai-textarea {
+            min-height: 200px;
+            background: white;
+            border: 1px solid var(--neutral-300);
+            border-radius: var(--radius-base);
+            padding: var(--spacing-4);
+            font-family: var(--font-family);
+            font-size: var(--font-size-sm);
+            resize: vertical;
+            width: 100%;
+        }
+        
+        .ai-generation-btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-base);
+            padding: var(--spacing-3) var(--spacing-6);
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: all var(--duration-normal);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+        
+        .ai-generation-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .ai-generation-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Loading States */
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform var(--duration-normal);
+            }
+            
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .header {
+                padding: var(--spacing-4);
+            }
+            
+            .content {
+                padding: var(--spacing-4);
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Utility Classes */
+        .hidden {
+            display: none;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-4 {
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .mb-6 {
+            margin-bottom: var(--spacing-6);
+        }
+        
+        .mt-4 {
+            margin-top: var(--spacing-4);
+        }
+        
+        .mt-6 {
+            margin-top: var(--spacing-6);
+        }
+        
+        .flex {
+            display: flex;
+        }
+        
+        .items-center {
+            align-items: center;
+        }
+        
+        .justify-between {
+            justify-content: space-between;
+        }
+        
+        .gap-4 {
+            gap: var(--spacing-4);
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i data-lucide="graduation-cap" style="width: 24px; height: 24px;"></i>
+                    <span>案例库管理</span>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <div class="nav-section-title">主要功能</div>
+                    <a href="#" class="nav-item active" data-section="dashboard">
+                        <i data-lucide="home" class="nav-item-icon"></i>
+                        <span class="nav-item-text">仪表板</span>
+                    </a>
+                    <a href="#" class="nav-item" data-section="ai-generation">
+                        <i data-lucide="brain" class="nav-item-icon"></i>
+                        <span class="nav-item-text">AI辅助生成</span>
+                    </a>
+                    <a href="#" class="nav-item" data-section="case-management">
+                        <i data-lucide="file-text" class="nav-item-icon"></i>
+                        <span class="nav-item-text">案例管理</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">内容管理</div>
+                    <a href="#" class="nav-item" data-section="categories">
+                        <i data-lucide="folder" class="nav-item-icon"></i>
+                        <span class="nav-item-text">分类管理</span>
+                    </a>
+                    <a href="#" class="nav-item" data-section="tags">
+                        <i data-lucide="tag" class="nav-item-icon"></i>
+                        <span class="nav-item-text">标签管理</span>
+                    </a>
+                    <a href="#" class="nav-item" data-section="users">
+                        <i data-lucide="users" class="nav-item-icon"></i>
+                        <span class="nav-item-text">用户管理</span>
+                    </a>
+                </div>
+                
+                <div class="nav-section">
+                    <div class="nav-section-title">系统设置</div>
+                    <a href="#" class="nav-item" data-section="settings">
+                        <i data-lucide="settings" class="nav-item-icon"></i>
+                        <span class="nav-item-text">系统设置</span>
+                    </a>
+                    <a href="#" class="nav-item" data-section="analytics">
+                        <i data-lucide="bar-chart" class="nav-item-icon"></i>
+                        <span class="nav-item-text">数据分析</span>
+                    </a>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <h1 class="header-title" id="pageTitle">仪表板</h1>
+                <div class="header-actions">
+                    <button class="btn btn-primary" onclick="showNewCaseModal()">
+                        <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                        新建案例
+                    </button>
+                    <div class="user-info">
+                        <div class="user-avatar">管</div>
+                        <div class="user-details">
+                            <div class="user-name">管理员</div>
+                            <div class="user-role">系统管理员</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content -->
+            <div class="content">
+                <!-- Dashboard Section -->
+                <div id="dashboard-section" class="section">
+                    <!-- Statistics -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">145</div>
+                            <div class="stat-label">总案例数</div>
+                            <div class="stat-change positive">
+                                <i data-lucide="trending-up" style="width: 12px; height: 12px;"></i>
+                                <span>较上月 +12</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-value">28</div>
+                            <div class="stat-label">待审核案例</div>
+                            <div class="stat-change">
+                                <i data-lucide="clock" style="width: 12px; height: 12px;"></i>
+                                <span>需要处理</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-value">12,467</div>
+                            <div class="stat-label">总阅读量</div>
+                            <div class="stat-change positive">
+                                <i data-lucide="trending-up" style="width: 12px; height: 12px;"></i>
+                                <span>较上月 +18%</span>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-value">89%</div>
+                            <div class="stat-label">用户满意度</div>
+                            <div class="stat-change positive">
+                                <i data-lucide="trending-up" style="width: 12px; height: 12px;"></i>
+                                <span>较上月 +2%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Cases -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">最近更新的案例</h3>
+                            <a href="#" class="btn btn-secondary btn-sm" onclick="switchSection('case-management')">查看全部</a>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>案例标题</th>
+                                            <th>校友姓名</th>
+                                            <th>状态</th>
+                                            <th>更新时间</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>从南大到AI独角兽：我的算法工程师之路</td>
+                                            <td>张三</td>
+                                            <td><span class="status-badge status-published">已发布</span></td>
+                                            <td>2024-01-15</td>
+                                            <td>
+                                                <button class="btn btn-secondary btn-sm">编辑</button>
+                                                <button class="btn btn-danger btn-sm">删除</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>从校园到华尔街：投行分析师的成长记录</td>
+                                            <td>李四</td>
+                                            <td><span class="status-badge status-pending">待审核</span></td>
+                                            <td>2024-01-14</td>
+                                            <td>
+                                                <button class="btn btn-success btn-sm">审核</button>
+                                                <button class="btn btn-secondary btn-sm">编辑</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>文科生的互联网转型：从零开始的产品之路</td>
+                                            <td>王五</td>
+                                            <td><span class="status-badge status-draft">草稿</span></td>
+                                            <td>2024-01-13</td>
+                                            <td>
+                                                <button class="btn btn-secondary btn-sm">编辑</button>
+                                                <button class="btn btn-danger btn-sm">删除</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Generation Section -->
+                <div id="ai-generation-section" class="section hidden">
+                    <div class="ai-generation-area">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">AI辅助案例生成</h3>
+                                <p style="font-size: var(--font-size-sm); color: var(--neutral-600); margin-top: var(--spacing-2);">
+                                    粘贴校友访谈记录、邮件内容或其他原始材料，AI将自动生成结构化的案例初稿
+                                </p>
+                            </div>
+                            <div class="card-body">
+                                <div class="ai-input">
+                                    <label class="form-label">原始材料输入</label>
+                                    <textarea 
+                                        class="ai-textarea" 
+                                        id="aiInput" 
+                                        placeholder="请在此处粘贴校友访谈记录、邮件原文或其他原始材料...
+
+示例：
+我是张三，2018年毕业于南大软件学院计算机科学与技术专业。毕业后进入字节跳动担任算法工程师，现在是高级算法工程师。
+
+我的求职经历：
+- 大三开始准备实习，第一次面试失败了
+- 寒假期间补强了算法基础
+- 春招拿到腾讯AI Lab实习offer
+- 秋招收到字节跳动offer
+
+工作感悟：
+- 数学基础很重要，特别是线性代数和概率论
+- 实习经历对求职帮助很大
+- 需要持续学习新技术..."></textarea>
+                                </div>
+                                
+                                <div class="flex items-center gap-4 mt-4">
+                                    <button class="ai-generation-btn" onclick="generateCaseWithAI()">
+                                        <i data-lucide="brain" style="width: 16px; height: 16px;"></i>
+                                        <span>AI生成案例</span>
+                                    </button>
+                                    <button class="btn btn-secondary" onclick="clearAIInput()">
+                                        <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                                        清空内容
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generated Result -->
+                    <div class="card hidden" id="generatedResult">
+                        <div class="card-header">
+                            <h3 class="card-title">AI生成结果</h3>
+                            <div class="flex gap-4">
+                                <button class="btn btn-primary" onclick="editGeneratedCase()">
+                                    <i data-lucide="edit" style="width: 16px; height: 16px;"></i>
+                                    编辑案例
+                                </button>
+                                <button class="btn btn-secondary" onclick="regenerateCase()">
+                                    <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                                    重新生成
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" id="generatedContent">
+                            <!-- AI generated content will be displayed here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Case Management Section -->
+                <div id="case-management-section" class="section hidden">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">案例管理</h3>
+                            <div class="flex gap-4">
+                                <button class="btn btn-primary" onclick="showNewCaseModal()">
+                                    <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                                    新建案例
+                                </button>
+                                <button class="btn btn-secondary" onclick="exportCases()">
+                                    <i data-lucide="download" style="width: 16px; height: 16px;"></i>
+                                    导出数据
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!-- Search and Filters -->
+                            <div class="flex items-center gap-4 mb-6">
+                                <div class="form-group" style="flex: 1; margin-bottom: 0;">
+                                    <input type="text" class="form-input" placeholder="搜索案例标题、校友姓名..." id="caseSearch">
+                                </div>
+                                <select class="form-select" style="width: 150px;" id="statusFilter">
+                                    <option value="">全部状态</option>
+                                    <option value="draft">草稿</option>
+                                    <option value="pending">待审核</option>
+                                    <option value="published">已发布</option>
+                                    <option value="archived">已归档</option>
+                                </select>
+                                <select class="form-select" style="width: 150px;" id="collegeFilter">
+                                    <option value="">全部学院</option>
+                                    <option value="软件学院">软件学院</option>
+                                    <option value="商学院">商学院</option>
+                                    <option value="工学院">工学院</option>
+                                    <option value="文学院">文学院</option>
+                                    <option value="医学院">医学院</option>
+                                </select>
+                            </div>
+
+                            <!-- Cases Table -->
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                <input type="checkbox" id="selectAll">
+                                            </th>
+                                            <th>案例标题</th>
+                                            <th>校友信息</th>
+                                            <th>行业/公司</th>
+                                            <th>状态</th>
+                                            <th>阅读量</th>
+                                            <th>更新时间</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="casesTableBody">
+                                        <!-- Cases will be populated here -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="flex justify-between items-center mt-6">
+                                <div style="color: var(--neutral-600); font-size: var(--font-size-sm);">
+                                    显示 1-10 条，共 145 条记录
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-secondary btn-sm" disabled>上一页</button>
+                                    <button class="btn btn-primary btn-sm">1</button>
+                                    <button class="btn btn-secondary btn-sm">2</button>
+                                    <button class="btn btn-secondary btn-sm">3</button>
+                                    <button class="btn btn-secondary btn-sm">下一页</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Categories Section -->
+                <div id="categories-section" class="section hidden">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">分类管理</h3>
+                            <button class="btn btn-primary" onclick="showNewCategoryModal()">
+                                <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                                新建分类
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>分类名称</th>
+                                            <th>分类类型</th>
+                                            <th>案例数量</th>
+                                            <th>创建时间</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>互联网科技</td>
+                                            <td>行业</td>
+                                            <td>42</td>
+                                            <td>2024-01-01</td>
+                                            <td>
+                                                <button class="btn btn-secondary btn-sm">编辑</button>
+                                                <button class="btn btn-danger btn-sm">删除</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>金融投资</td>
+                                            <td>行业</td>
+                                            <td>28</td>
+                                            <td>2024-01-01</td>
+                                            <td>
+                                                <button class="btn btn-secondary btn-sm">编辑</button>
+                                                <button class="btn btn-danger btn-sm">删除</button>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>软件学院</td>
+                                            <td>学院</td>
+                                            <td>35</td>
+                                            <td>2024-01-01</td>
+                                            <td>
+                                                <button class="btn btn-secondary btn-sm">编辑</button>
+                                                <button class="btn btn-danger btn-sm">删除</button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Other sections would be implemented similarly -->
+                <div id="tags-section" class="section hidden">
+                    <div class="text-center" style="padding: var(--spacing-16);">
+                        <i data-lucide="tag" style="width: 48px; height: 48px; color: var(--neutral-400); margin-bottom: var(--spacing-4);"></i>
+                        <h3 style="color: var(--neutral-600); margin-bottom: var(--spacing-2);">标签管理</h3>
+                        <p style="color: var(--neutral-500);">标签管理功能开发中...</p>
+                    </div>
+                </div>
+
+                <div id="users-section" class="section hidden">
+                    <div class="text-center" style="padding: var(--spacing-16);">
+                        <i data-lucide="users" style="width: 48px; height: 48px; color: var(--neutral-400); margin-bottom: var(--spacing-4);"></i>
+                        <h3 style="color: var(--neutral-600); margin-bottom: var(--spacing-2);">用户管理</h3>
+                        <p style="color: var(--neutral-500);">用户管理功能开发中...</p>
+                    </div>
+                </div>
+
+                <div id="settings-section" class="section hidden">
+                    <div class="text-center" style="padding: var(--spacing-16);">
+                        <i data-lucide="settings" style="width: 48px; height: 48px; color: var(--neutral-400); margin-bottom: var(--spacing-4);"></i>
+                        <h3 style="color: var(--neutral-600); margin-bottom: var(--spacing-2);">系统设置</h3>
+                        <p style="color: var(--neutral-500);">系统设置功能开发中...</p>
+                    </div>
+                </div>
+
+                <div id="analytics-section" class="section hidden">
+                    <div class="text-center" style="padding: var(--spacing-16);">
+                        <i data-lucide="bar-chart" style="width: 48px; height: 48px; color: var(--neutral-400); margin-bottom: var(--spacing-4);"></i>
+                        <h3 style="color: var(--neutral-600); margin-bottom: var(--spacing-2);">数据分析</h3>
+                        <p style="color: var(--neutral-500);">数据分析功能开发中...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Initialize the admin panel
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            initializeNavigation();
+            loadCasesTable();
+            
+            // Auto-refresh statistics every 5 minutes
+            setInterval(refreshStatistics, 5 * 60 * 1000);
+        });
+
+        // Navigation handling
+        function initializeNavigation() {
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all items
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    
+                    // Add active class to clicked item
+                    this.classList.add('active');
+                    
+                    // Get section to show
+                    const section = this.dataset.section;
+                    switchSection(section);
+                });
+            });
+        }
+
+        // Switch sections
+        function switchSection(sectionName) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.section');
+            sections.forEach(section => section.classList.add('hidden'));
+            
+            // Show target section
+            const targetSection = document.getElementById(sectionName + '-section');
+            if (targetSection) {
+                targetSection.classList.remove('hidden');
+            }
+            
+            // Update page title
+            const titles = {
+                'dashboard': '仪表板',
+                'ai-generation': 'AI辅助生成',
+                'case-management': '案例管理',
+                'categories': '分类管理',
+                'tags': '标签管理',
+                'users': '用户管理',
+                'settings': '系统设置',
+                'analytics': '数据分析'
+            };
+            
+            document.getElementById('pageTitle').textContent = titles[sectionName] || '仪表板';
+        }
+
+        // AI Generation functionality
+        function generateCaseWithAI() {
+            const input = document.getElementById('aiInput').value.trim();
+            const button = document.querySelector('.ai-generation-btn');
+            const resultDiv = document.getElementById('generatedResult');
+            
+            if (!input) {
+                showToast('请输入原始材料内容', 'warning');
+                return;
+            }
+            
+            // Show loading state
+            button.disabled = true;
+            button.innerHTML = '<div class="loading-spinner"></div><span>AI正在分析和生成...</span>';
+            
+            // Simulate AI processing
+            setTimeout(() => {
+                const generatedContent = generateMockCase(input);
+                displayGeneratedContent(generatedContent);
+                
+                // Reset button
+                button.disabled = false;
+                button.innerHTML = '<i data-lucide="brain" style="width: 16px; height: 16px;"></i><span>AI生成案例</span>';
+                
+                // Show result
+                resultDiv.classList.remove('hidden');
+                resultDiv.scrollIntoView({ behavior: 'smooth' });
+                
+                lucide.createIcons();
+                showToast('AI案例生成完成！', 'success');
+            }, 3000);
+        }
+
+        // Generate mock case content
+        function generateMockCase(input) {
+            // In a real application, this would call an AI API
+            return {
+                title: '从南大到AI独角兽：我的算法工程师之路',
+                alumniInfo: {
+                    name: '张三',
+                    graduationYear: '2018',
+                    college: '软件学院',
+                    major: '计算机科学与技术',
+                    industry: '人工智能',
+                    company: '字节跳动',
+                    position: '高级算法工程师',
+                    stage: '骨干精英(3-8年)'
+                },
+                summary: '分享从校园学习到进入AI行业头部公司的求职经历与成长感悟，包括技术栈建设、实习规划、面试准备等实用建议。',
+                keyTakeaways: [
+                    '打好数学和编程基础是进入AI领域的不二法门',
+                    '实习经历远比想象中重要，要尽早规划',
+                    '技术面试考查的不仅是算法，更重要的是工程实践能力',
+                    '保持学习的热情和好奇心，AI领域变化很快'
+                ],
+                content: `
+                    <h2>缘起：为什么选择AI这条路</h2>
+                    <p>2014年，当我刚踏进南大软件学院的时候，AI还不像今天这样火热。那时候大家更多关注的是Web开发、移动应用等传统的互联网方向。但在一次偶然的机会下，我参加了学院组织的机器学习讲座，被Andrew Ng教授在Coursera上的课程深深吸引。那种用数学模型去理解和预测世界的感觉，让我找到了自己真正想要追求的方向。</p>
+                    
+                    <h2>求学路：如何在大学里打好基础</h2>
+                    <p>回过头来看，大学四年是我职业生涯最重要的基石。除了完成学院的课程要求，我还做了很多额外的准备：</p>
+                    <ul>
+                        <li><strong>数学基础强化</strong>：重新学习了线性代数、概率论、数理统计。</li>
+                        <li><strong>编程能力提升</strong>：除了Java，我还自学了Python，重点掌握了NumPy、Pandas、Scikit-learn等数据科学工具库。</li>
+                        <li><strong>项目实践</strong>：参与了导师的研究项目，做过推荐系统、文本分类等小项目。</li>
+                    </ul>
+                `
+            };
+        }
+
+        // Display generated content
+        function displayGeneratedContent(content) {
+            const container = document.getElementById('generatedContent');
+            
+            container.innerHTML = `
+                <div class="mb-6">
+                    <h4 style="color: var(--primary-600); margin-bottom: var(--spacing-3);">基本信息</h4>
+                    <div style="background: var(--neutral-50); padding: var(--spacing-4); border-radius: var(--radius-base);">
+                        <p><strong>案例标题：</strong>${content.title}</p>
+                        <p><strong>校友姓名：</strong>${content.alumniInfo.name}</p>
+                        <p><strong>毕业信息：</strong>${content.alumniInfo.graduationYear}届 ${content.alumniInfo.college} ${content.alumniInfo.major}</p>
+                        <p><strong>当前状态：</strong>${content.alumniInfo.company} ${content.alumniInfo.position}</p>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 style="color: var(--primary-600); margin-bottom: var(--spacing-3);">案例摘要</h4>
+                    <p style="background: var(--neutral-50); padding: var(--spacing-4); border-radius: var(--radius-base);">
+                        ${content.summary}
+                    </p>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 style="color: var(--primary-600); margin-bottom: var(--spacing-3);">核心建议</h4>
+                    <ul style="background: var(--success-50); padding: var(--spacing-4); border-radius: var(--radius-base);">
+                        ${content.keyTakeaways.map(item => `<li>${item}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="mb-6">
+                    <h4 style="color: var(--primary-600); margin-bottom: var(--spacing-3);">正文内容</h4>
+                    <div style="background: var(--neutral-50); padding: var(--spacing-4); border-radius: var(--radius-base);">
+                        ${content.content}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Clear AI input
+        function clearAIInput() {
+            document.getElementById('aiInput').value = '';
+            document.getElementById('generatedResult').classList.add('hidden');
+        }
+
+        // Edit generated case
+        function editGeneratedCase() {
+            // In a real application, this would open an editor
+            showToast('跳转到案例编辑页面...', 'info');
+        }
+
+        // Regenerate case
+        function regenerateCase() {
+            generateCaseWithAI();
+        }
+
+        // Load cases table
+        function loadCasesTable() {
+            const sampleCases = [
+                {
+                    id: 1,
+                    title: '从南大到AI独角兽：我的算法工程师之路',
+                    alumniName: '张三',
+                    college: '软件学院',
+                    year: '2018',
+                    industry: '人工智能',
+                    company: '字节跳动',
+                    status: 'published',
+                    views: 1024,
+                    updateTime: '2024-01-15'
+                },
+                {
+                    id: 2,
+                    title: '从校园到华尔街：投行分析师的成长记录',
+                    alumniName: '李四',
+                    college: '商学院',
+                    year: '2020',
+                    industry: '金融',
+                    company: '高盛',
+                    status: 'pending',
+                    views: 856,
+                    updateTime: '2024-01-14'
+                },
+                {
+                    id: 3,
+                    title: '文科生的互联网转型：从零开始的产品之路',
+                    alumniName: '王五',
+                    college: '文学院',
+                    year: '2019',
+                    industry: '互联网',
+                    company: '腾讯',
+                    status: 'draft',
+                    views: 692,
+                    updateTime: '2024-01-13'
+                }
+            ];
+            
+            const tbody = document.getElementById('casesTableBody');
+            if (tbody) {
+                tbody.innerHTML = sampleCases.map(case_ => `
+                    <tr>
+                        <td><input type="checkbox" value="${case_.id}"></td>
+                        <td>${case_.title}</td>
+                        <td>${case_.alumniName}<br><small style="color: var(--neutral-500);">${case_.year}届 ${case_.college}</small></td>
+                        <td>${case_.industry}<br><small style="color: var(--neutral-500);">${case_.company}</small></td>
+                        <td><span class="status-badge status-${case_.status}">${getStatusText(case_.status)}</span></td>
+                        <td>${case_.views}</td>
+                        <td>${case_.updateTime}</td>
+                        <td>
+                            <button class="btn btn-secondary btn-sm" onclick="editCase(${case_.id})">编辑</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteCase(${case_.id})">删除</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+
+        // Get status text
+        function getStatusText(status) {
+            const statusMap = {
+                'draft': '草稿',
+                'pending': '待审核',
+                'published': '已发布',
+                'archived': '已归档'
+            };
+            return statusMap[status] || status;
+        }
+
+        // Show new case modal
+        function showNewCaseModal() {
+            showToast('打开新建案例页面...', 'info');
+        }
+
+        // Show new category modal
+        function showNewCategoryModal() {
+            showToast('打开新建分类页面...', 'info');
+        }
+
+        // Edit case
+        function editCase(id) {
+            showToast(`编辑案例 #${id}`, 'info');
+        }
+
+        // Delete case
+        function deleteCase(id) {
+            if (confirm('确定要删除这个案例吗？此操作不可撤销。')) {
+                showToast(`案例 #${id} 已删除`, 'success');
+                // Remove from table
+                const row = document.querySelector(`input[value="${id}"]`).closest('tr');
+                if (row) {
+                    row.remove();
+                }
+            }
+        }
+
+        // Export cases
+        function exportCases() {
+            showToast('正在导出案例数据...', 'info');
+            // Simulate export
+            setTimeout(() => {
+                showToast('案例数据导出完成！', 'success');
+            }, 2000);
+        }
+
+        // Refresh statistics
+        function refreshStatistics() {
+            // In a real application, this would fetch updated statistics
+            console.log('Refreshing statistics...');
+        }
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const colors = {
+                success: 'var(--success-500)',
+                warning: 'var(--warning-500)',
+                error: 'var(--error-500)',
+                info: 'var(--primary-500)'
+            };
+            
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: ${colors[type] || colors.success};
+                color: white;
+                padding: 12px 16px;
+                border-radius: 8px;
+                box-shadow: var(--shadow-lg);
+                z-index: 1000;
+                font-size: 14px;
+                font-weight: 500;
+                max-width: 300px;
+                transform: translateX(100%);
+                transition: transform 0.3s ease-out;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            // Show animation
+            setTimeout(() => {
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Hide animation
+            setTimeout(() => {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 3000);
+        }
+
+        // Search functionality
+        document.getElementById('caseSearch')?.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#casesTableBody tr');
+            
+            rows.forEach(row => {
+                const title = row.cells[1].textContent.toLowerCase();
+                const name = row.cells[2].textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || name.includes(searchTerm)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Filter functionality
+        document.getElementById('statusFilter')?.addEventListener('change', function() {
+            const filterValue = this.value;
+            const rows = document.querySelectorAll('#casesTableBody tr');
+            
+            rows.forEach(row => {
+                const statusBadge = row.querySelector('.status-badge');
+                if (!filterValue || statusBadge.classList.contains(`status-${filterValue}`)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // Select all functionality
+        document.getElementById('selectAll')?.addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('#casesTableBody input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+    </script>
+</body>
+</html>
