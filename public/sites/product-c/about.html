@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>关于我们 - 智能简历规划平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            /* Design System Colors */
+            --primary-50: #e3f2fd;
+            --primary-100: #bbdefb;
+            --primary-200: #90caf9;
+            --primary-300: #64b5f6;
+            --primary-400: #42a5f5;
+            --primary-500: #1976d2;
+            --primary-600: #1565c0;
+            --primary-700: #0d47a1;
+            --primary-800: #0a3d91;
+            --primary-900: #082f73;
+            
+            --neutral-50: #fafafa;
+            --neutral-100: #f8f9fa;
+            --neutral-200: #f1f3f4;
+            --neutral-300: #e8eaed;
+            --neutral-400: #dadce0;
+            --neutral-500: #9aa0a6;
+            --neutral-600: #5f6368;
+            --neutral-700: #3c4043;
+            --neutral-800: #2d3134;
+            --neutral-900: #1a1a1a;
+            
+            /* Typography */
+            --font-family: 'Inter', 'Google Sans', 'Roboto', sans-serif;
+            --font-size-sm: 14px;
+            --font-size-base: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 20px;
+            --font-size-2xl: 24px;
+            --font-size-3xl: 32px;
+            --font-size-4xl: 40px;
+            
+            /* Spacing */
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-12: 48px;
+            --spacing-16: 64px;
+            --spacing-20: 80px;
+            
+            /* Border Radius */
+            --radius-base: 8px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            
+            /* Shadows */
+            --shadow-base: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            --gradient-background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background: var(--gradient-background);
+            color: var(--neutral-700);
+            line-height: 1.6;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            box-shadow: var(--shadow-base);
+            padding: 0 var(--spacing-6);
+            height: 64px;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+        
+        .logo {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+        
+        .logo-icon {
+            font-size: 28px;
+        }
+        
+        .nav {
+            display: flex;
+            gap: var(--spacing-2);
+        }
+        
+        .nav-link {
+            border-radius: 20px;
+            padding: var(--spacing-2) var(--spacing-4);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.87);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.16);
+            color: white;
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-20) var(--spacing-6);
+        }
+        
+        .page-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: var(--neutral-900);
+            text-align: center;
+            margin-bottom: var(--spacing-16);
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-8);
+            margin-bottom: var(--spacing-8);
+            box-shadow: var(--shadow-base);
+        }
+        
+        .section-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            color: var(--primary-600);
+            margin-bottom: var(--spacing-6);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+        }
+        
+        .section-icon {
+            font-size: 28px;
+        }
+        
+        .section-content {
+            font-size: var(--font-size-base);
+            line-height: 1.8;
+            color: var(--neutral-700);
+        }
+        
+        .section-content p {
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-6);
+            margin-top: var(--spacing-6);
+        }
+        
+        .feature-item {
+            background: var(--neutral-50);
+            padding: var(--spacing-6);
+            border-radius: var(--radius-base);
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 48px;
+            color: var(--primary-500);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .feature-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-3);
+        }
+        
+        .feature-description {
+            font-size: var(--font-size-base);
+            color: var(--neutral-600);
+        }
+        
+        /* Contact Section */
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-6);
+            margin-top: var(--spacing-6);
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            padding: var(--spacing-4);
+            background: var(--primary-50);
+            border-radius: var(--radius-base);
+        }
+        
+        .contact-icon {
+            font-size: 24px;
+            color: var(--primary-600);
+        }
+        
+        .contact-text {
+            color: var(--neutral-700);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            
+            .main-content {
+                padding: var(--spacing-12) var(--spacing-4);
+            }
+            
+            .page-title {
+                font-size: var(--font-size-3xl);
+            }
+            
+            .content-section {
+                padding: var(--spacing-6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span class="material-icons logo-icon">psychology</span>
+                智能简历规划
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="cases.html" class="nav-link">案例</a>
+                <a href="career-selection.html" class="nav-link">我的仪表板</a>
+                <a href="about.html" class="nav-link active">关于</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">关于智能简历规划平台</h1>
+        
+        <!-- 平台简介 -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="material-icons section-icon">info</span>
+                平台简介
+            </h2>
+            <div class="section-content">
+                <p>
+                    智能简历规划平台是一个基于AI驱动的动态简历规划平台，专为大学生求职、考编和升学需求而设计。我们整合了简历分析优化、校友案例库和职业发展数据，为学生提供个性化的职业规划指导和实时简历优化建议。
+                </p>
+                <p>
+                    平台采用"以简历为导向的学习成长规划"核心理念，通过展示学生的目标简历模板，指导学生有针对性地完善自己的学习、实习和技能发展，最终达成理想的就业竞争力。
+                </p>
+                <p>
+                    我们的目标是：<strong>"当学生完成这份简历时，他的就业竞争力已经很强了"</strong>
+                </p>
+            </div>
+        </section>
+
+        <!-- 核心功能 -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="material-icons section-icon">star</span>
+                核心功能
+            </h2>
+            <div class="feature-grid">
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">psychology</span>
+                    <h3 class="feature-title">智能简历分析</h3>
+                    <p class="feature-description">
+                        基于AI算法分析简历完成度，智能识别缺失项目，提供精准的补充建议
+                    </p>
+                </div>
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">route</span>
+                    <h3 class="feature-title">个性化规划</h3>
+                    <p class="feature-description">
+                        根据就业、考编、升学三个方向，定制不同的简历结构和发展路径
+                    </p>
+                </div>
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">people</span>
+                    <h3 class="feature-title">校友案例库</h3>
+                    <p class="feature-description">
+                        汇聚真实校友职业发展经历，提供可信赖的求职指导和职业规划参考
+                    </p>
+                </div>
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">trending_up</span>
+                    <h3 class="feature-title">进度追踪</h3>
+                    <p class="feature-description">
+                        实时追踪简历完善进度，可视化展示成长轨迹和阶段性成果
+                    </p>
+                </div>
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">lightbulb</span>
+                    <h3 class="feature-title">智能建议</h3>
+                    <p class="feature-description">
+                        提供具体可执行的行动建议，包含学习资源、实习机会、竞赛信息
+                    </p>
+                </div>
+                <div class="feature-item">
+                    <span class="material-icons feature-icon">assessment</span>
+                    <h3 class="feature-title">能力评估</h3>
+                    <p class="feature-description">
+                        综合评估技术能力、项目经验、学习能力，生成个性化发展报告
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 技术特色 -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="material-icons section-icon">settings</span>
+                技术特色
+            </h2>
+            <div class="section-content">
+                <p>
+                    我们采用现代化的技术架构，为用户提供流畅、智能的使用体验：
+                </p>
+                <div class="feature-grid">
+                    <div class="feature-item">
+                        <span class="material-icons feature-icon">view_in_ar</span>
+                        <h3 class="feature-title">3D可视化</h3>
+                        <p class="feature-description">
+                            使用Three.js实现3D简历展示和交互效果，提供沉浸式体验
+                        </p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="material-icons feature-icon">smart_toy</span>
+                        <h3 class="feature-title">AI算法</h3>
+                        <p class="feature-description">
+                            基于机器学习的简历分析和个性化推荐算法
+                        </p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="material-icons feature-icon">phone_android</span>
+                        <h3 class="feature-title">响应式设计</h3>
+                        <p class="feature-description">
+                            支持多端适配，在桌面端、平板、手机上都有优秀体验
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 联系我们 -->
+        <section class="content-section">
+            <h2 class="section-title">
+                <span class="material-icons section-icon">contact_mail</span>
+                联系我们
+            </h2>
+            <div class="section-content">
+                <p>
+                    如果您有任何问题、建议或合作意向，欢迎与我们联系：
+                </p>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span class="material-icons contact-icon">email</span>
+                        <span class="contact-text">contact@resumeplanner.com</span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="material-icons contact-icon">phone</span>
+                        <span class="contact-text">400-888-0000</span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="material-icons contact-icon">location_on</span>
+                        <span class="contact-text">南京大学创新创业园</span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="material-icons contact-icon">schedule</span>
+                        <span class="contact-text">工作时间：9:00-18:00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

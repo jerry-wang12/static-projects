@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>选择发展方向 - 智能简历规划平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            /* Design System Colors */
+            --primary-50: #e3f2fd;
+            --primary-100: #bbdefb;
+            --primary-200: #90caf9;
+            --primary-300: #64b5f6;
+            --primary-400: #42a5f5;
+            --primary-500: #1976d2;
+            --primary-600: #1565c0;
+            --primary-700: #0d47a1;
+            --primary-800: #0a3d91;
+            --primary-900: #082f73;
+            
+            --secondary-500: #9c27b0;
+            --secondary-600: #8e24aa;
+            
+            --success-500: #34a853;
+            --warning-500: #f57c00;
+            --error-500: #ea4335;
+            
+            --neutral-50: #fafafa;
+            --neutral-100: #f8f9fa;
+            --neutral-200: #f1f3f4;
+            --neutral-300: #e8eaed;
+            --neutral-400: #dadce0;
+            --neutral-500: #9aa0a6;
+            --neutral-600: #5f6368;
+            --neutral-700: #3c4043;
+            --neutral-800: #2d3134;
+            --neutral-900: #1a1a1a;
+            
+            /* Typography */
+            --font-family: 'Inter', 'Google Sans', 'Roboto', sans-serif;
+            --font-size-xs: 12px;
+            --font-size-sm: 14px;
+            --font-size-base: 16px;
+            --font-size-lg: 18px;
+            --font-size-xl: 20px;
+            --font-size-2xl: 24px;
+            --font-size-3xl: 32px;
+            --font-size-4xl: 40px;
+            --font-size-5xl: 48px;
+            --font-size-6xl: 60px;
+            
+            /* Spacing */
+            --spacing-1: 4px;
+            --spacing-2: 8px;
+            --spacing-3: 12px;
+            --spacing-4: 16px;
+            --spacing-5: 20px;
+            --spacing-6: 24px;
+            --spacing-8: 32px;
+            --spacing-10: 40px;
+            --spacing-12: 48px;
+            --spacing-16: 64px;
+            --spacing-20: 80px;
+            --spacing-24: 96px;
+            
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius-base: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 20px;
+            --radius-2xl: 24px;
+            --radius-full: 50%;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px 0 rgba(0,0,0,0.06);
+            --shadow-base: 0 2px 4px -1px rgba(0,0,0,0.2), 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12);
+            --shadow-md: 0 4px 8px -2px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 2px 18px 0 rgba(0,0,0,0.12);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
+            --gradient-success: linear-gradient(135deg, #34a853 0%, #2e7d32 50%, #1b5e20 100%);
+            --gradient-warning: linear-gradient(135deg, #f57c00 0%, #ef6c00 50%, #e65100 100%);
+            --gradient-error: linear-gradient(135deg, #ea4335 0%, #d32f2f 50%, #b71c1c 100%);
+            --gradient-surface: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            --gradient-background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background: var(--gradient-background);
+            color: var(--neutral-700);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            background: var(--gradient-primary);
+            box-shadow: var(--shadow-base);
+            padding: 0 var(--spacing-6);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            height: 64px;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+        
+        .logo {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+        }
+        
+        .logo-icon {
+            font-size: 28px;
+        }
+        
+        .nav {
+            display: flex;
+            gap: var(--spacing-2);
+        }
+        
+        .nav-link {
+            border-radius: 20px;
+            padding: var(--spacing-2) var(--spacing-4);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.87);
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: white;
+            box-shadow: var(--shadow-sm);
+            transform: translateY(-1px);
+        }
+        
+        .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.16);
+            color: white;
+            box-shadow: var(--shadow-base);
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: var(--spacing-20) var(--spacing-6);
+            text-align: center;
+        }
+        
+        .page-title {
+            font-size: var(--font-size-4xl);
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .page-subtitle {
+            font-size: var(--font-size-lg);
+            color: var(--neutral-600);
+            margin-bottom: var(--spacing-16);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Career Options */
+        .career-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: var(--spacing-8);
+            margin-bottom: var(--spacing-16);
+        }
+        
+        .career-option {
+            background: white;
+            border-radius: var(--radius-2xl);
+            padding: var(--spacing-8);
+            box-shadow: var(--shadow-base);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .career-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .career-option:hover::before {
+            left: 100%;
+        }
+        
+        .career-option:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-200);
+        }
+        
+        .career-option.selected {
+            border-color: var(--primary-500);
+            background: var(--primary-50);
+            transform: translateY(-4px);
+        }
+        
+        .career-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto var(--spacing-6);
+            border-radius: var(--radius-2xl);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .career-option[data-career="employment"] .career-icon {
+            background: var(--gradient-primary);
+        }
+        
+        .career-option[data-career="exam"] .career-icon {
+            background: var(--gradient-success);
+        }
+        
+        .career-option[data-career="study"] .career-icon {
+            background: var(--gradient-warning);
+        }
+        
+        .career-title {
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-3);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .career-description {
+            font-size: var(--font-size-base);
+            color: var(--neutral-600);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-6);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .career-features {
+            list-style: none;
+            text-align: left;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .career-features li {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            padding: var(--spacing-2) 0;
+            font-size: var(--font-size-sm);
+            color: var(--neutral-700);
+        }
+        
+        .career-features li .material-icons {
+            font-size: 18px;
+            color: var(--primary-500);
+        }
+        
+        /* Continue Button */
+        .continue-section {
+            display: none;
+            animation: fadeInUp 0.6s ease;
+        }
+        
+        .continue-section.show {
+            display: block;
+        }
+        
+        .continue-button {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: var(--spacing-4) var(--spacing-8);
+            border-radius: var(--radius-lg);
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            box-shadow: var(--shadow-base);
+        }
+        
+        .continue-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .continue-button:active {
+            transform: translateY(0);
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes bounceIn {
+            0% { opacity: 0; transform: scale(0.3); }
+            50% { opacity: 1; transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+            
+            .main-content {
+                padding: var(--spacing-12) var(--spacing-4);
+            }
+            
+            .page-title {
+                font-size: var(--font-size-3xl);
+            }
+            
+            .career-options {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-6);
+            }
+            
+            .career-option {
+                padding: var(--spacing-6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <span class="material-icons logo-icon">psychology</span>
+                智能简历规划
+            </a>
+            <nav class="nav">
+                <a href="index.html" class="nav-link">首页</a>
+                <a href="cases.html" class="nav-link">案例</a>
+                <a href="dashboard.html" class="nav-link">我的仪表板</a>
+                <a href="#" class="nav-link">关于</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1 class="page-title">选择你的发展方向</h1>
+        <p class="page-subtitle">
+            不同的发展方向需要不同的简历重点和技能准备。选择最符合你目标的方向，我们将为你定制专属的简历规划。
+        </p>
+        
+        <div class="career-options">
+            <!-- 就业方向 -->
+            <div class="career-option" data-career="employment" onclick="selectCareer('employment')">
+                <div class="career-icon">
+                    <span class="material-icons">work</span>
+                </div>
+                <h2 class="career-title">企业就业</h2>
+                <p class="career-description">
+                    面向互联网、金融、咨询等企业的技术或管理岗位，注重技能实践和项目经验。
+                </p>
+                <ul class="career-features">
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>技术技能展示</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>项目经验重点</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>实习经历加分</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>创新能力体现</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- 考编方向 -->
+            <div class="career-option" data-career="exam" onclick="selectCareer('exam')">
+                <div class="career-icon">
+                    <span class="material-icons">account_balance</span>
+                </div>
+                <h2 class="career-title">公务员考编</h2>
+                <p class="career-description">
+                    面向政府机关、事业单位的公务员或事业编制岗位，注重综合素质和服务意识。
+                </p>
+                <ul class="career-features">
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>学术成绩突出</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>社会实践经历</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>领导组织能力</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>党团活动参与</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- 升学方向 -->
+            <div class="career-option" data-career="study" onclick="selectCareer('study')">
+                <div class="career-icon">
+                    <span class="material-icons">school</span>
+                </div>
+                <h2 class="career-title">继续升学</h2>
+                <p class="career-description">
+                    面向研究生院校申请，注重学术研究能力和专业知识深度。
+                </p>
+                <ul class="career-features">
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>学术研究经历</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>论文发表情况</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>导师推荐信</span>
+                    </li>
+                    <li>
+                        <span class="material-icons">check_circle</span>
+                        <span>专业竞赛获奖</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="continue-section" id="continueSection">
+            <button class="continue-button" onclick="proceedToDashboard()">
+                <span>开始规划我的简历</span>
+                <span class="material-icons">arrow_forward</span>
+            </button>
+        </div>
+    </main>
+
+    <script>
+        let selectedCareer = null;
+        
+        function selectCareer(career) {
+            // Remove previous selection
+            document.querySelectorAll('.career-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            const selectedOption = document.querySelector(`[data-career="${career}"]`);
+            selectedOption.classList.add('selected');
+            selectedCareer = career;
+            
+            // Show continue button with animation
+            const continueSection = document.getElementById('continueSection');
+            continueSection.classList.add('show');
+            
+            // Add bounce animation to selected option
+            selectedOption.style.animation = 'bounceIn 0.6s ease';
+            setTimeout(() => {
+                selectedOption.style.animation = '';
+            }, 600);
+        }
+        
+        function proceedToDashboard() {
+            if (!selectedCareer) {
+                alert('请先选择一个发展方向');
+                return;
+            }
+            
+            // Store selected career in localStorage
+            localStorage.setItem('selectedCareer', selectedCareer);
+            
+            // Add loading animation
+            const button = document.querySelector('.continue-button');
+            button.innerHTML = `
+                <div style="display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top: 2px solid white; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                <span>正在为你定制简历...</span>
+            `;
+            
+            // Add spinner animation
+            const spinnerStyle = document.createElement('style');
+            spinnerStyle.textContent = `
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(spinnerStyle);
+            
+            // Redirect after animation
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+        }
+        
+        // Animation on page load
+        window.addEventListener('load', () => {
+            const options = document.querySelectorAll('.career-option');
+            options.forEach((option, index) => {
+                option.style.opacity = '0';
+                option.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    option.style.transition = 'all 0.8s ease';
+                    option.style.opacity = '1';
+                    option.style.transform = 'translateY(0)';
+                }, index * 200 + 500);
+            });
+        });
+    </script>
+</body>
+</html>

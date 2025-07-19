@@ -9,7 +9,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <style>
         :root {
             /* Design System Colors */
@@ -86,10 +85,19 @@
             
             /* Gradients */
             --gradient-primary: linear-gradient(135deg, #1976d2 0%, #1565c0 50%, #0d47a1 100%);
-            --gradient-tech: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-holographic: linear-gradient(45deg, #ff6b6b 0%, #4ecdc4 25%, #45b7d1 50%, #96ceb4 75%, #feca57 100%);
+            --gradient-success: linear-gradient(135deg, #34a853 0%, #2e7d32 50%, #1b5e20 100%);
+            --gradient-warning: linear-gradient(135deg, #f57c00 0%, #ef6c00 50%, #e65100 100%);
+            --gradient-error: linear-gradient(135deg, #ea4335 0%, #d32f2f 50%, #b71c1c 100%);
             --gradient-surface: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
             --gradient-background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            
+            /* Status Colors */
+            --status-completed: #34a853;
+            --status-partial: #f57c00;
+            --status-missing: #ea4335;
+            --status-completed-bg: #e8f5e8;
+            --status-partial-bg: #fef7e0;
+            --status-missing-bg: #fce8e6;
         }
         
         * {
@@ -100,9 +108,10 @@
         
         body {
             font-family: var(--font-family);
-            background: var(--neutral-50);
+            background: var(--gradient-background);
             color: var(--neutral-700);
             line-height: 1.5;
+            min-height: 100vh;
         }
         
         /* Header */
@@ -118,7 +127,7 @@
         }
         
         .header-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -170,331 +179,80 @@
         
         /* Main Content */
         .main-content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: var(--spacing-8) var(--spacing-6);
         }
         
-        /* Welcome Section */
-        .welcome-section {
-            background: var(--gradient-surface);
-            border-radius: var(--radius-xl);
-            padding: var(--spacing-8);
+        /* Dashboard Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: var(--spacing-8);
-            position: relative;
-            overflow: hidden;
         }
         
-        .welcome-content {
-            position: relative;
-            z-index: 2;
+        .career-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-4);
         }
         
-        .welcome-title {
+        .change-career-btn {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-1);
+            padding: var(--spacing-2) var(--spacing-3);
+            background: var(--neutral-100);
+            border: 1px solid var(--neutral-300);
+            border-radius: var(--radius-base);
+            color: var(--neutral-700);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .change-career-btn:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-300);
+            color: var(--primary-700);
+            transform: translateY(-1px);
+        }
+        
+        .change-career-btn .material-icons {
+            font-size: 18px;
+        }
+        
+        .dashboard-title {
             font-size: var(--font-size-3xl);
             font-weight: 700;
             color: var(--neutral-900);
             margin-bottom: var(--spacing-2);
         }
         
-        .welcome-subtitle {
+        .dashboard-subtitle {
             font-size: var(--font-size-lg);
             color: var(--neutral-600);
-            margin-bottom: var(--spacing-6);
         }
         
-        .welcome-stats {
-            display: flex;
-            gap: var(--spacing-6);
-            flex-wrap: wrap;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: var(--font-size-2xl);
-            font-weight: 700;
-            color: var(--primary-600);
-            margin-bottom: var(--spacing-1);
-        }
-        
-        .stat-label {
-            font-size: var(--font-size-sm);
-            color: var(--neutral-600);
-        }
-        
-        /* Dashboard Grid */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: var(--spacing-8);
-            margin-bottom: var(--spacing-8);
-        }
-        
-        .widget {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-6);
-            transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-        }
-        
-        .widget:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .widget-header {
+        .progress-overview {
             display: flex;
             align-items: center;
-            gap: var(--spacing-3);
-            margin-bottom: var(--spacing-4);
-        }
-        
-        .widget-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-base);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-        
-        .widget-title {
-            font-size: var(--font-size-lg);
-            font-weight: 600;
-            color: var(--neutral-900);
-        }
-        
-        /* 3D Radar Widget */
-        .radar-widget {
-            position: relative;
-            min-height: 400px;
-        }
-        
-        .radar-container {
-            width: 100%;
-            height: 350px;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .radar-3d {
-            width: 280px;
-            height: 280px;
-            position: relative;
-            perspective: 1000px;
-        }
-        
-        .radar-sphere {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            animation: rotate 20s linear infinite;
-        }
-        
-        .radar-ring {
-            position: absolute;
-            border: 2px solid rgba(25, 118, 210, 0.2);
-            border-radius: 50%;
-            transform-style: preserve-3d;
-        }
-        
-        .radar-ring:nth-child(1) {
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-        }
-        
-        .radar-ring:nth-child(2) {
-            width: 80%;
-            height: 80%;
-            top: 10%;
-            left: 10%;
-            transform: rotateX(60deg);
-        }
-        
-        .radar-ring:nth-child(3) {
-            width: 60%;
-            height: 60%;
-            top: 20%;
-            left: 20%;
-            transform: rotateY(60deg);
-        }
-        
-        .radar-point {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background: var(--primary-500);
-            border-radius: 50%;
-            box-shadow: 0 0 15px rgba(25, 118, 210, 0.5);
-            animation: pulse 2s ease-in-out infinite;
-        }
-        
-        .radar-labels {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-        }
-        
-        .radar-label {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--neutral-700);
-            padding: var(--spacing-2) var(--spacing-3);
-            border-radius: var(--radius-base);
-            font-size: var(--font-size-sm);
-            font-weight: 500;
-            white-space: nowrap;
-            box-shadow: var(--shadow-sm);
-        }
-        
-        /* Combined Score and Recommendations Widget */
-        .combined-widget {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-6);
-        }
-        
-        .score-section {
-            text-align: center;
-            padding-bottom: var(--spacing-4);
-            border-bottom: 1px solid var(--neutral-200);
-        }
-        
-        .recommendations-section {
-            flex: 1;
-        }
-        
-        .score-circle {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto var(--spacing-3);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .score-value {
-            font-size: var(--font-size-4xl);
-            font-weight: 700;
-            color: var(--primary-600);
-        }
-        
-        .score-label {
-            font-size: var(--font-size-sm);
-            color: var(--neutral-600);
-        }
-        
-        .recommendations-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-2);
-        }
-        
-        .recommendation-item {
-            display: flex;
-            align-items: flex-start;
-            gap: var(--spacing-2);
-            padding: var(--spacing-2) var(--spacing-3);
-            background: var(--neutral-50);
-            border-radius: var(--radius-base);
-            transition: all 0.2s ease;
-        }
-        
-        .recommendation-item:hover {
-            background: var(--primary-50);
-            transform: translateX(4px);
-        }
-        
-        .recommendation-icon {
-            width: 24px;
-            height: 24px;
-            border-radius: var(--radius-sm);
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 12px;
-            flex-shrink: 0;
-            margin-top: 1px;
-        }
-        
-        .recommendation-text {
-            flex: 1;
-        }
-        
-        .recommendation-title {
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-            color: var(--neutral-800);
-            margin-bottom: 2px;
-        }
-        
-        .recommendation-description {
-            font-size: 11px;
-            color: var(--neutral-600);
-            line-height: 1.3;
-        }
-        
-        /* Timeline Widget */
-        .timeline-widget {
-            grid-column: 1 / -1;
-        }
-        
-        .timeline-container {
-            position: relative;
-            height: 300px;
-            margin-top: var(--spacing-4);
-        }
-        
-        /* Progress Section */
-        .progress-section {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--spacing-6);
-            margin-bottom: var(--spacing-8);
-        }
-        
-        .progress-card {
+            gap: var(--spacing-4);
             background: white;
+            padding: var(--spacing-4);
             border-radius: var(--radius-lg);
-            padding: var(--spacing-6);
             box-shadow: var(--shadow-base);
-            transition: all 0.3s ease;
         }
         
-        .progress-card:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .progress-header {
+        .progress-circle {
+            width: 80px;
+            height: 80px;
+            position: relative;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: var(--spacing-4);
-        }
-        
-        .progress-title {
-            font-size: var(--font-size-lg);
-            font-weight: 600;
-            color: var(--neutral-900);
+            justify-content: center;
         }
         
         .progress-value {
@@ -503,68 +261,299 @@
             color: var(--primary-600);
         }
         
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--neutral-200);
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            margin-bottom: var(--spacing-3);
+        .progress-info {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-1);
         }
         
-        .progress-fill {
-            height: 100%;
-            background: var(--gradient-primary);
-            border-radius: var(--radius-sm);
-            transition: width 1s ease;
-        }
-        
-        .progress-description {
+        .progress-label {
             font-size: var(--font-size-sm);
             color: var(--neutral-600);
         }
         
-        /* Action Cards */
-        .action-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing-6);
+        .progress-status {
+            font-size: var(--font-size-xs);
+            color: var(--neutral-500);
         }
         
-        .action-card {
+        /* Dashboard Layout */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 1fr 360px;
+            gap: var(--spacing-8);
+        }
+        
+        /* Resume Display */
+        .resume-container {
             background: white;
             border-radius: var(--radius-lg);
-            padding: var(--spacing-6);
             box-shadow: var(--shadow-base);
-            transition: all 0.3s ease;
+            padding: var(--spacing-6);
             position: relative;
             overflow: hidden;
+            transition: all 0.3s ease;
         }
         
-        .action-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-        
-        .action-card::before {
+        .resume-container::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-holographic);
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.1), transparent);
+            transition: left 0.6s ease;
         }
         
-        .action-card:hover::before {
-            transform: translateX(0);
+        .resume-container:hover::before {
+            left: 100%;
         }
         
-        .action-icon {
-            width: 48px;
-            height: 48px;
+        .resume-container:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+        }
+        
+        .resume-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-6);
+            padding-bottom: var(--spacing-4);
+            border-bottom: 1px solid var(--neutral-200);
+        }
+        
+        .resume-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
+            color: var(--neutral-900);
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .resume-title:hover {
+            color: var(--primary-600);
+            transform: translateX(4px);
+        }
+        
+        .resume-template {
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+            background: var(--neutral-100);
+            padding: var(--spacing-1) var(--spacing-3);
+            border-radius: var(--radius-base);
+        }
+        
+        .resume-content {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-6);
+        }
+        
+        .resume-section {
+            position: relative;
+            padding: var(--spacing-4);
+            border-radius: var(--radius-base);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+        
+        .resume-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+            transition: left 0.4s ease;
+            z-index: 1;
+        }
+        
+        .resume-section:hover::before {
+            left: 100%;
+        }
+        
+        .resume-section:hover {
+            transform: translateX(8px) scale(1.02);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .resume-section.completed {
+            background: var(--status-completed-bg);
+            border-color: var(--status-completed);
+        }
+        
+        .resume-section.partial {
+            background: var(--status-partial-bg);
+            border-color: var(--status-warning);
+        }
+        
+        .resume-section.missing {
+            background: var(--status-missing-bg);
+            border-color: var(--status-missing);
+            animation: pulse 2s infinite, glow 3s ease-in-out infinite alternate;
+        }
+        
+        .resume-section.completed {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .resume-section.partial {
+            animation: wobble 4s ease-in-out infinite;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-3);
+        }
+        
+        .section-title {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--neutral-900);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .section-title:hover {
+            color: var(--primary-600);
+            transform: translateX(4px);
+        }
+        
+        .section-status {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-1);
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+        
+        .status-icon {
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .resume-section:hover .status-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+        
+        .completed .status-icon {
+            color: var(--status-completed);
+        }
+        
+        .partial .status-icon {
+            color: var(--status-warning);
+        }
+        
+        .missing .status-icon {
+            color: var(--status-missing);
+        }
+        
+        .section-content {
+            color: var(--neutral-700);
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .section-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-2);
+            margin-top: var(--spacing-3);
+        }
+        
+        .item-tag {
+            padding: var(--spacing-1) var(--spacing-2);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .item-tag:hover {
+            transform: translateY(-2px) scale(1.05);
+        }
+        
+        .item-tag.completed {
+            background: var(--status-completed);
+            color: white;
+            box-shadow: 0 0 10px rgba(52, 168, 83, 0.3);
+        }
+        
+        .item-tag.completed:hover {
+            box-shadow: 0 4px 20px rgba(52, 168, 83, 0.4);
+        }
+        
+        .item-tag.missing {
+            background: var(--neutral-300);
+            color: var(--neutral-600);
+            border: 1px dashed var(--neutral-400);
+            animation: missingTag 2s ease-in-out infinite;
+        }
+        
+        .item-tag.missing:hover {
+            background: var(--status-missing-bg);
+            border-color: var(--status-missing);
+            color: var(--status-missing);
+        }
+        
+        .missing-placeholder {
+            color: var(--neutral-500);
+            font-style: italic;
+            padding: var(--spacing-3);
+            border: 2px dashed var(--neutral-300);
+            border-radius: var(--radius-base);
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+            animation: placeholderBreathe 3s ease-in-out infinite;
+        }
+        
+        .missing-placeholder:hover {
+            border-color: var(--status-missing);
+            background: var(--status-missing-bg);
+            color: var(--status-missing);
+            transform: scale(1.02);
+        }
+        
+        /* Suggestions Panel */
+        .suggestions-panel {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-base);
+            padding: var(--spacing-6);
+            height: fit-content;
+            position: sticky;
+            top: 80px;
+        }
+        
+        .suggestions-header {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-3);
+            margin-bottom: var(--spacing-6);
+        }
+        
+        
+        .suggestions-icon {
+            width: 40px;
+            height: 40px;
             background: var(--gradient-primary);
             border-radius: var(--radius-base);
             display: flex;
@@ -572,44 +561,204 @@
             justify-content: center;
             color: white;
             font-size: 24px;
-            margin-bottom: var(--spacing-3);
         }
         
-        .action-title {
+        .suggestions-title {
             font-size: var(--font-size-lg);
             font-weight: 600;
             color: var(--neutral-900);
+        }
+        
+        .suggestions-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-4);
+        }
+        
+        .suggestion-item {
+            background: var(--neutral-50);
+            border-radius: var(--radius-base);
+            padding: var(--spacing-4);
+            border-left: 4px solid var(--primary-500);
+            transition: all 0.3s ease;
+        }
+        
+        .suggestion-item:hover {
+            background: var(--primary-50);
+            transform: translateX(4px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .suggestion-item.high-priority {
+            border-left-color: var(--error-500);
+        }
+        
+        .suggestion-item.medium-priority {
+            border-left-color: var(--warning-500);
+        }
+        
+        .suggestion-item.low-priority {
+            border-left-color: var(--success-500);
+        }
+        
+        .suggestion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             margin-bottom: var(--spacing-2);
         }
         
-        .action-description {
-            font-size: var(--font-size-sm);
-            color: var(--neutral-600);
-            margin-bottom: var(--spacing-4);
+        .suggestion-controls {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-2);
         }
         
-        .action-button {
-            background: var(--primary-500);
-            color: white;
+        .suggestion-refresh {
+            width: 24px;
+            height: 24px;
             border: none;
-            padding: var(--spacing-2) var(--spacing-4);
-            border-radius: var(--radius-base);
-            font-size: var(--font-size-sm);
-            font-weight: 500;
+            background: var(--neutral-200);
+            border-radius: var(--radius-full);
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neutral-600);
+            transition: all 0.2s ease;
+        }
+        
+        .suggestion-refresh:hover {
+            background: var(--primary-100);
+            color: var(--primary-600);
+            transform: rotate(180deg);
+        }
+        
+        .suggestion-refresh .material-icons {
+            font-size: 16px;
+        }
+        
+        .suggestion-title {
+            font-size: var(--font-size-sm);
+            font-weight: 600;
+            color: var(--neutral-900);
+        }
+        
+        .suggestion-priority {
+            font-size: var(--font-size-xs);
+            padding: var(--spacing-1) var(--spacing-2);
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+        }
+        
+        .suggestion-priority.high {
+            background: var(--status-missing-bg);
+            color: var(--error-500);
+        }
+        
+        .suggestion-priority.medium {
+            background: var(--status-partial-bg);
+            color: var(--warning-500);
+        }
+        
+        .suggestion-priority.low {
+            background: var(--status-completed-bg);
+            color: var(--success-500);
+        }
+        
+        .suggestion-description {
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+            margin-bottom: var(--spacing-3);
+            line-height: 1.5;
+        }
+        
+        .suggestion-actions {
+            display: flex;
+            gap: var(--spacing-2);
+        }
+        
+        .suggestion-action {
+            padding: var(--spacing-2) var(--spacing-3);
+            border-radius: var(--radius-base);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+            text-decoration: none;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             gap: var(--spacing-1);
         }
         
-        .action-button:hover {
+        .suggestion-action.primary {
+            background: var(--primary-500);
+            color: white;
+        }
+        
+        .suggestion-action.primary:hover {
             background: var(--primary-600);
             transform: translateY(-1px);
         }
         
-        /* Career Path Modal */
-        .modal {
+        .suggestion-action.secondary {
+            background: var(--neutral-200);
+            color: var(--neutral-700);
+        }
+        
+        .suggestion-action.secondary:hover {
+            background: var(--neutral-300);
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            margin-top: var(--spacing-6);
+            padding-top: var(--spacing-6);
+            border-top: 1px solid var(--neutral-200);
+        }
+        
+        .quick-actions-title {
+            font-size: var(--font-size-base);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-4);
+        }
+        
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-3);
+        }
+        
+        .quick-action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: var(--spacing-3);
+            background: var(--neutral-50);
+            border-radius: var(--radius-base);
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .quick-action-item:hover {
+            background: var(--primary-50);
+            transform: translateY(-2px);
+        }
+        
+        .quick-action-icon {
+            font-size: 24px;
+            color: var(--primary-500);
+            margin-bottom: var(--spacing-2);
+        }
+        
+        .quick-action-label {
+            font-size: var(--font-size-xs);
+            color: var(--neutral-700);
+            text-align: center;
+        }
+        
+        /* Suggestion Detail Modal */
+        .suggestion-modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -617,25 +766,24 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
-            display: flex;
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 1000;
             opacity: 0;
-            visibility: hidden;
             transition: all 0.3s ease;
         }
         
-        .modal.active {
+        .suggestion-modal.active {
+            display: flex;
             opacity: 1;
-            visibility: visible;
         }
         
-        .modal-content {
+        .suggestion-modal-content {
             background: white;
             border-radius: var(--radius-lg);
-            padding: var(--spacing-8);
-            max-width: 900px;
+            padding: var(--spacing-6);
+            max-width: 600px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
@@ -644,27 +792,27 @@
             transition: transform 0.3s ease;
         }
         
-        .modal.active .modal-content {
+        .suggestion-modal.active .suggestion-modal-content {
             transform: scale(1);
         }
         
-        .modal-header {
+        .suggestion-modal-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: var(--spacing-6);
+            align-items: center;
+            margin-bottom: var(--spacing-4);
             padding-bottom: var(--spacing-4);
             border-bottom: 1px solid var(--neutral-200);
         }
         
-        .modal-title {
-            font-size: var(--font-size-2xl);
-            font-weight: 700;
+        .suggestion-modal-title {
+            font-size: var(--font-size-xl);
+            font-weight: 600;
             color: var(--neutral-900);
             margin: 0;
         }
         
-        .modal-close {
+        .suggestion-modal-close {
             width: 32px;
             height: 32px;
             border: none;
@@ -677,184 +825,57 @@
             transition: all 0.2s ease;
         }
         
-        .modal-close:hover {
+        .suggestion-modal-close:hover {
             background: var(--neutral-300);
         }
         
-        /* Career Path Timeline */
-        .career-timeline {
-            position: relative;
-            padding: var(--spacing-6) 0;
-        }
-        
-        .timeline-line {
-            position: absolute;
-            left: 30px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--gradient-primary);
-        }
-        
-        .timeline-item {
-            position: relative;
-            padding-left: var(--spacing-16);
-            margin-bottom: var(--spacing-8);
-        }
-        
-        .timeline-dot {
-            position: absolute;
-            left: 22px;
-            top: var(--spacing-2);
-            width: 16px;
-            height: 16px;
-            border-radius: var(--radius-full);
-            background: var(--primary-500);
-            border: 3px solid white;
-            box-shadow: 0 0 0 2px var(--primary-500);
-        }
-        
-        .timeline-current {
-            background: var(--warning-500);
-            box-shadow: 0 0 0 2px var(--warning-500), 0 0 10px rgba(245, 124, 0, 0.3);
-        }
-        
-        .timeline-future {
-            background: var(--neutral-300);
-            box-shadow: 0 0 0 2px var(--neutral-300);
-        }
-        
-        .timeline-content {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-4);
-            box-shadow: var(--shadow-sm);
-            border-left: 4px solid var(--primary-500);
-        }
-        
-        .timeline-future .timeline-content {
-            border-left-color: var(--neutral-300);
-            opacity: 0.7;
-        }
-        
-        .timeline-current .timeline-content {
-            border-left-color: var(--warning-500);
-            background: var(--warning-50);
-        }
-        
-        .timeline-stage {
-            font-size: var(--font-size-sm);
-            color: var(--primary-600);
-            font-weight: 500;
-            margin-bottom: var(--spacing-1);
-        }
-        
-        .timeline-title {
-            font-size: var(--font-size-lg);
-            font-weight: 600;
-            color: var(--neutral-900);
-            margin-bottom: var(--spacing-2);
-        }
-        
-        .timeline-description {
-            font-size: var(--font-size-sm);
-            color: var(--neutral-600);
-            margin-bottom: var(--spacing-3);
-        }
-        
-        .timeline-skills {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-1);
-            margin-bottom: var(--spacing-3);
-        }
-        
-        .skill-chip {
-            background: var(--primary-50);
-            color: var(--primary-600);
-            padding: var(--spacing-1) var(--spacing-2);
-            border-radius: var(--radius-sm);
-            font-size: var(--font-size-xs);
-            font-weight: 500;
-        }
-        
-        .timeline-actions {
-            display: flex;
-            gap: var(--spacing-2);
-        }
-        
-        .timeline-btn {
-            background: var(--primary-500);
-            color: white;
-            border: none;
-            padding: var(--spacing-1) var(--spacing-3);
-            border-radius: var(--radius-sm);
-            font-size: var(--font-size-xs);
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .timeline-btn:hover {
-            background: var(--primary-600);
-        }
-        
-        .timeline-btn-secondary {
-            background: var(--neutral-200);
-            color: var(--neutral-700);
-        }
-        
-        .timeline-btn-secondary:hover {
-            background: var(--neutral-300);
-        }
-        
-        /* Path Options */
-        .path-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: var(--spacing-4);
+        .suggestion-detail-section {
             margin-bottom: var(--spacing-6);
         }
         
-        .path-option {
-            background: var(--gradient-surface);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-4);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-        }
-        
-        .path-option:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .path-option.selected {
-            border-color: var(--primary-500);
-            background: var(--primary-50);
-        }
-        
-        .path-option-title {
-            font-size: var(--font-size-base);
+        .suggestion-detail-section h3 {
+            font-size: var(--font-size-lg);
             font-weight: 600;
             color: var(--neutral-900);
-            margin-bottom: var(--spacing-2);
+            margin-bottom: var(--spacing-3);
         }
         
-        .path-option-description {
-            font-size: var(--font-size-sm);
+        .suggestion-detail-section p {
             color: var(--neutral-600);
+            line-height: 1.6;
+            margin-bottom: var(--spacing-3);
+        }
+        
+        .suggestion-detail-section ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .suggestion-detail-section ul li {
+            padding: var(--spacing-2);
+            margin-bottom: var(--spacing-2);
+            background: var(--neutral-50);
+            border-radius: var(--radius-base);
+            border-left: 4px solid var(--primary-500);
+        }
+        
+        .suggestion-detail-actions {
+            display: flex;
+            gap: var(--spacing-3);
+            margin-top: var(--spacing-6);
+        }
+        
+        .suggestion-detail-actions .suggestion-action {
+            flex: 1;
+            justify-content: center;
+            padding: var(--spacing-3) var(--spacing-4);
+            font-size: var(--font-size-sm);
         }
         
         /* Animations */
-        @keyframes rotate {
-            0% { transform: rotateY(0deg); }
-            100% { transform: rotateY(360deg); }
-        }
-        
         @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.2); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
         }
         
         @keyframes fadeInUp {
@@ -862,15 +883,157 @@
             100% { opacity: 1; transform: translateY(0); }
         }
         
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px rgba(234, 67, 53, 0.2); }
+            100% { box-shadow: 0 0 20px rgba(234, 67, 53, 0.4), 0 0 30px rgba(234, 67, 53, 0.2); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-3px); }
+        }
+        
+        @keyframes wobble {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        @keyframes missingTag {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+        
+        @keyframes placeholderBreathe {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.01); opacity: 1; }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: 200px 0; }
+        }
+        
+        /* Career Selector Modal Styles */
+        .career-options-modal {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: var(--spacing-6);
+        }
+        
+        .career-option-modal {
+            background: var(--neutral-50);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-6);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .career-option-modal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(25, 118, 210, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .career-option-modal:hover::before {
+            left: 100%;
+        }
+        
+        .career-option-modal:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-200);
+        }
+        
+        .career-option-modal.selected {
+            border-color: var(--primary-500);
+            background: var(--primary-50);
+        }
+        
+        .career-icon-modal {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto var(--spacing-4);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .career-icon-modal.employment {
+            background: var(--gradient-primary);
+        }
+        
+        .career-icon-modal.exam {
+            background: var(--gradient-success);
+        }
+        
+        .career-icon-modal.study {
+            background: var(--gradient-warning);
+        }
+        
+        .career-title-modal {
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--neutral-900);
+            margin-bottom: var(--spacing-2);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .career-description-modal {
+            font-size: var(--font-size-sm);
+            color: var(--neutral-600);
+            line-height: 1.5;
+            margin-bottom: var(--spacing-4);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .career-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-2);
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .career-tag {
+            background: var(--neutral-200);
+            color: var(--neutral-700);
+            padding: var(--spacing-1) var(--spacing-2);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: 500;
+        }
+        
         /* Responsive Design */
         @media (max-width: 1024px) {
-            .dashboard-grid {
+            .dashboard-layout {
                 grid-template-columns: 1fr;
                 gap: var(--spacing-6);
             }
             
-            .combined-widget {
-                gap: var(--spacing-4);
+            .suggestions-panel {
+                position: static;
+            }
+            
+            .career-options-modal {
+                grid-template-columns: 1fr;
             }
         }
         
@@ -883,21 +1046,25 @@
                 padding: var(--spacing-6) var(--spacing-4);
             }
             
-            .dashboard-grid {
-                grid-template-columns: 1fr;
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-4);
             }
             
-            .welcome-stats {
-                justify-content: center;
+            .career-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-2);
             }
             
-            .radar-3d {
-                width: 280px;
-                height: 280px;
+            .progress-overview {
+                flex-direction: column;
+                text-align: center;
             }
             
-            .action-cards {
-                grid-template-columns: 1fr;
+            .quick-actions-grid {
+                grid-template-columns: repeat(1, 1fr);
             }
         }
     </style>
@@ -914,387 +1081,264 @@
                 <a href="index.html" class="nav-link">首页</a>
                 <a href="cases.html" class="nav-link">案例</a>
                 <a href="dashboard.html" class="nav-link active">我的仪表板</a>
-                <a href="#" class="nav-link">关于</a>
+                <a href="about.html" class="nav-link">关于</a>
             </nav>
         </div>
     </header>
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Welcome Section -->
-        <section class="welcome-section">
-            <div class="welcome-content">
-                <h1 class="welcome-title">欢迎回来，张明华！</h1>
-                <p class="welcome-subtitle">您的职业规划助手已为您准备了个性化的分析报告</p>
-                <div class="welcome-stats">
-                    <div class="stat-item">
-                        <div class="stat-value">85</div>
-                        <div class="stat-label">整体竞争力</div>
+        <!-- Dashboard Header -->
+        <section class="dashboard-header">
+            <div>
+                <h1 class="dashboard-title">我的简历规划</h1>
+                <div class="career-info">
+                    <p class="dashboard-subtitle" id="careerSubtitle">软件工程师 - 应届生方向</p>
+                    <button class="change-career-btn" onclick="showCareerSelector()" title="更换发展方向">
+                        <span class="material-icons">swap_horiz</span>
+                        <span>切换方向</span>
+                    </button>
+                </div>
+            </div>
+            <div class="progress-overview">
+                <div class="progress-circle">
+                    <canvas id="progressChart" width="80" height="80"></canvas>
+                    <div style="position: absolute; text-align: center;">
+                        <div class="progress-value">65%</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-value">12</div>
-                        <div class="stat-label">待提升项</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">5</div>
-                        <div class="stat-label">匹配职位</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">92%</div>
-                        <div class="stat-label">简历完整度</div>
-                    </div>
+                </div>
+                <div class="progress-info">
+                    <div class="progress-label">简历完成度</div>
+                    <div class="progress-status">还需完成 4 个重要项目</div>
                 </div>
             </div>
         </section>
 
-        <!-- Dashboard Grid -->
-        <section class="dashboard-grid">
-            <!-- 3D Radar Widget -->
-            <div class="widget radar-widget">
-                <div class="widget-header">
-                    <div class="widget-icon">
-                        <span class="material-icons">3d_rotation</span>
-                    </div>
-                    <h2 class="widget-title">3D能力雷达分析</h2>
+        <!-- Dashboard Layout -->
+        <section class="dashboard-layout">
+            <!-- Resume Display -->
+            <div class="resume-container">
+                <div class="resume-header">
+                    <h2 class="resume-title" id="resumeTitle">张明华 - 软件工程师</h2>
+                    <span class="resume-template" id="resumeTemplate">互联网-技术-应届生模板</span>
                 </div>
-                <div class="radar-container">
-                    <div class="radar-3d">
-                        <div class="radar-sphere">
-                            <div class="radar-ring"></div>
-                            <div class="radar-ring"></div>
-                            <div class="radar-ring"></div>
-                            <div class="radar-point" style="top: 15%; left: 50%; transform: translateX(-50%);"></div>
-                            <div class="radar-point" style="top: 50%; left: 85%; transform: translateY(-50%);"></div>
-                            <div class="radar-point" style="top: 85%; left: 60%; transform: translate(-50%, -50%);"></div>
-                            <div class="radar-point" style="top: 60%; left: 15%; transform: translateY(-50%);"></div>
-                            <div class="radar-point" style="top: 30%; left: 30%; transform: translate(-50%, -50%);"></div>
-                        </div>
-                        <div class="radar-labels">
-                            <div class="radar-label" style="top: 5%; left: 50%; transform: translateX(-50%);">技术能力 (88)</div>
-                            <div class="radar-label" style="top: 50%; right: 5%; transform: translateY(-50%);">沟通能力 (75)</div>
-                            <div class="radar-label" style="bottom: 5%; left: 60%; transform: translateX(-50%);">领导能力 (68)</div>
-                            <div class="radar-label" style="top: 60%; left: 5%; transform: translateY(-50%);">创新能力 (82)</div>
-                            <div class="radar-label" style="top: 30%; left: 30%; transform: translate(-50%, -50%);">分析能力 (90)</div>
-                        </div>
-                    </div>
+                
+                <div class="resume-content">
+                    <!-- Dynamic content will be generated based on career selection -->
                 </div>
             </div>
 
-            <!-- Combined Score and Recommendations Widget -->
-            <div class="widget combined-widget">
-                <!-- Score Section -->
-                <div class="score-section">
-                    <div class="widget-header" style="margin-bottom: var(--spacing-3);">
-                        <div class="widget-icon">
-                            <span class="material-icons">grade</span>
-                        </div>
-                        <h2 class="widget-title">竞争力评分</h2>
+            <!-- Suggestions Panel -->
+            <div class="suggestions-panel">
+                <div class="suggestions-header">
+                    <div class="suggestions-icon">
+                        <span class="material-icons">lightbulb</span>
                     </div>
-                    <div class="score-circle">
-                        <canvas id="scoreChart" width="100" height="100"></canvas>
-                        <div style="position: absolute; text-align: center;">
-                            <div class="score-value" style="font-size: var(--font-size-2xl);">85</div>
-                            <div class="score-label" style="font-size: var(--font-size-xs);">总分</div>
-                        </div>
-                    </div>
-                    <p style="text-align: center; color: var(--neutral-600); font-size: var(--font-size-xs); margin-top: var(--spacing-2);">
-                        超过78%同届毕业生
-                    </p>
+                    <h2 class="suggestions-title">下一步行动建议</h2>
                 </div>
-
-                <!-- AI Recommendations Section -->
-                <div class="recommendations-section">
-                    <div class="widget-header" style="margin-bottom: var(--spacing-3);">
-                        <div class="widget-icon">
-                            <span class="material-icons">lightbulb</span>
+                
+                <div class="suggestions-list">
+                    <div class="suggestion-item high-priority">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-title">学习Python编程</h3>
+                            <div class="suggestion-controls">
+                                <span class="suggestion-priority high">高优先级</span>
+                                <button class="suggestion-refresh" onclick="refreshSingleSuggestion(this)" title="换一个建议">
+                                    <span class="material-icons">refresh</span>
+                                </button>
+                            </div>
                         </div>
-                        <h2 class="widget-title">AI智能建议</h2>
+                        <p class="suggestion-description">
+                            Python是数据科学和后端开发的重要语言，掌握后将大大提升你的技术竞争力。
+                        </p>
+                        <div class="suggestion-actions">
+                            <a href="#" class="suggestion-action primary">
+                                <span class="material-icons">play_arrow</span>
+                                开始学习
+                            </a>
+                            <button class="suggestion-action secondary" onclick="showSuggestionDetail('python-learning')">
+                                <span class="material-icons">info</span>
+                                查看详情
+                            </button>
+                        </div>
                     </div>
-                    <div class="recommendations-list">
-                        <div class="recommendation-item">
-                            <div class="recommendation-icon">
+
+                    <div class="suggestion-item high-priority">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-title">完成后端项目</h3>
+                            <div class="suggestion-controls">
+                                <span class="suggestion-priority high">高优先级</span>
+                                <button class="suggestion-refresh" onclick="refreshSingleSuggestion(this)" title="换一个建议">
+                                    <span class="material-icons">refresh</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="suggestion-description">
+                            构建一个完整的后端系统，包含用户认证、数据库操作、API设计等核心功能。
+                        </p>
+                        <div class="suggestion-actions">
+                            <a href="#" class="suggestion-action primary">
                                 <span class="material-icons">code</span>
-                            </div>
-                            <div class="recommendation-text">
-                                <div class="recommendation-title">学习Python高级特性</div>
-                                <div class="recommendation-description">提升技术深度，匹配高级开发职位</div>
+                                开始项目
+                            </a>
+                            <button class="suggestion-action secondary" onclick="showSuggestionDetail('backend-project')">
+                                <span class="material-icons">info</span>
+                                查看详情
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="suggestion-item medium-priority">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-title">寻找实习机会</h3>
+                            <div class="suggestion-controls">
+                                <span class="suggestion-priority medium">中优先级</span>
+                                <button class="suggestion-refresh" onclick="refreshSingleSuggestion(this)" title="换一个建议">
+                                    <span class="material-icons">refresh</span>
+                                </button>
                             </div>
                         </div>
-                        <div class="recommendation-item">
-                            <div class="recommendation-icon">
-                                <span class="material-icons">groups</span>
-                            </div>
-                            <div class="recommendation-text">
-                                <div class="recommendation-title">参与开源项目</div>
-                                <div class="recommendation-description">增强协作能力和项目经验</div>
+                        <p class="suggestion-description">
+                            实习经历是简历的重要组成部分，建议寻找3-6个月的技术实习岗位。
+                        </p>
+                        <div class="suggestion-actions">
+                            <a href="#" class="suggestion-action primary">
+                                <span class="material-icons">search</span>
+                                查看职位
+                            </a>
+                            <button class="suggestion-action secondary" onclick="showSuggestionDetail('internship-search')">
+                                <span class="material-icons">info</span>
+                                查看详情
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="suggestion-item medium-priority">
+                        <div class="suggestion-header">
+                            <h3 class="suggestion-title">参加编程竞赛</h3>
+                            <div class="suggestion-controls">
+                                <span class="suggestion-priority medium">中优先级</span>
+                                <button class="suggestion-refresh" onclick="refreshSingleSuggestion(this)" title="换一个建议">
+                                    <span class="material-icons">refresh</span>
+                                </button>
                             </div>
                         </div>
-                        <div class="recommendation-item">
-                            <div class="recommendation-icon">
-                                <span class="material-icons">school</span>
-                            </div>
-                            <div class="recommendation-text">
-                                <div class="recommendation-title">考取技术认证</div>
-                                <div class="recommendation-description">AWS或Azure云服务认证</div>
-                            </div>
-                        </div>
-                        <div class="recommendation-item">
-                            <div class="recommendation-icon">
-                                <span class="material-icons">trending_up</span>
-                            </div>
-                            <div class="recommendation-text">
-                                <div class="recommendation-title">提升领导能力</div>
-                                <div class="recommendation-description">参与团队管理，准备晋升机会</div>
-                            </div>
+                        <p class="suggestion-description">
+                            参加ACM、LeetCode竞赛等，获得奖项可以有效提升简历竞争力。
+                        </p>
+                        <div class="suggestion-actions">
+                            <a href="#" class="suggestion-action primary">
+                                <span class="material-icons">emoji_events</span>
+                                查看竞赛
+                            </a>
+                            <button class="suggestion-action secondary" onclick="showSuggestionDetail('programming-contest')">
+                                <span class="material-icons">info</span>
+                                查看详情
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
 
-        <!-- Progress Section -->
-        <section class="progress-section">
-            <div class="progress-card">
-                <div class="progress-header">
-                    <h3 class="progress-title">技术技能</h3>
-                    <span class="progress-value">88%</span>
+                <div class="quick-actions">
+                    <h3 class="quick-actions-title">快速操作</h3>
+                    <div class="quick-actions-grid">
+                        <a href="#" class="quick-action-item" onclick="openResumeEditor()">
+                            <span class="material-icons quick-action-icon">edit</span>
+                            <span class="quick-action-label">编辑简历</span>
+                        </a>
+                        <a href="#" class="quick-action-item" onclick="openCareerPlanner()">
+                            <span class="material-icons quick-action-icon">timeline</span>
+                            <span class="quick-action-label">职业规划</span>
+                        </a>
+                        <a href="cases.html" class="quick-action-item">
+                            <span class="material-icons quick-action-icon">people</span>
+                            <span class="quick-action-label">校友案例</span>
+                        </a>
+                        <a href="#" class="quick-action-item" onclick="generateReport()">
+                            <span class="material-icons quick-action-icon">assessment</span>
+                            <span class="quick-action-label">生成报告</span>
+                        </a>
+                    </div>
                 </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 88%"></div>
-                </div>
-                <p class="progress-description">掌握多种编程语言，建议深入学习框架应用</p>
-            </div>
-
-            <div class="progress-card">
-                <div class="progress-header">
-                    <h3 class="progress-title">项目经验</h3>
-                    <span class="progress-value">72%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 72%"></div>
-                </div>
-                <p class="progress-description">有一定项目基础，建议参与更复杂的系统开发</p>
-            </div>
-
-            <div class="progress-card">
-                <div class="progress-header">
-                    <h3 class="progress-title">沟通协作</h3>
-                    <span class="progress-value">75%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 75%"></div>
-                </div>
-                <p class="progress-description">团队协作良好，可尝试担任项目负责人角色</p>
-            </div>
-
-            <div class="progress-card">
-                <div class="progress-header">
-                    <h3 class="progress-title">行业认知</h3>
-                    <span class="progress-value">68%</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 68%"></div>
-                </div>
-                <p class="progress-description">需要加强对行业趋势和前沿技术的了解</p>
-            </div>
-        </section>
-
-        <!-- Action Cards -->
-        <section class="action-cards">
-            <div class="action-card">
-                <div class="action-icon">
-                    <span class="material-icons">description</span>
-                </div>
-                <h3 class="action-title">优化简历</h3>
-                <p class="action-description">基于AI分析结果，自动优化您的简历内容和格式，突出核心竞争力</p>
-                <button class="action-button">
-                    <span class="material-icons">auto_fix_high</span>
-                    开始优化
-                </button>
-            </div>
-
-            <div class="action-card">
-                <div class="action-icon">
-                    <span class="material-icons">trending_up</span>
-                </div>
-                <h3 class="action-title">技能提升计划</h3>
-                <p class="action-description">获取个性化的技能提升建议，制定详细的学习计划和时间安排</p>
-                <button class="action-button">
-                    <span class="material-icons">school</span>
-                    制定计划
-                </button>
-            </div>
-
-            <div class="action-card">
-                <div class="action-icon">
-                    <span class="material-icons">people</span>
-                </div>
-                <h3 class="action-title">校友案例匹配</h3>
-                <p class="action-description">查找与您背景相似的成功校友案例，学习他们的职业发展经验</p>
-                <button class="action-button" onclick="window.location.href='cases.html'">
-                    <span class="material-icons">group</span>
-                    查看案例
-                </button>
-            </div>
-
-            <div class="action-card">
-                <div class="action-icon">
-                    <span class="material-icons">work</span>
-                </div>
-                <h3 class="action-title">职位推荐</h3>
-                <p class="action-description">基于您的技能和兴趣，推荐最适合的职位机会和求职策略</p>
-                <button class="action-button">
-                    <span class="material-icons">search</span>
-                    查看推荐
-                </button>
-            </div>
-
-            <div class="action-card">
-                <div class="action-icon">
-                    <span class="material-icons">timeline</span>
-                </div>
-                <h3 class="action-title">职业路径规划</h3>
-                <p class="action-description">制定5年职业发展规划，设定阶段性目标和关键里程碑</p>
-                <button class="action-button" onclick="openCareerPathModal()">
-                    <span class="material-icons">map</span>
-                    规划路径
-                </button>
-            </div>
-
-            <div class="action-card">
-                <div class="action-icon">
-                    <span class="material-icons">analytics</span>
-                </div>
-                <h3 class="action-title">数据分析报告</h3>
-                <p class="action-description">获取详细的职业发展数据分析，包括行业趋势和薪资水平</p>
-                <button class="action-button">
-                    <span class="material-icons">assessment</span>
-                    查看报告
-                </button>
             </div>
         </section>
     </main>
 
-    <!-- Career Path Planning Modal -->
-    <div id="careerPathModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title">职业路径规划</h2>
-                <button class="modal-close" onclick="closeCareerPathModal()">
+    <!-- Suggestion Detail Modal -->
+    <div id="suggestionModal" class="suggestion-modal">
+        <div class="suggestion-modal-content">
+            <div class="suggestion-modal-header">
+                <h2 class="suggestion-modal-title" id="suggestionModalTitle">建议详情</h2>
+                <button class="suggestion-modal-close" onclick="closeSuggestionModal()">
                     <span class="material-icons">close</span>
                 </button>
             </div>
-            
-            <div class="modal-body">
-                <h3 style="margin-bottom: var(--spacing-4); color: var(--neutral-700);">选择您的目标职业方向</h3>
-                
-                <div class="path-options">
-                    <div class="path-option" data-path="technical">
-                        <div class="path-option-title">技术专家路径</div>
-                        <div class="path-option-description">深入技术领域，成为架构师或技术专家</div>
-                    </div>
-                    <div class="path-option" data-path="management">
-                        <div class="path-option-title">管理发展路径</div>
-                        <div class="path-option-description">转向管理岗位，发展团队领导能力</div>
-                    </div>
-                    <div class="path-option" data-path="product">
-                        <div class="path-option-title">产品经理路径</div>
-                        <div class="path-option-description">结合技术和商业，成为产品负责人</div>
-                    </div>
-                    <div class="path-option" data-path="entrepreneur">
-                        <div class="path-option-title">创业发展路径</div>
-                        <div class="path-option-description">积累经验后开始创业或加入初创公司</div>
-                    </div>
-                </div>
-                
-                <h3 style="margin: var(--spacing-6) 0 var(--spacing-4); color: var(--neutral-700);">职业发展时间线</h3>
-                
-                <div class="career-timeline">
-                    <div class="timeline-line"></div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-dot"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-stage">第1年 - 基础建设期</div>
-                            <div class="timeline-title">初级软件工程师</div>
-                            <div class="timeline-description">掌握核心技术栈，完成基础项目，建立良好的工作习惯</div>
-                            <div class="timeline-skills">
-                                <span class="skill-chip">Java/Python</span>
-                                <span class="skill-chip">数据库设计</span>
-                                <span class="skill-chip">版本控制</span>
-                                <span class="skill-chip">单元测试</span>
-                            </div>
-                            <div class="timeline-actions">
-                                <button class="timeline-btn">制定学习计划</button>
-                                <button class="timeline-btn timeline-btn-secondary">查看相关课程</button>
-                            </div>
+            <div id="suggestionModalBody">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Career Selector Modal -->
+    <div id="careerSelectorModal" class="suggestion-modal">
+        <div class="suggestion-modal-content" style="max-width: 900px;">
+            <div class="suggestion-modal-header">
+                <h2 class="suggestion-modal-title">选择发展方向</h2>
+                <button class="suggestion-modal-close" onclick="closeCareerSelector()">
+                    <span class="material-icons">close</span>
+                </button>
+            </div>
+            <div class="career-selector-body">
+                <p style="text-align: center; color: var(--neutral-600); margin-bottom: var(--spacing-6);">
+                    选择不同的发展方向，我们将为你定制相应的简历结构和发展建议
+                </p>
+                <div class="career-options-modal">
+                    <!-- 就业方向 -->
+                    <div class="career-option-modal" data-career="employment" onclick="selectNewCareer('employment')">
+                        <div class="career-icon-modal employment">
+                            <span class="material-icons">work</span>
+                        </div>
+                        <h3 class="career-title-modal">企业就业</h3>
+                        <p class="career-description-modal">
+                            面向互联网、金融、咨询等企业的技术或管理岗位
+                        </p>
+                        <div class="career-tags">
+                            <span class="career-tag">技术技能</span>
+                            <span class="career-tag">项目经验</span>
+                            <span class="career-tag">实习经历</span>
                         </div>
                     </div>
                     
-                    <div class="timeline-item">
-                        <div class="timeline-dot timeline-current"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-stage">第2-3年 - 技能提升期</div>
-                            <div class="timeline-title">中级软件工程师</div>
-                            <div class="timeline-description">承担复杂项目，提升系统设计能力，开始技术分享</div>
-                            <div class="timeline-skills">
-                                <span class="skill-chip">系统架构</span>
-                                <span class="skill-chip">微服务</span>
-                                <span class="skill-chip">云计算</span>
-                                <span class="skill-chip">性能优化</span>
-                            </div>
-                            <div class="timeline-actions">
-                                <button class="timeline-btn">开始实施</button>
-                                <button class="timeline-btn timeline-btn-secondary">寻找导师</button>
-                            </div>
+                    <!-- 考编方向 -->
+                    <div class="career-option-modal" data-career="exam" onclick="selectNewCareer('exam')">
+                        <div class="career-icon-modal exam">
+                            <span class="material-icons">account_balance</span>
+                        </div>
+                        <h3 class="career-title-modal">公务员考编</h3>
+                        <p class="career-description-modal">
+                            面向政府机关、事业单位的公务员或事业编制岗位
+                        </p>
+                        <div class="career-tags">
+                            <span class="career-tag">学术成绩</span>
+                            <span class="career-tag">社会实践</span>
+                            <span class="career-tag">党团活动</span>
                         </div>
                     </div>
                     
-                    <div class="timeline-item">
-                        <div class="timeline-dot timeline-future"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-stage">第4-5年 - 专业发展期</div>
-                            <div class="timeline-title">高级软件工程师/Tech Lead</div>
-                            <div class="timeline-description">技术领导角色，指导团队，参与重大技术决策</div>
-                            <div class="timeline-skills">
-                                <span class="skill-chip">团队管理</span>
-                                <span class="skill-chip">技术选型</span>
-                                <span class="skill-chip">项目管理</span>
-                                <span class="skill-chip">跨部门协作</span>
-                            </div>
-                            <div class="timeline-actions">
-                                <button class="timeline-btn">设定目标</button>
-                                <button class="timeline-btn timeline-btn-secondary">预约咨询</button>
-                            </div>
+                    <!-- 升学方向 -->
+                    <div class="career-option-modal" data-career="study" onclick="selectNewCareer('study')">
+                        <div class="career-icon-modal study">
+                            <span class="material-icons">school</span>
                         </div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-dot timeline-future"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-stage">第6-8年 - 资深发展期</div>
-                            <div class="timeline-title">架构师/技术专家</div>
-                            <div class="timeline-description">成为技术权威，制定技术标准，影响产品方向</div>
-                            <div class="timeline-skills">
-                                <span class="skill-chip">企业架构</span>
-                                <span class="skill-chip">技术战略</span>
-                                <span class="skill-chip">行业洞察</span>
-                                <span class="skill-chip">团队建设</span>
-                            </div>
-                            <div class="timeline-actions">
-                                <button class="timeline-btn">长期规划</button>
-                                <button class="timeline-btn timeline-btn-secondary">行业交流</button>
-                            </div>
+                        <h3 class="career-title-modal">继续升学</h3>
+                        <p class="career-description-modal">
+                            面向研究生院校申请，注重学术研究能力
+                        </p>
+                        <div class="career-tags">
+                            <span class="career-tag">学术研究</span>
+                            <span class="career-tag">论文发表</span>
+                            <span class="career-tag">专业竞赛</span>
                         </div>
-                    </div>
-                </div>
-                
-                <div style="margin-top: var(--spacing-6); padding: var(--spacing-4); background: var(--primary-50); border-radius: var(--radius-base);">
-                    <h4 style="color: var(--primary-600); margin-bottom: var(--spacing-2);">AI 个性化建议</h4>
-                    <p style="color: var(--neutral-600); font-size: var(--font-size-sm); margin-bottom: var(--spacing-3);">基于您当前的技能水平和兴趣偏好，我们建议您选择<strong>技术专家路径</strong>，这最符合您的职业发展潜力。</p>
-                    <div style="display: flex; gap: var(--spacing-2);">
-                        <button class="timeline-btn">接受建议</button>
-                        <button class="timeline-btn timeline-btn-secondary">自定义路径</button>
                     </div>
                 </div>
             </div>
@@ -1302,31 +1346,15 @@
     </div>
 
     <script>
-        // 3D Radar Animation
-        let radarSphere = document.querySelector('.radar-sphere');
-        let isPaused = false;
-        
-        if (radarSphere) {
-            radarSphere.addEventListener('mouseenter', () => {
-                radarSphere.style.animationPlayState = 'paused';
-                isPaused = true;
-            });
-            
-            radarSphere.addEventListener('mouseleave', () => {
-                radarSphere.style.animationPlayState = 'running';
-                isPaused = false;
-            });
-        }
-
-        // Score Chart using Canvas
-        function drawScoreChart() {
-            const canvas = document.getElementById('scoreChart');
+        // Progress Chart
+        function drawProgressChart(progressValue = 65) {
+            const canvas = document.getElementById('progressChart');
             const ctx = canvas.getContext('2d');
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
-            const radius = 40;
-            const score = 85;
-            const angle = (score / 100) * 2 * Math.PI;
+            const radius = 35;
+            const progress = progressValue;
+            const angle = (progress / 100) * 2 * Math.PI;
 
             // Clear canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1334,196 +1362,1335 @@
             // Draw background circle
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-            ctx.strokeStyle = '#e8eaed';
-            ctx.lineWidth = 5;
+            ctx.strokeStyle = '#f1f3f4';
+            ctx.lineWidth = 6;
             ctx.stroke();
 
-            // Draw score arc
+            // Draw progress arc
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + angle);
             ctx.strokeStyle = '#1976d2';
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 6;
             ctx.lineCap = 'round';
             ctx.stroke();
 
             // Add glow effect
-            ctx.shadowBlur = 6;
+            ctx.shadowBlur = 8;
             ctx.shadowColor = 'rgba(25, 118, 210, 0.3)';
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, -Math.PI / 2, -Math.PI / 2 + angle);
             ctx.strokeStyle = '#1976d2';
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 6;
             ctx.lineCap = 'round';
             ctx.stroke();
         }
 
-        // Animate progress bars
-        function animateProgressBars() {
-            const progressBars = document.querySelectorAll('.progress-fill');
-            progressBars.forEach((bar, index) => {
-                const targetWidth = bar.style.width;
-                bar.style.width = '0%';
+        // Animation effects
+        function animateElements() {
+            const resumeSections = document.querySelectorAll('.resume-section');
+            const suggestions = document.querySelectorAll('.suggestion-item');
+
+            resumeSections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px) rotateX(10deg)';
                 
                 setTimeout(() => {
-                    bar.style.width = targetWidth;
-                }, index * 200);
+                    section.style.transition = 'all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1)';
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0) rotateX(0deg)';
+                }, index * 150);
             });
+
+            suggestions.forEach((suggestion, index) => {
+                suggestion.style.opacity = '0';
+                suggestion.style.transform = 'translateX(20px) scale(0.9)';
+                
+                setTimeout(() => {
+                    suggestion.style.transition = 'all 0.8s cubic-bezier(0.4, 0.0, 0.2, 1)';
+                    suggestion.style.opacity = '1';
+                    suggestion.style.transform = 'translateX(0) scale(1)';
+                }, 800 + index * 100);
+            });
+            
+            // Add staggered animation for item tags
+            setTimeout(() => {
+                document.querySelectorAll('.item-tag').forEach((tag, index) => {
+                    tag.style.opacity = '0';
+                    tag.style.transform = 'translateY(10px)';
+                    
+                    setTimeout(() => {
+                        tag.style.transition = 'all 0.4s ease';
+                        tag.style.opacity = '1';
+                        tag.style.transform = 'translateY(0)';
+                    }, index * 50);
+                });
+            }, 1000);
         }
 
-        // Initialize animations
+        // Add particle effect for resume container
+        function createParticles() {
+            const resumeContainer = document.querySelector('.resume-container');
+            const particleCount = 20;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.cssText = `
+                    position: absolute;
+                    width: 3px;
+                    height: 3px;
+                    background: radial-gradient(circle, rgba(25, 118, 210, 0.6) 0%, transparent 70%);
+                    border-radius: 50%;
+                    pointer-events: none;
+                    animation: particleFloat ${3 + Math.random() * 4}s ease-in-out infinite;
+                    animation-delay: ${Math.random() * 2}s;
+                    left: ${Math.random() * 100}%;
+                    top: ${Math.random() * 100}%;
+                    z-index: 1;
+                `;
+                resumeContainer.appendChild(particle);
+            }
+        }
+        
+        // Add particle animation
+        const particleStyle = document.createElement('style');
+        particleStyle.textContent = `
+            @keyframes particleFloat {
+                0%, 100% { 
+                    transform: translate(0, 0) scale(0.8);
+                    opacity: 0;
+                }
+                50% { 
+                    transform: translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px) scale(1);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(particleStyle);
+
+        // Career-specific configurations with detailed resume structures
+        const careerConfigs = {
+            employment: {
+                subtitle: '软件工程师 - 企业就业方向',
+                resumeTitle: '张明华 - 软件工程师',
+                template: '互联网-技术-企业就业模板',
+                focusAreas: ['技术技能', '项目经验', '实习经历', '创新能力'],
+                sections: [
+                    {
+                        name: '个人信息',
+                        status: 'completed',
+                        icon: 'person',
+                        content: {
+                            name: '张明华',
+                            major: '计算机科学与技术',
+                            degree: '本科（2024届）',
+                            contact: '电话、邮箱已完善'
+                        }
+                    },
+                    {
+                        name: '教育背景',
+                        status: 'completed',
+                        icon: 'school',
+                        content: {
+                            university: '南京大学',
+                            major: '计算机科学与技术',
+                            period: '2020.09 - 2024.06',
+                            gpa: 'GPA: 3.8/4.0 | 排名: 15/120',
+                            courses: '数据结构、算法设计、操作系统、计算机网络'
+                        }
+                    },
+                    {
+                        name: '专业技能',
+                        status: 'partial',
+                        icon: 'code',
+                        content: {
+                            languages: {
+                                completed: ['Java', 'JavaScript'],
+                                missing: ['Python', 'Go']
+                            },
+                            frameworks: {
+                                completed: ['Spring Boot', 'React'],
+                                missing: ['Docker', 'Kubernetes']
+                            }
+                        }
+                    },
+                    {
+                        name: '项目经验',
+                        status: 'missing',
+                        icon: 'work',
+                        content: {
+                            required: '需要至少 2 个技术项目',
+                            suggestion: '建议包含：1个后端项目 + 1个前端项目'
+                        }
+                    },
+                    {
+                        name: '实习经历',
+                        status: 'missing',
+                        icon: 'business',
+                        content: {
+                            required: '需要至少 1 段相关实习经历',
+                            suggestion: '建议时长：3个月以上'
+                        }
+                    },
+                    {
+                        name: '技术竞赛',
+                        status: 'missing',
+                        icon: 'emoji_events',
+                        content: {
+                            required: '建议参加技术类竞赛获奖',
+                            suggestion: '推荐：ACM竞赛、开源贡献、技术认证'
+                        }
+                    }
+                ]
+            },
+            exam: {
+                subtitle: '综合管理 - 公务员考编方向',
+                resumeTitle: '张明华 - 管理培训生',
+                template: '政府机关-管理-考编模板',
+                focusAreas: ['学术成绩', '社会实践', '组织能力', '党团活动'],
+                sections: [
+                    {
+                        name: '个人信息',
+                        status: 'completed',
+                        icon: 'person',
+                        content: {
+                            name: '张明华',
+                            major: '计算机科学与技术',
+                            degree: '本科（2024届）',
+                            political: '中共党员'
+                        }
+                    },
+                    {
+                        name: '教育背景',
+                        status: 'completed',
+                        icon: 'school',
+                        content: {
+                            university: '南京大学',
+                            major: '计算机科学与技术',
+                            period: '2020.09 - 2024.06',
+                            gpa: 'GPA: 3.8/4.0 | 排名: 15/120',
+                            awards: '优秀学生奖学金、三好学生'
+                        }
+                    },
+                    {
+                        name: '党团活动',
+                        status: 'partial',
+                        icon: 'flag',
+                        content: {
+                            completed: ['入党积极分子培训', '党支部学习活动'],
+                            missing: ['党员发展对象', '志愿服务时长']
+                        }
+                    },
+                    {
+                        name: '学生工作',
+                        status: 'missing',
+                        icon: 'groups',
+                        content: {
+                            required: '需要学生干部或组织工作经历',
+                            suggestion: '班委、社团负责人、学生会干部'
+                        }
+                    },
+                    {
+                        name: '社会实践',
+                        status: 'missing',
+                        icon: 'volunteer_activism',
+                        content: {
+                            required: '需要社会实践和志愿服务经历',
+                            suggestion: '暑期三下乡、志愿服务、社会调研'
+                        }
+                    },
+                    {
+                        name: '获奖荣誉',
+                        status: 'partial',
+                        icon: 'military_tech',
+                        content: {
+                            completed: ['优秀学生奖学金'],
+                            missing: ['优秀共青团员', '社会实践奖', '志愿服务奖']
+                        }
+                    }
+                ]
+            },
+            study: {
+                subtitle: '计算机科学 - 研究生升学方向',
+                resumeTitle: '张明华 - 研究生申请',
+                template: '学术研究-升学申请模板',
+                focusAreas: ['学术研究', '论文发表', '导师推荐', '专业竞赛'],
+                sections: [
+                    {
+                        name: '个人信息',
+                        status: 'completed',
+                        icon: 'person',
+                        content: {
+                            name: '张明华',
+                            major: '计算机科学与技术',
+                            degree: '本科（2024届）',
+                            research: '研究方向：机器学习'
+                        }
+                    },
+                    {
+                        name: '教育背景',
+                        status: 'completed',
+                        icon: 'school',
+                        content: {
+                            university: '南京大学',
+                            major: '计算机科学与技术',
+                            period: '2020.09 - 2024.06',
+                            gpa: 'GPA: 3.8/4.0 | 排名: 15/120',
+                            core: '核心课程：机器学习、数据挖掘、算法分析'
+                        }
+                    },
+                    {
+                        name: '学术研究',
+                        status: 'partial',
+                        icon: 'science',
+                        content: {
+                            completed: ['本科毕业设计：深度学习算法优化'],
+                            missing: ['独立研究项目', '研究方法训练']
+                        }
+                    },
+                    {
+                        name: '论文发表',
+                        status: 'missing',
+                        icon: 'article',
+                        content: {
+                            required: '需要学术论文或研究成果',
+                            suggestion: '期刊论文、会议论文、专利申请'
+                        }
+                    },
+                    {
+                        name: '学术竞赛',
+                        status: 'missing',
+                        icon: 'emoji_events',
+                        content: {
+                            required: '需要学科竞赛获奖经历',
+                            suggestion: '数学建模、程序设计竞赛、创新创业大赛'
+                        }
+                    },
+                    {
+                        name: '研究经历',
+                        status: 'missing',
+                        icon: 'biotech',
+                        content: {
+                            required: '需要科研项目参与经历',
+                            suggestion: '导师科研项目、实验室工作、学术会议'
+                        }
+                    }
+                ]
+            }
+        };
+        
+        // Initialize career-specific content
+        function initializeCareerContent() {
+            const selectedCareer = localStorage.getItem('selectedCareer') || 'employment';
+            const config = careerConfigs[selectedCareer];
+            
+            if (config) {
+                // Update header information
+                document.getElementById('careerSubtitle').textContent = config.subtitle;
+                document.getElementById('resumeTitle').textContent = config.resumeTitle;
+                document.getElementById('resumeTemplate').textContent = config.template;
+                
+                // Generate resume sections dynamically
+                generateResumeSections(config.sections);
+                
+                // Update progress based on sections
+                updateProgressDisplay(config.sections);
+            }
+        }
+        
+        // Generate resume sections based on career configuration
+        function generateResumeSections(sections) {
+            const resumeContent = document.querySelector('.resume-content');
+            resumeContent.innerHTML = '';
+            
+            sections.forEach(section => {
+                const sectionHTML = createSectionHTML(section);
+                resumeContent.appendChild(sectionHTML);
+            });
+        }
+        
+        // Create HTML for a resume section
+        function createSectionHTML(section) {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.className = `resume-section ${section.status}`;
+            
+            let contentHTML = '';
+            
+            // Generate content based on section data structure
+            if (section.content) {
+                if (section.status === 'completed') {
+                    contentHTML = generateCompletedContent(section.content);
+                } else if (section.status === 'partial') {
+                    contentHTML = generatePartialContent(section.content);
+                } else {
+                    contentHTML = generateMissingContent(section.content);
+                }
+            }
+            
+            sectionDiv.innerHTML = `
+                <div class="section-header">
+                    <h3 class="section-title">
+                        <span class="material-icons">${section.icon}</span>
+                        ${section.name}
+                    </h3>
+                    <div class="section-status">
+                        <span class="material-icons status-icon">${getStatusIcon(section.status)}</span>
+                        <span>${getStatusText(section.status)}</span>
+                    </div>
+                </div>
+                <div class="section-content">
+                    ${contentHTML}
+                </div>
+            `;
+            
+            return sectionDiv;
+        }
+        
+        // Generate content for completed sections
+        function generateCompletedContent(content) {
+            let html = '';
+            
+            Object.keys(content).forEach(key => {
+                const value = content[key];
+                const label = getFieldLabel(key);
+                html += `<p><strong>${label}：</strong>${value}</p>`;
+            });
+            
+            return html;
+        }
+        
+        // Generate content for partial sections
+        function generatePartialContent(content) {
+            let html = '';
+            
+            // Handle completed items
+            if (content.completed) {
+                html += '<p><strong>已完成：</strong></p>';
+                html += '<div class="section-items">';
+                content.completed.forEach(item => {
+                    html += `<span class="item-tag completed">${item}</span>`;
+                });
+                html += '</div>';
+            }
+            
+            // Handle languages and frameworks for employment
+            if (content.languages) {
+                html += '<p><strong>编程语言：</strong></p>';
+                html += '<div class="section-items">';
+                content.languages.completed.forEach(lang => {
+                    html += `<span class="item-tag completed">${lang}</span>`;
+                });
+                content.languages.missing.forEach(lang => {
+                    html += `<span class="item-tag missing">${lang}</span>`;
+                });
+                html += '</div>';
+                
+                html += '<p style="margin-top: 12px;"><strong>技术栈：</strong></p>';
+                html += '<div class="section-items">';
+                content.frameworks.completed.forEach(fw => {
+                    html += `<span class="item-tag completed">${fw}</span>`;
+                });
+                content.frameworks.missing.forEach(fw => {
+                    html += `<span class="item-tag missing">${fw}</span>`;
+                });
+                html += '</div>';
+            }
+            
+            // Handle missing items
+            if (content.missing) {
+                html += '<p style="color: var(--warning-500); margin-top: 12px;"><strong>需要补充：</strong>';
+                content.missing.forEach((item, index) => {
+                    html += index === 0 ? item : `、${item}`;
+                });
+                html += '</p>';
+            }
+            
+            return html;
+        }
+        
+        // Generate content for missing sections
+        function generateMissingContent(content) {
+            return `
+                <div class="missing-placeholder">
+                    ${content.required}<br>
+                    ${content.suggestion}
+                </div>
+            `;
+        }
+        
+        // Get status icon
+        function getStatusIcon(status) {
+            switch (status) {
+                case 'completed': return 'check_circle';
+                case 'partial': return 'warning';
+                case 'missing': return 'error';
+                default: return 'help';
+            }
+        }
+        
+        // Get status text
+        function getStatusText(status) {
+            switch (status) {
+                case 'completed': return '已完成';
+                case 'partial': return '部分完成';
+                case 'missing': return '待完成';
+                default: return '未知';
+            }
+        }
+        
+        // Get field labels
+        function getFieldLabel(key) {
+            const labels = {
+                name: '姓名',
+                major: '专业',
+                degree: '学历',
+                contact: '联系方式',
+                political: '政治面貌',
+                research: '研究方向',
+                university: '学校',
+                period: '时间',
+                gpa: '成绩',
+                courses: '主修课程',
+                awards: '获奖情况',
+                core: '核心课程'
+            };
+            return labels[key] || key;
+        }
+        
+        // Update progress display based on sections
+        function updateProgressDisplay(sections) {
+            const totalSections = sections.length;
+            const completedSections = sections.filter(s => s.status === 'completed').length;
+            const partialSections = sections.filter(s => s.status === 'partial').length;
+            
+            // Calculate progress (completed = 100%, partial = 50%)
+            const progress = Math.round((completedSections * 100 + partialSections * 50) / totalSections);
+            
+            // Update progress circle
+            document.querySelector('.progress-value').textContent = `${progress}%`;
+            
+            // Update progress status
+            const missingSections = totalSections - completedSections - partialSections;
+            const statusText = `还需完成 ${missingSections} 个重要项目`;
+            document.querySelector('.progress-status').textContent = statusText;
+            
+            // Redraw progress chart with new value
+            drawProgressChart(progress);
+        }
+
+        // Initialize
         window.addEventListener('load', () => {
-            drawScoreChart();
-            animateProgressBars();
+            initializeCareerContent();
+            drawProgressChart();
+            animateElements();
+            createParticles();
+        });
+
+        // Interactive effects
+        document.querySelectorAll('.resume-section').forEach(section => {
+            section.addEventListener('click', () => {
+                if (section.classList.contains('missing') || section.classList.contains('partial')) {
+                    section.style.transform = 'scale(1.02)';
+                    setTimeout(() => {
+                        section.style.transform = 'scale(1)';
+                    }, 200);
+                }
+            });
             
-            // Animate action cards
-            const actionCards = document.querySelectorAll('.action-card');
-            actionCards.forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
+            // Add 3D tilt effect
+            section.addEventListener('mousemove', (e) => {
+                const rect = section.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
                 
-                setTimeout(() => {
-                    card.style.transition = 'all 0.6s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
-        });
-
-        // Add interactivity to recommendation items
-        document.querySelectorAll('.recommendation-item').forEach(item => {
-            item.addEventListener('click', () => {
-                console.log('Recommendation clicked:', item.querySelector('.recommendation-title').textContent);
-            });
-        });
-
-        // Add hover effects to radar points
-        document.querySelectorAll('.radar-point').forEach(point => {
-            point.addEventListener('mouseenter', () => {
-                point.style.transform += ' scale(1.5)';
-                point.style.boxShadow = '0 0 25px rgba(25, 118, 210, 0.8)';
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                section.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
             });
             
-            point.addEventListener('mouseleave', () => {
-                point.style.transform = point.style.transform.replace(' scale(1.5)', '');
-                point.style.boxShadow = '0 0 15px rgba(25, 118, 210, 0.5)';
+            section.addEventListener('mouseleave', () => {
+                section.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0px)';
             });
         });
 
-        // Career Path Modal Functions
-        function openCareerPathModal() {
-            const modal = document.getElementById('careerPathModal');
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
+        // Suggestion actions
+        document.querySelectorAll('.suggestion-action').forEach(action => {
+            action.addEventListener('click', (e) => {
+                e.preventDefault();
+                const actionText = action.textContent.trim();
+                console.log('执行操作:', actionText);
+                
+                // Add visual feedback
+                action.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    action.style.transform = 'scale(1)';
+                }, 150);
+            });
+        });
 
-        function closeCareerPathModal() {
-            const modal = document.getElementById('careerPathModal');
+        // Suggestion detail data
+        const suggestionDetails = {
+            'python-learning': {
+                title: 'Python编程学习计划',
+                sections: [
+                    {
+                        title: '学习目标',
+                        content: 'Python是数据科学、人工智能和后端开发的重要语言。掌握Python将大大提升你在技术面试中的竞争力，特别是在数据分析、机器学习和后端开发岗位。'
+                    },
+                    {
+                        title: '学习路径',
+                        content: '',
+                        list: [
+                            '第1-2周：Python基础语法，数据类型，控制结构',
+                            '第3-4周：面向对象编程，模块与包管理',
+                            '第5-6周：常用库学习（NumPy, Pandas, Matplotlib）',
+                            '第7-8周：实战项目：数据分析项目或Web API开发',
+                            '第9-10周：代码优化和最佳实践',
+                            '第11-12周：准备技术面试和项目展示'
+                        ]
+                    },
+                    {
+                        title: '推荐资源',
+                        content: '',
+                        list: [
+                            '在线课程：Python核心编程（40小时）',
+                            '实战项目：Netflix数据分析项目',
+                            '编程练习：LeetCode Python题库',
+                            '书籍推荐：《Python编程：从入门到实践》',
+                            '社区支持：Python学习交流群'
+                        ]
+                    },
+                    {
+                        title: '预期收益',
+                        content: '完成这个学习计划后，你将能够：使用Python进行数据分析、开发Web API、编写自动化脚本，并在简历中增加"Python (熟练)"技能标签。这将使你的简历竞争力提升约15-20%。'
+                    }
+                ],
+                actions: [
+                    { text: '开始学习', class: 'primary', icon: 'play_arrow' },
+                    { text: '加入学习群', class: 'secondary', icon: 'group' },
+                    { text: '下载资料', class: 'secondary', icon: 'download' }
+                ]
+            },
+            'backend-project': {
+                title: '后端项目开发指南',
+                sections: [
+                    {
+                        title: '项目概述',
+                        content: '构建一个完整的后端系统是展示你技术能力的最佳方式。我们推荐开发一个用户管理系统，包含注册、登录、权限控制等核心功能。'
+                    },
+                    {
+                        title: '技术栈选择',
+                        content: '',
+                        list: [
+                            '后端框架：Spring Boot（Java）或 Express（Node.js）',
+                            '数据库：MySQL + Redis缓存',
+                            '认证：JWT Token',
+                            '部署：Docker + 云服务器',
+                            '测试：单元测试 + 集成测试',
+                            '文档：Swagger API文档'
+                        ]
+                    },
+                    {
+                        title: '开发计划',
+                        content: '',
+                        list: [
+                            '第1周：搭建项目架构，配置开发环境',
+                            '第2周：实现用户注册、登录功能',
+                            '第3周：完善权限控制和数据验证',
+                            '第4周：添加业务功能模块',
+                            '第5周：性能优化和缓存策略',
+                            '第6周：部署上线和文档完善'
+                        ]
+                    },
+                    {
+                        title: '项目亮点',
+                        content: '这个项目将成为你简历上的重要亮点，展示你的全栈开发能力。完成后可以部署到云服务器，提供实际的演示链接。'
+                    }
+                ],
+                actions: [
+                    { text: '获取项目模板', class: 'primary', icon: 'code' },
+                    { text: '技术支持', class: 'secondary', icon: 'help' },
+                    { text: '类似项目', class: 'secondary', icon: 'explore' }
+                ]
+            },
+            'internship-search': {
+                title: '实习机会搜索指南',
+                sections: [
+                    {
+                        title: '实习的重要性',
+                        content: '实习经历是简历的重要组成部分，不仅能提供实际工作经验，还能帮助你建立职业网络。3-6个月的技术实习可以显著提升你的就业竞争力。'
+                    },
+                    {
+                        title: '实习岗位类型',
+                        content: '',
+                        list: [
+                            '软件开发实习生：前端、后端、移动端开发',
+                            '数据分析实习生：数据挖掘、商业分析',
+                            '测试工程师实习生：自动化测试、性能测试',
+                            '产品经理实习生：产品设计、需求分析',
+                            'DevOps实习生：运维、CI/CD流程'
+                        ]
+                    },
+                    {
+                        title: '求职渠道',
+                        content: '',
+                        list: [
+                            '校园招聘：春招、秋招实习生专场',
+                            '在线平台：Boss直聘、拉勾网、牛客网',
+                            '公司官网：直接投递目标公司',
+                            '校友推荐：通过校友内推',
+                            '技术社区：GitHub、技术论坛'
+                        ]
+                    },
+                    {
+                        title: '面试准备',
+                        content: '准备技术面试题目，完善个人项目，准备自我介绍。我们提供面试模拟服务，帮助你提高面试通过率。'
+                    }
+                ],
+                actions: [
+                    { text: '查看职位', class: 'primary', icon: 'search' },
+                    { text: '面试辅导', class: 'secondary', icon: 'school' },
+                    { text: '简历优化', class: 'secondary', icon: 'edit' }
+                ]
+            },
+            'programming-contest': {
+                title: '编程竞赛参与指南',
+                sections: [
+                    {
+                        title: '竞赛价值',
+                        content: '编程竞赛是展示算法能力和问题解决能力的绝佳平台。获得竞赛奖项可以显著提升简历含金量，特别是在技术面试中会有很大加分。'
+                    },
+                    {
+                        title: '推荐竞赛',
+                        content: '',
+                        list: [
+                            'ACM-ICPC：国际大学生程序设计竞赛',
+                            'LeetCode周赛：在线算法竞赛',
+                            'Codeforces：国际在线编程竞赛',
+                            '蓝桥杯：全国软件专业人才设计竞赛',
+                            'Google Code Jam：谷歌编程挑战赛',
+                            'AtCoder：日本在线编程竞赛平台'
+                        ]
+                    },
+                    {
+                        title: '准备计划',
+                        content: '',
+                        list: [
+                            '第1-2周：复习数据结构和算法基础',
+                            '第3-4周：刷题训练，重点攻克常见题型',
+                            '第5-6周：参加在线模拟赛，熟悉比赛流程',
+                            '第7-8周：组队训练，提高团队协作能力',
+                            '第9-10周：冲刺阶段，参加正式比赛'
+                        ]
+                    },
+                    {
+                        title: '技能提升',
+                        content: '通过参加编程竞赛，你将提升算法思维、代码实现能力和时间管理能力。这些技能在技术面试中非常重要。'
+                    }
+                ],
+                actions: [
+                    { text: '查看竞赛', class: 'primary', icon: 'emoji_events' },
+                    { text: '组队报名', class: 'secondary', icon: 'group' },
+                    { text: '刷题训练', class: 'secondary', icon: 'quiz' }
+                ]
+            }
+        };
+
+        // Alternative suggestions for refresh functionality
+        const alternativeSuggestionsPool = [
+            {
+                id: 'docker-learning',
+                title: '学习Docker容器化',
+                description: '容器化技术是现代软件开发的重要技能，掌握Docker将提升你的DevOps能力。',
+                priority: 'high',
+                actions: [
+                    { text: '开始学习', class: 'primary', icon: 'play_arrow' },
+                    { text: '查看详情', class: 'secondary', icon: 'info' }
+                ]
+            },
+            {
+                id: 'open-source',
+                title: '参与开源项目',
+                description: '为开源项目贡献代码可以展示你的技术能力和团队协作精神。',
+                priority: 'medium',
+                actions: [
+                    { text: '寻找项目', class: 'primary', icon: 'explore' },
+                    { text: '查看详情', class: 'secondary', icon: 'info' }
+                ]
+            },
+            {
+                id: 'tech-certification',
+                title: '考取技术认证',
+                description: 'AWS、阿里云等技术认证可以证明你的云计算能力，提升求职竞争力。',
+                priority: 'medium',
+                actions: [
+                    { text: '查看认证', class: 'primary', icon: 'verified' },
+                    { text: '查看详情', class: 'secondary', icon: 'info' }
+                ]
+            },
+            {
+                id: 'algorithm-practice',
+                title: '算法刷题训练',
+                description: '系统性的算法练习可以帮助你在技术面试中表现出色。',
+                priority: 'high',
+                actions: [
+                    { text: '开始刷题', class: 'primary', icon: 'quiz' },
+                    { text: '查看详情', class: 'secondary', icon: 'info' }
+                ]
+            },
+            {
+                id: 'react-learning',
+                title: '深入学习React',
+                description: 'React是前端开发的主流框架，掌握React生态系统将大大提升你的前端开发能力。',
+                priority: 'high',
+                actions: [
+                    { text: '开始学习', class: 'primary', icon: 'play_arrow' },
+                    { text: '查看详情', class: 'secondary', icon: 'info' }
+                ]
+            },
+            {
+                id: 'database-optimization',
+                title: '数据库性能优化',
+                description: '学习MySQL、PostgreSQL等数据库的性能优化技术，提升后端开发水平。',
+                priority: 'medium',
+                actions: [
+                    { text: '开始学习', class: 'primary', icon: 'storage' },
+                    { text: '查看详情', class: 'secondary', icon: 'info' }
+                ]
+            },
+            {
+                id: 'system-design',
+                title: '系统设计学习',
+                description: '掌握大型系统设计原理，为高级技术面试做好准备。',
+                priority: 'high',
+                actions: [
+                    { text: '开始学习', class: 'primary', icon: 'architecture' },
+                    { text: '查看详情', class: 'secondary', icon: 'info' }
+                ]
+            },
+            {
+                id: 'mobile-dev',
+                title: '移动应用开发',
+                description: '学习React Native或Flutter，扩展你的移动端开发技能。',
+                priority: 'medium',
+                actions: [
+                    { text: '开始学习', class: 'primary', icon: 'phone_android' },
+                    { text: '查看详情', class: 'secondary', icon: 'info' }
+                ]
+            }
+        ];
+
+        // Close suggestion detail modal
+        function closeSuggestionModal() {
+            const modal = document.getElementById('suggestionModal');
             modal.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
 
-        // Path option selection
-        document.querySelectorAll('.path-option').forEach(option => {
-            option.addEventListener('click', () => {
-                // Remove selected class from all options
-                document.querySelectorAll('.path-option').forEach(opt => {
-                    opt.classList.remove('selected');
-                });
-                
-                // Add selected class to clicked option
-                option.classList.add('selected');
-                
-                // Update timeline based on selected path
-                const pathType = option.dataset.path;
-                updateTimelineForPath(pathType);
-            });
-        });
-
-        function updateTimelineForPath(pathType) {
-            const timelineItems = document.querySelectorAll('.timeline-item');
+        // Refresh single suggestion
+        function refreshSingleSuggestion(button) {
+            const suggestionItem = button.closest('.suggestion-item');
+            const refreshButton = button;
             
-            // Path-specific timeline updates
-            const pathData = {
-                technical: {
-                    titles: ['初级软件工程师', '中级软件工程师', '高级软件工程师', '架构师/技术专家'],
-                    descriptions: [
-                        '掌握核心技术栈，完成基础项目，建立良好的工作习惯',
-                        '承担复杂项目，提升系统设计能力，开始技术分享',
-                        '技术领导角色，指导团队，参与重大技术决策',
-                        '成为技术权威，制定技术标准，影响产品方向'
-                    ]
-                },
-                management: {
-                    titles: ['初级开发工程师', '中级开发工程师', '技术组长', '技术经理/总监'],
-                    descriptions: [
-                        '掌握开发技能，了解团队协作，培养沟通能力',
-                        '承担项目责任，开始带领小组，学习管理技能',
-                        '管理技术团队，制定项目计划，协调资源',
-                        '负责技术部门，制定技术战略，管理多个团队'
-                    ]
-                },
-                product: {
-                    titles: ['产品助理', '产品经理', '高级产品经理', '产品总监'],
-                    descriptions: [
-                        '学习产品思维，了解用户需求，参与产品设计',
-                        '独立负责产品功能，协调开发资源，分析用户反馈',
-                        '负责产品线规划，制定产品战略，管理产品团队',
-                        '负责产品部门，制定公司产品战略，推动商业增长'
-                    ]
-                },
-                entrepreneur: {
-                    titles: ['技术骨干', '项目负责人', '合伙人/CTO', '创业者/CEO'],
-                    descriptions: [
-                        '积累技术经验，了解商业模式，建立行业人脉',
-                        '承担重要项目，学习商业技能，寻找创业机会',
-                        '参与创业项目，负责技术方向，建立团队',
-                        '创立公司，制定商业战略，领导团队发展'
-                    ]
+            // Add loading state
+            refreshButton.style.transform = 'rotate(360deg)';
+            
+            setTimeout(() => {
+                // Get a random alternative suggestion
+                const randomSuggestion = alternativeSuggestionsPool[Math.floor(Math.random() * alternativeSuggestionsPool.length)];
+                
+                // Update the suggestion content
+                const titleElement = suggestionItem.querySelector('.suggestion-title');
+                const descriptionElement = suggestionItem.querySelector('.suggestion-description');
+                const priorityElement = suggestionItem.querySelector('.suggestion-priority');
+                const actionsContainer = suggestionItem.querySelector('.suggestion-actions');
+                
+                titleElement.textContent = randomSuggestion.title;
+                descriptionElement.textContent = randomSuggestion.description;
+                priorityElement.textContent = randomSuggestion.priority === 'high' ? '高优先级' : '中优先级';
+                priorityElement.className = `suggestion-priority ${randomSuggestion.priority}`;
+                
+                // Update suggestion item priority class
+                suggestionItem.className = `suggestion-item ${randomSuggestion.priority}-priority`;
+                
+                // Update actions
+                actionsContainer.innerHTML = `
+                    ${randomSuggestion.actions.map(action => `
+                        <button class="suggestion-action ${action.class}" onclick="${action.text === '查看详情' ? `showSuggestionDetail('${randomSuggestion.id}')` : ''}">
+                            <span class="material-icons">${action.icon}</span>
+                            ${action.text}
+                        </button>
+                    `).join('')}
+                `;
+                
+                refreshButton.style.transform = 'rotate(0deg)';
+                
+                // Add animation
+                suggestionItem.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    suggestionItem.style.transform = 'scale(1)';
+                }, 200);
+            }, 500);
+        }
+        
+
+        // Add detailed suggestion data for new suggestions
+        const extendedSuggestionDetails = {
+            ...suggestionDetails,
+            'docker-learning': {
+                title: 'Docker容器化学习指南',
+                sections: [
+                    {
+                        title: '学习目标',
+                        content: 'Docker是现代软件开发和部署的核心技术。掌握容器化技术将帮助你更好地理解微服务架构，提升DevOps技能。'
+                    },
+                    {
+                        title: '学习内容',
+                        content: '',
+                        list: [
+                            '第1-2周：Docker基础概念，镜像与容器',
+                            '第3-4周：Dockerfile编写与镜像构建',
+                            '第5-6周：Docker Compose多容器编排',
+                            '第7-8周：容器网络和数据卷管理',
+                            '第9-10周：Docker部署实践项目'
+                        ]
+                    },
+                    {
+                        title: '实践项目',
+                        content: '',
+                        list: [
+                            '容器化现有Web应用',
+                            '使用Docker部署微服务架构',
+                            '构建CI/CD流水线',
+                            '容器监控与日志管理'
+                        ]
+                    }
+                ],
+                actions: [
+                    { text: '开始学习', class: 'primary', icon: 'play_arrow' },
+                    { text: '下载资料', class: 'secondary', icon: 'download' }
+                ]
+            },
+            'open-source': {
+                title: '开源项目参与指南',
+                sections: [
+                    {
+                        title: '参与价值',
+                        content: '参与开源项目可以提升代码质量、学习最佳实践、建立技术声誉，是技术成长的重要途径。'
+                    },
+                    {
+                        title: '参与步骤',
+                        content: '',
+                        list: [
+                            '选择合适的开源项目',
+                            '阅读项目文档和贡献指南',
+                            '从简单的issue开始',
+                            '提交高质量的Pull Request',
+                            '参与项目讨论和代码review'
+                        ]
+                    },
+                    {
+                        title: '推荐项目',
+                        content: '',
+                        list: [
+                            'Vue.js - 前端框架',
+                            'Spring Boot - Java后端框架',
+                            'TensorFlow - 机器学习框架',
+                            'React - 前端库',
+                            'Node.js - JavaScript运行时'
+                        ]
+                    }
+                ],
+                actions: [
+                    { text: '寻找项目', class: 'primary', icon: 'explore' },
+                    { text: 'GitHub指南', class: 'secondary', icon: 'code' }
+                ]
+            }
+        };
+        
+        // Update showSuggestionDetail function to use extended data
+        function showSuggestionDetail(suggestionId) {
+            const modal = document.getElementById('suggestionModal');
+            const titleElement = document.getElementById('suggestionModalTitle');
+            const bodyElement = document.getElementById('suggestionModalBody');
+            
+            const suggestion = extendedSuggestionDetails[suggestionId];
+            if (!suggestion) {
+                // Show generic message for suggestions without detailed data
+                titleElement.textContent = '建议详情';
+                bodyElement.innerHTML = `
+                    <div class="suggestion-detail-section">
+                        <h3>详细信息</h3>
+                        <p>该建议的详细信息正在完善中，请稍后查看。</p>
+                    </div>
+                    <div class="suggestion-detail-actions">
+                        <button class="suggestion-action primary">
+                            <span class="material-icons">play_arrow</span>
+                            开始行动
+                        </button>
+                    </div>
+                `;
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                return;
+            }
+            
+            titleElement.textContent = suggestion.title;
+            
+            let bodyHTML = '';
+            suggestion.sections.forEach(section => {
+                bodyHTML += `<div class="suggestion-detail-section">
+                    <h3>${section.title}</h3>`;
+                
+                if (section.content) {
+                    bodyHTML += `<p>${section.content}</p>`;
                 }
+                
+                if (section.list) {
+                    bodyHTML += '<ul>';
+                    section.list.forEach(item => {
+                        bodyHTML += `<li>${item}</li>`;
+                    });
+                    bodyHTML += '</ul>';
+                }
+                
+                bodyHTML += '</div>';
+            });
+            
+            bodyHTML += '<div class="suggestion-detail-actions">';
+            suggestion.actions.forEach(action => {
+                bodyHTML += `<button class="suggestion-action ${action.class}">
+                    <span class="material-icons">${action.icon}</span>
+                    ${action.text}
+                </button>`;
+            });
+            bodyHTML += '</div>';
+            
+            bodyElement.innerHTML = bodyHTML;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Quick action functions
+        function openResumeEditor() {
+            // Create resume editor modal
+            const modal = document.createElement('div');
+            modal.className = 'suggestion-modal active';
+            modal.innerHTML = `
+                <div class="suggestion-modal-content">
+                    <div class="suggestion-modal-header">
+                        <h2 class="suggestion-modal-title">简历编辑器</h2>
+                        <button class="suggestion-modal-close" onclick="this.closest('.suggestion-modal').remove(); document.body.style.overflow = 'auto';">
+                            <span class="material-icons">close</span>
+                        </button>
+                    </div>
+                    <div class="suggestion-detail-section">
+                        <h3>在线简历编辑</h3>
+                        <p>使用我们的智能简历编辑器，根据目标职位优化你的简历内容。</p>
+                        <ul>
+                            <li>AI智能内容建议</li>
+                            <li>实时格式优化</li>
+                            <li>多种模板选择</li>
+                            <li>关键词匹配度分析</li>
+                        </ul>
+                    </div>
+                    <div class="suggestion-detail-actions">
+                        <button class="suggestion-action primary" onclick="alert('跳转到简历编辑页面')">
+                            <span class="material-icons">edit</span>
+                            开始编辑
+                        </button>
+                        <button class="suggestion-action secondary" onclick="alert('导入现有简历')">
+                            <span class="material-icons">upload</span>
+                            导入简历
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openCareerPlanner() {
+            // Create career planner modal
+            const modal = document.createElement('div');
+            modal.className = 'suggestion-modal active';
+            modal.innerHTML = `
+                <div class="suggestion-modal-content">
+                    <div class="suggestion-modal-header">
+                        <h2 class="suggestion-modal-title">职业规划器</h2>
+                        <button class="suggestion-modal-close" onclick="this.closest('.suggestion-modal').remove(); document.body.style.overflow = 'auto';">
+                            <span class="material-icons">close</span>
+                        </button>
+                    </div>
+                    <div class="suggestion-detail-section">
+                        <h3>智能职业规划</h3>
+                        <p>基于你的兴趣、技能和市场需求，制定个性化的职业发展路径。</p>
+                        <ul>
+                            <li>职业兴趣测评</li>
+                            <li>技能差距分析</li>
+                            <li>发展路径规划</li>
+                            <li>阶段性目标设定</li>
+                        </ul>
+                    </div>
+                    <div class="suggestion-detail-section">
+                        <h3>推荐发展方向</h3>
+                        <ul>
+                            <li>全栈开发工程师 - 匹配度85%</li>
+                            <li>后端开发工程师 - 匹配度78%</li>
+                            <li>数据分析师 - 匹配度72%</li>
+                            <li>产品经理 - 匹配度68%</li>
+                        </ul>
+                    </div>
+                    <div class="suggestion-detail-actions">
+                        <button class="suggestion-action primary" onclick="alert('开始职业规划测评')">
+                            <span class="material-icons">timeline</span>
+                            开始规划
+                        </button>
+                        <button class="suggestion-action secondary" onclick="alert('查看详细路径')">
+                            <span class="material-icons">map</span>
+                            查看路径
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function generateReport() {
+            // Show loading state
+            const modal = document.createElement('div');
+            modal.className = 'suggestion-modal active';
+            modal.innerHTML = `
+                <div class="suggestion-modal-content">
+                    <div class="suggestion-modal-header">
+                        <h2 class="suggestion-modal-title">生成个人发展报告</h2>
+                        <button class="suggestion-modal-close" onclick="this.closest('.suggestion-modal').remove(); document.body.style.overflow = 'auto';">
+                            <span class="material-icons">close</span>
+                        </button>
+                    </div>
+                    <div class="suggestion-detail-section">
+                        <h3>报告生成中...</h3>
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #1976d2; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                            <p style="margin-top: 16px; color: #666;">正在分析你的简历完成度和发展建议...</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+            
+            // Add spinner animation
+            const spinnerStyle = document.createElement('style');
+            spinnerStyle.textContent = `
+                @keyframes spin {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+            `;
+            document.head.appendChild(spinnerStyle);
+            
+            // Simulate report generation
+            setTimeout(() => {
+                modal.innerHTML = `
+                    <div class="suggestion-modal-content">
+                        <div class="suggestion-modal-header">
+                            <h2 class="suggestion-modal-title">个人发展报告</h2>
+                            <button class="suggestion-modal-close" onclick="this.closest('.suggestion-modal').remove(); document.body.style.overflow = 'auto';">
+                                <span class="material-icons">close</span>
+                            </button>
+                        </div>
+                        <div class="suggestion-detail-section">
+                            <h3>简历完成度分析</h3>
+                            <p>当前简历完成度：<strong>65%</strong></p>
+                            <ul>
+                                <li>✅ 个人信息完整</li>
+                                <li>✅ 教育背景清晰</li>
+                                <li>⚠️ 技能部分需要补充Python、Docker</li>
+                                <li>❌ 缺少项目经验展示</li>
+                                <li>❌ 需要增加实习经历</li>
+                            </ul>
+                        </div>
+                        <div class="suggestion-detail-section">
+                            <h3>竞争力评估</h3>
+                            <p>基于目标职位"软件工程师"的评估结果：</p>
+                            <ul>
+                                <li>技术能力：★★★☆☆</li>
+                                <li>项目经验：★★☆☆☆</li>
+                                <li>学习能力：★★★★☆</li>
+                                <li>综合评分：★★★☆☆</li>
+                            </ul>
+                        </div>
+                        <div class="suggestion-detail-section">
+                            <h3>近期发展建议</h3>
+                            <ul>
+                                <li>优先级1：学习Python编程，预计4周</li>
+                                <li>优先级2：完成后端项目，预计6周</li>
+                                <li>优先级3：寻找实习机会，目标3个月</li>
+                            </ul>
+                        </div>
+                        <div class="suggestion-detail-actions">
+                            <button class="suggestion-action primary" onclick="alert('下载PDF报告')">
+                                <span class="material-icons">download</span>
+                                下载报告
+                            </button>
+                            <button class="suggestion-action secondary" onclick="alert('分享报告')">
+                                <span class="material-icons">share</span>
+                                分享报告
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }, 2000);
+        }
+        
+        // Career selector functions
+        function showCareerSelector() {
+            const modal = document.getElementById('careerSelectorModal');
+            const currentCareer = localStorage.getItem('selectedCareer') || 'employment';
+            
+            // Remove previous selections
+            document.querySelectorAll('.career-option-modal').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Highlight current career
+            const currentOption = document.querySelector(`[data-career="${currentCareer}"]`);
+            if (currentOption) {
+                currentOption.classList.add('selected');
+            }
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeCareerSelector() {
+            const modal = document.getElementById('careerSelectorModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+        
+        function selectNewCareer(career) {
+            const currentCareer = localStorage.getItem('selectedCareer');
+            
+            if (career === currentCareer) {
+                // Same career selected, just close modal
+                closeCareerSelector();
+                return;
+            }
+            
+            // Remove previous selections
+            document.querySelectorAll('.career-option-modal').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Add selection to clicked option
+            const selectedOption = document.querySelector(`[data-career="${career}"]`);
+            selectedOption.classList.add('selected');
+            
+            // Show loading state
+            const modal = document.getElementById('careerSelectorModal');
+            const modalContent = modal.querySelector('.suggestion-modal-content');
+            
+            modalContent.innerHTML = `
+                <div class="suggestion-modal-header">
+                    <h2 class="suggestion-modal-title">切换发展方向</h2>
+                </div>
+                <div style="text-align: center; padding: 40px;">
+                    <div style="display: inline-block; width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid #1976d2; border-radius: 50%; animation: spin 1s linear infinite;"></div>
+                    <p style="margin-top: 20px; color: #666;">正在为你切换到新的发展方向...</p>
+                    <p style="margin-top: 8px; font-size: 14px; color: #999;">简历结构和内容将根据新方向进行调整</p>
+                </div>
+            `;
+            
+            // Update localStorage and reload content
+            setTimeout(() => {
+                localStorage.setItem('selectedCareer', career);
+                
+                // Reinitialize content
+                initializeCareerContent();
+                
+                // Close modal
+                closeCareerSelector();
+                
+                // Show success notification
+                showCareerChangeNotification(career);
+            }, 1500);
+        }
+        
+        function showCareerChangeNotification(career) {
+            const careerNames = {
+                employment: '企业就业',
+                exam: '公务员考编', 
+                study: '继续升学'
             };
             
-            const data = pathData[pathType];
-            if (data) {
-                timelineItems.forEach((item, index) => {
-                    const titleElement = item.querySelector('.timeline-title');
-                    const descriptionElement = item.querySelector('.timeline-description');
-                    
-                    if (titleElement && data.titles[index]) {
-                        titleElement.textContent = data.titles[index];
+            // Create notification
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: var(--success-500);
+                color: white;
+                padding: 16px 20px;
+                border-radius: 8px;
+                box-shadow: var(--shadow-lg);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                animation: slideInRight 0.5s ease;
+            `;
+            
+            notification.innerHTML = `
+                <span class="material-icons">check_circle</span>
+                <span>已切换到${careerNames[career]}方向</span>
+            `;
+            
+            // Add animation style
+            const animationStyle = document.createElement('style');
+            animationStyle.textContent = `
+                @keyframes slideInRight {
+                    0% { transform: translateX(100%); opacity: 0; }
+                    100% { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOutRight {
+                    0% { transform: translateX(0); opacity: 1; }
+                    100% { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(animationStyle);
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after 3 seconds
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.5s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
                     }
-                    
-                    if (descriptionElement && data.descriptions[index]) {
-                        descriptionElement.textContent = data.descriptions[index];
-                    }
-                });
-            }
+                }, 500);
+            }, 3000);
         }
 
         // Close modal when clicking outside
-        document.getElementById('careerPathModal').addEventListener('click', (e) => {
+        document.getElementById('suggestionModal').addEventListener('click', (e) => {
             if (e.target === e.currentTarget) {
-                closeCareerPathModal();
+                closeSuggestionModal();
             }
         });
 
         // Close modal with Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                closeCareerPathModal();
-            }
-        });
-
-        // Timeline button interactions
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('timeline-btn')) {
-                const action = e.target.textContent;
-                console.log('Timeline action:', action);
-                
-                // Add visual feedback
-                e.target.style.background = 'var(--primary-600)';
-                setTimeout(() => {
-                    e.target.style.background = '';
-                }, 200);
+                closeSuggestionModal();
             }
         });
     </script>
