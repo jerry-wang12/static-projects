@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>消息中心 - 南大校友</title>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.5.19/vue.global.min.js"></script>
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        /* 消息页面专用样式 */
+        .messages-page {
+            background-color: #F8F9FA;
+            min-height: 100vh;
+        }
+
+        .page-content {
+            padding: 0;
+            background-color: #F8F9FA;
+        }
+
+        /* 简化的消息筛选样式 */
+        .simple-message-filters {
+            background-color: var(--color-surface);
+            padding: 12px var(--spacing-lg);
+            border-bottom: 1px solid #F1F3F4;
+        }
+
+        .simple-filter-tabs {
+            display: flex;
+            gap: var(--spacing-sm);
+            max-width: 400px;
+        }
+
+        .simple-filter-tab {
+            flex: 1;
+            padding: 10px var(--spacing-md);
+            background-color: #F8F9FA;
+            color: var(--color-on-surface-variant);
+            border: 2px solid transparent;
+            border-radius: var(--radius-sm);
+            font-size: var(--text-body-medium);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-xs);
+            text-align: center;
+        }
+
+        .simple-filter-tab.active {
+            background-color: var(--color-primary);
+            color: var(--color-on-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(112, 44, 138, 0.2);
+        }
+
+        .simple-filter-badge {
+            background-color: var(--color-error);
+            color: var(--color-on-error);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: var(--radius-full);
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .simple-filter-tab.active .simple-filter-badge {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: var(--color-primary);
+        }
+
+        .message-list {
+            background-color: var(--color-surface);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .message-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-md);
+            padding: var(--spacing-lg);
+            border-bottom: 1px solid #F1F3F4;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .message-item:hover {
+            background-color: #F8F9FA;
+        }
+
+        .message-item:last-child {
+            border-bottom: none;
+        }
+
+        .message-item.unread {
+            background-color: color-mix(in srgb, var(--color-primary) 4%, transparent);
+        }
+
+        .message-item.unread::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background-color: var(--color-primary);
+        }
+
+        .message-icon-wrapper {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .message-icon-wrapper.system {
+            background-color: var(--color-primary-container);
+            color: var(--color-on-primary-container);
+        }
+
+        .message-icon-wrapper.activity {
+            background-color: var(--color-tertiary-container);
+            color: var(--color-on-tertiary-container);
+        }
+
+        .message-icon-wrapper.booking {
+            background-color: var(--color-secondary-container);
+            color: var(--color-on-secondary-container);
+        }
+
+        .message-icon-wrapper.notification {
+            background-color: #E3F2FD;
+            color: #1976D2;
+        }
+
+        .priority-indicator {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--color-error);
+            border-radius: var(--radius-full);
+            border: 2px solid var(--color-surface);
+        }
+
+        .message-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .message-title {
+            font-size: var(--text-body-large);
+            font-weight: 600;
+            color: var(--color-on-surface);
+            line-height: 1.4;
+            flex: 1;
+            margin: 0;
+        }
+
+        .message-time {
+            font-size: var(--text-label-medium);
+            color: var(--color-on-surface-variant);
+            flex-shrink: 0;
+        }
+
+        .message-summary {
+            font-size: var(--text-body-medium);
+            color: var(--color-on-surface-variant);
+            line-height: 1.5;
+            margin-bottom: var(--spacing-xs);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            align-items: center;
+        }
+
+        .action-btn {
+            background: none;
+            border: none;
+            padding: var(--spacing-xs);
+            border-radius: var(--radius-xs);
+            color: var(--color-on-surface-variant);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 12px;
+        }
+
+        .action-btn:hover {
+            background-color: var(--color-primary-container);
+            color: var(--color-on-primary-container);
+        }
+
+        .action-btn.primary {
+            background-color: var(--color-primary);
+            color: var(--color-on-primary);
+            padding: 4px 8px;
+            font-weight: 500;
+        }
+
+        .action-btn.primary:hover {
+            background-color: color-mix(in srgb, var(--color-primary) 90%, black);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-xl) var(--spacing-lg);
+            background-color: var(--color-surface);
+        }
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: var(--spacing-lg);
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: var(--text-title-medium);
+            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-on-surface);
+        }
+
+        .empty-message {
+            font-size: var(--text-body-large);
+            color: var(--color-on-surface-variant);
+            line-height: 1.5;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--spacing-md);
+            }
+            
+            .simple-message-filters {
+                padding: 10px var(--spacing-md);
+            }
+            
+            .simple-filter-tab {
+                padding: 8px var(--spacing-sm);
+                font-size: var(--text-body-small);
+            }
+            
+            .message-item {
+                padding: var(--spacing-md);
+                gap: var(--spacing-sm);
+            }
+            
+            .message-icon-wrapper {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            
+            .message-header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+            }
+            
+            .message-time {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="messages-page app-container">
+            <!-- 顶部导航栏容器 -->
+            <div class="top-bar-container"></div>
+
+            <main class="page-content">
+                <!-- 简化的消息筛选 -->
+                <section class="simple-message-filters">
+                    <div class="simple-filter-tabs">
+                        <button 
+                            :class="['simple-filter-tab', { active: activeFilter === 'all' }]"
+                            @click="setActiveFilter('all')"
+                        >
+                            全部消息
+                        </button>
+                        <button 
+                            :class="['simple-filter-tab', { active: activeFilter === 'unread' }]"
+                            @click="setActiveFilter('unread')"
+                        >
+                            未读 <span v-if="unreadCount > 0" class="simple-filter-badge">{{ unreadCount }}</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 消息列表 -->
+                <section class="message-list">
+                    <div 
+                        v-for="message in filteredMessages" 
+                        :key="message.id"
+                        :class="['message-item', { unread: !message.read }]"
+                        @click="viewMessage(message)"
+                    >
+                        <div :class="['message-icon-wrapper', message.type]">
+                            <iconify-icon :icon="getMessageIcon(message.type)" width="20" height="20"></iconify-icon>
+                            <div v-if="message.priority === 'high'" class="priority-indicator"></div>
+                        </div>
+                        
+                        <div class="message-content">
+                            <div class="message-header">
+                                <h3 class="message-title">{{ message.title }}</h3>
+                                <span class="message-time">{{ formatTime(message.time) }}</span>
+                            </div>
+                            
+                            <p class="message-summary">{{ message.summary }}</p>
+                            
+                            <div class="message-actions">
+                                <button 
+                                    v-if="message.actionable"
+                                    class="action-btn primary"
+                                    @click.stop="handleAction(message)"
+                                >
+                                    {{ message.actionText || '查看详情' }}
+                                </button>
+                                <button 
+                                    v-if="!message.read"
+                                    class="action-btn"
+                                    @click.stop="markAsRead(message)"
+                                >
+                                    标记已读
+                                </button>
+                                <button 
+                                    class="action-btn"
+                                    @click.stop="deleteMessage(message)"
+                                >
+                                    删除
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 空状态 -->
+                    <div v-if="filteredMessages.length === 0" class="empty-state">
+                        <div class="empty-icon">📬</div>
+                        <div class="empty-title">暂无消息</div>
+                        <div class="empty-message">
+                            <span v-if="activeFilter === 'all'">您还没有收到任何消息</span>
+                            <span v-else>当前筛选条件下没有消息</span>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- 底部导航栏容器 -->
+            <div class="bottom-nav-container"></div>
+        </div>
+
+        <!-- 加载指示器容器 -->
+        <div class="loader-container"></div>
+    </div>
+
+    <script src="shared-components.js"></script>
+    <script src="page-loader.js"></script>
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    activeFilter: 'all',
+                    
+                    
+                    messages: [
+                        {
+                            id: 1,
+                            type: 'booking',
+                            title: '住宿预订确认',
+                            summary: '您预订的豪华双人间已确认，入住时间：10月15日-16日，请于入住当日14:00后办理入住手续。',
+                            time: new Date(Date.now() - 2 * 60 * 60 * 1000),
+                            read: false,
+                            priority: 'high',
+                            actionable: true,
+                            actionText: '查看订单'
+                        },
+                        {
+                            id: 2,
+                            type: 'activity',
+                            title: '活动报名成功',
+                            summary: '您已成功报名"校友企业专场招聘会"，活动时间：10月15日 14:00-17:00，地点：南京大学逸夫楼。',
+                            time: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
+                            read: false,
+                            actionable: true,
+                            actionText: '查看活动'
+                        },
+                        {
+                            id: 3,
+                            type: 'system',
+                            title: '校友身份认证成功',
+                            summary: '恭喜您！校友身份认证已通过，现在可以使用南大校友APP的全部功能，包括活动报名、住宿预订等。',
+                            time: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+                            read: true,
+                            actionable: false
+                        },
+                        {
+                            id: 4,
+                            type: 'activity',
+                            title: '活动提醒',
+                            summary: '您报名的"南大创业论坛"将于明天上午9:00开始，请按时参加。地点：南京大学仙林校区大礼堂。',
+                            time: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000),
+                            read: true,
+                            priority: 'high',
+                            actionable: true,
+                            actionText: '查看路线'
+                        },
+                        {
+                            id: 5,
+                            type: 'notification',
+                            title: '系统维护通知',
+                            summary: '系统将于今晚23:00-次日凌晨2:00进行维护升级，期间部分功能可能无法使用，请谅解。',
+                            time: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+                            read: true,
+                            actionable: false
+                        },
+                        {
+                            id: 6,
+                            type: 'system',
+                            title: '个人信息更新提醒',
+                            summary: '请及时更新您的个人信息，包括联系方式、工作单位等，以便我们为您提供更好的服务。',
+                            time: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+                            read: false,
+                            actionable: true,
+                            actionText: '去更新'
+                        }
+                    ]
+                };
+            },
+            
+            computed: {
+                filteredMessages() {
+                    if (this.activeFilter === 'all') {
+                        return this.messages;
+                    } else if (this.activeFilter === 'unread') {
+                        return this.messages.filter(msg => !msg.read);
+                    }
+                    return this.messages;
+                },
+                
+                unreadCount() {
+                    return this.messages.filter(msg => !msg.read).length;
+                }
+            },
+            
+            methods: {
+                setActiveFilter(filter) {
+                    this.activeFilter = filter;
+                },
+                
+                formatTime(time) {
+                    const now = new Date();
+                    const msgTime = new Date(time);
+                    const diff = now.getTime() - msgTime.getTime();
+                    
+                    const minutes = Math.floor(diff / 60000);
+                    const hours = Math.floor(diff / 3600000);
+                    const days = Math.floor(diff / 86400000);
+                    
+                    if (minutes < 1) {
+                        return '刚刚';
+                    } else if (minutes < 60) {
+                        return `${minutes}分钟前`;
+                    } else if (hours < 24) {
+                        return `${hours}小时前`;
+                    } else if (days < 7) {
+                        return `${days}天前`;
+                    } else {
+                        return msgTime.toLocaleDateString('zh-CN', {
+                            month: 'short',
+                            day: 'numeric'
+                        });
+                    }
+                },
+                
+                getMessageIcon(type) {
+                    const iconMap = {
+                        system: 'mdi:cog',
+                        activity: 'mdi:calendar-check',
+                        booking: 'mdi:bed',
+                        notification: 'mdi:bell'
+                    };
+                    return iconMap[type] || 'mdi:email';
+                },
+                
+                viewMessage(message) {
+                    // 标记为已读
+                    if (!message.read) {
+                        this.markAsRead(message, false);
+                    }
+                    
+                    showModal(message.title, `
+                        <div style="text-align: left;">
+                            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding: 12px; background-color: #F8F9FA; border-radius: 8px;">
+                                <div class="message-icon-wrapper ${message.type}" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <iconify-icon icon="${this.getMessageIcon(message.type)}" width="20" height="20"></iconify-icon>
+                                </div>
+                                <div>
+                                    <div style="font-weight: 500; margin-bottom: 4px;">${this.getTypeText(message.type)}</div>
+                                    <div style="font-size: 14px; color: var(--color-on-surface-variant);">${this.formatTime(message.time)}</div>
+                                </div>
+                            </div>
+                            <div style="line-height: 1.6; color: var(--color-on-surface);">
+                                ${message.summary}
+                            </div>
+                            ${message.actionable ? `
+                                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #F1F3F4;">
+                                    <button class="primary-btn" onclick="handleMessageAction(${message.id}); closeModal(this);" style="width: 100%;">
+                                        ${message.actionText || '查看详情'}
+                                    </button>
+                                </div>
+                            ` : ''}
+                        </div>
+                    `, [
+                        { text: '关闭', class: 'outlined-btn' }
+                    ]);
+                },
+                
+                getTypeText(type) {
+                    const typeMap = {
+                        system: '系统消息',
+                        activity: '活动消息',
+                        booking: '预订消息',
+                        notification: '通知消息'
+                    };
+                    return typeMap[type] || '消息';
+                },
+                
+                markAsRead(message, showToast = true) {
+                    message.read = true;
+                    
+                    if (showToast) {
+                        showToast('已标记为已读', 'success');
+                    }
+                },
+                
+                deleteMessage(message) {
+                    showModal('确认删除', `
+                        <p>确定要删除这条消息吗？</p>
+                        <p style="color: var(--color-on-surface-variant); font-size: 14px; margin-top: 8px;">
+                            "${message.title}"
+                        </p>
+                    `, [
+                        { text: '取消', class: 'outlined-btn' },
+                        { 
+                            text: '删除', 
+                            class: 'primary-btn',
+                            onclick: `confirmDelete(${message.id})`
+                        }
+                    ]);
+                },
+                
+                confirmDelete(messageId) {
+                    const index = this.messages.findIndex(msg => msg.id === messageId);
+                    if (index > -1) {
+                        this.messages.splice(index, 1);
+                        showToast('消息已删除', 'success');
+                    }
+                },
+                
+                handleAction(message) {
+                    switch (message.type) {
+                        case 'booking':
+                            window.location.href = 'accommodation.html';
+                            break;
+                        case 'activity':
+                            window.location.href = 'home.html';
+                            break;
+                        case 'system':
+                            window.location.href = 'profile.html';
+                            break;
+                        default:
+                            showToast('功能开发中...', 'info');
+                    }
+                }
+            },
+            
+            mounted() {
+                // 检查登录状态
+                if (!localStorage.getItem('alumni_token')) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                // 初始化页面组件
+                initializePage({
+                    title: '消息中心',
+                    activePage: 'messages'
+                });
+            }
+        }).mount('#app');
+
+        // 全局函数
+        function confirmDelete(messageId) {
+            const app = document.getElementById('app').__vue_app__.ctx;
+            app.confirmDelete(messageId);
+            closeModal(event.target);
+        }
+        
+        function handleMessageAction(messageId) {
+            const app = document.getElementById('app').__vue_app__.ctx;
+            const message = app.messages.find(msg => msg.id === messageId);
+            if (message) {
+                app.handleAction(message);
+            }
+        }
+    </script>
+</body>
+</html>

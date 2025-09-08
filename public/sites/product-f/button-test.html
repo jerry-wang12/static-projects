@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>按钮一致性测试</title>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        .test-container {
+            padding: var(--spacing-xl);
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: var(--color-background);
+            min-height: 100vh;
+        }
+
+        .test-button {
+            width: 100%;
+            padding: var(--spacing-lg);
+            background-color: var(--color-primary);
+            color: var(--color-on-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: var(--text-body-large);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .test-button:hover {
+            background-color: color-mix(in srgb, var(--color-primary) 90%, black);
+        }
+
+        .test-title {
+            text-align: center;
+            color: var(--color-on-surface);
+            margin-bottom: var(--spacing-xl);
+            font-size: var(--text-title-large);
+        }
+
+        .instruction {
+            padding: var(--spacing-md);
+            background-color: #f0f0f0;
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--spacing-lg);
+            font-size: var(--text-body-medium);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1 class="test-title">按钮大小一致性测试</h1>
+        
+        <div class="instruction">
+            点击下方按钮测试底部弹窗中的按钮是否大小一致。注意观察"关闭"和"立即报名"按钮的高度、宽度、字体大小是否完全相同。
+        </div>
+        
+        <button class="test-button" onclick="showConsistentButtons()">
+            测试按钮一致性
+        </button>
+
+        <button class="test-button" onclick="showDifferentButtons()">
+            测试不同类型按钮
+        </button>
+
+        <button class="test-button" onclick="showSingleButton()">
+            测试单个按钮
+        </button>
+
+        <button class="test-button" onclick="showThreeButtons()">
+            测试三个按钮
+        </button>
+    </div>
+
+    <script src="shared-components.js"></script>
+    <script>
+        function showConsistentButtons() {
+            showBottomSheet('按钮一致性测试', `
+                <div style="padding: 20px; text-align: center;">
+                    <h3 style="margin-bottom: 16px;">测试说明</h3>
+                    <p style="line-height: 1.6; margin-bottom: 20px;">
+                        请仔细观察下方两个按钮：<br>
+                        • 高度是否相同 (48px)<br>
+                        • 字体大小是否相同<br>
+                        • 内边距是否相同<br>
+                        • 边框粗细是否相同
+                    </p>
+                    <div style="background: #f5f5f5; padding: 16px; border-radius: 8px;">
+                        两个按钮应该具有完全相同的尺寸和外观（除了颜色）
+                    </div>
+                </div>
+            `, [
+                { text: '关闭', class: 'outlined-btn' },
+                { text: '立即报名', class: 'primary-btn', onclick: 'showToast("测试成功！按钮大小一致", "success"); closeBottomSheet(this);' }
+            ]);
+        }
+
+        function showDifferentButtons() {
+            showBottomSheet('不同按钮类型测试', `
+                <div style="padding: 20px; text-align: center;">
+                    <h3 style="margin-bottom: 16px;">多种按钮类型</h3>
+                    <p style="line-height: 1.6;">
+                        测试不同类型按钮的一致性
+                    </p>
+                </div>
+            `, [
+                { text: '取消', class: 'outlined-btn' },
+                { text: '确认', class: 'primary-btn', onclick: 'closeBottomSheet(this);' }
+            ]);
+        }
+
+        function showSingleButton() {
+            showBottomSheet('单按钮测试', `
+                <div style="padding: 20px; text-align: center;">
+                    <h3 style="margin-bottom: 16px;">单个按钮</h3>
+                    <p style="line-height: 1.6;">
+                        测试单个按钮的显示效果
+                    </p>
+                </div>
+            `, [
+                { text: '知道了', class: 'primary-btn' }
+            ]);
+        }
+
+        function showThreeButtons() {
+            showBottomSheet('三按钮测试', `
+                <div style="padding: 20px; text-align: center;">
+                    <h3 style="margin-bottom: 16px;">多按钮布局</h3>
+                    <p style="line-height: 1.6;">
+                        测试三个按钮的等宽布局
+                    </p>
+                </div>
+            `, [
+                { text: '取消', class: 'outlined-btn' },
+                { text: '保存', class: 'outlined-btn', onclick: 'showToast("保存成功", "success");' },
+                { text: '确认', class: 'primary-btn', onclick: 'closeBottomSheet(this);' }
+            ]);
+        }
+    </script>
+</body>
+</html>

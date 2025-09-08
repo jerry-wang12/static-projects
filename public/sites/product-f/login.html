@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 中美校友</title>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.5.19/vue.global.min.js"></script>
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        /* 登录页面专用样式 */
+        .login-page {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md) var(--spacing-lg);
+        }
+
+        .login-container {
+            width: 100%;
+            max-width: 400px;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: var(--spacing-lg);
+            color: var(--color-on-primary);
+        }
+
+        .app-title {
+            font-size: 42px;
+            font-weight: 300;
+            margin-bottom: var(--spacing-sm);
+            letter-spacing: 3px;
+        }
+
+        .welcome-text {
+            font-size: var(--text-body-large);
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .login-form {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-lg);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .input-label {
+            display: block;
+            font-size: var(--text-label-large);
+            font-weight: 500;
+            color: var(--color-on-surface);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background-color: var(--color-surface-variant);
+            border: 2px solid transparent;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+        }
+
+        .input-wrapper:focus-within {
+            background-color: var(--color-surface);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 12%, transparent);
+        }
+
+        .input-icon {
+            padding: 0 var(--spacing-md);
+            color: var(--color-on-surface-variant);
+        }
+
+        .input-field {
+            flex: 1;
+            padding: var(--spacing-md) 0;
+            border: none;
+            background: none;
+            font-size: var(--text-body-large);
+            color: var(--color-on-surface);
+            outline: none;
+        }
+
+        .input-field::placeholder {
+            color: var(--color-on-surface-variant);
+        }
+
+        .code-btn {
+            padding: var(--spacing-xs) var(--spacing-md);
+            background: none;
+            border: none;
+            color: var(--color-primary);
+            font-size: var(--text-label-large);
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: var(--radius-xs);
+            transition: background-color 0.3s ease;
+        }
+
+        .code-btn:hover {
+            background-color: var(--color-primary-container);
+        }
+
+        .code-btn:disabled {
+            color: var(--color-on-surface-variant);
+            cursor: not-allowed;
+        }
+
+        .agreement-section {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+            font-size: var(--text-body-medium);
+            line-height: 1.5;
+        }
+
+        .custom-checkbox {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .custom-checkbox input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 20px;
+            width: 20px;
+            background-color: var(--color-surface);
+            border: 2px solid var(--color-outline);
+            border-radius: var(--radius-xs);
+            transition: all 0.3s ease;
+        }
+
+        .custom-checkbox:hover input ~ .checkmark {
+            border-color: var(--color-primary);
+        }
+
+        .custom-checkbox input:checked ~ .checkmark {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        .custom-checkbox input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        .custom-checkbox .checkmark:after {
+            left: 6px;
+            top: 2px;
+            width: 4px;
+            height: 8px;
+            border: solid var(--color-on-primary);
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .agreement-text {
+            color: var(--color-on-surface);
+            flex: 1;
+        }
+
+        .agreement-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .agreement-link:hover {
+            text-decoration: underline;
+        }
+
+        .primary-btn {
+            width: 100%;
+            padding: var(--spacing-md) var(--spacing-lg);
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: var(--color-on-primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: var(--text-label-large);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: var(--spacing-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .primary-btn:hover::before {
+            left: 100%;
+        }
+
+        .primary-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(112, 44, 138, 0.3);
+        }
+
+        .primary-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .divider {
+            text-align: center;
+            margin: var(--spacing-md) 0;
+            position: relative;
+            color: var(--color-on-surface-variant);
+            font-size: var(--text-body-medium);
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--color-outline), transparent);
+        }
+
+        .divider span {
+            background-color: var(--color-surface);
+            padding: 0 var(--spacing-lg);
+            position: relative;
+        }
+
+        .wechat-btn {
+            width: 100%;
+            padding: var(--spacing-md) var(--spacing-lg);
+            background-color: var(--color-surface);
+            color: var(--color-on-surface);
+            border: 2px solid var(--color-outline);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-label-large);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .wechat-btn:hover {
+            background-color: #07C160;
+            color: white;
+            border-color: #07C160;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(7, 193, 96, 0.2);
+        }
+
+        .countdown {
+            color: var(--color-on-surface-variant);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 480px) {
+            .login-page {
+                padding: var(--spacing-sm) var(--spacing-md);
+            }
+            
+            .login-container {
+                padding: 0;
+            }
+            
+            .app-title {
+                font-size: 32px;
+                letter-spacing: 2px;
+            }
+            
+            .login-form {
+                padding: var(--spacing-md);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="login-page">
+            <div class="login-container">
+                <div class="welcome-section">
+                    <h1 class="app-title">中美校友</h1>
+                    <p class="welcome-text">连接校友，共创未来</p>
+                </div>
+
+                <form class="login-form" @submit.prevent="handleLogin">
+                    <div class="input-group">
+                        <label class="input-label">手机号码</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <iconify-icon icon="mdi:phone-outline" width="20" height="20"></iconify-icon>
+                            </div>
+                            <input 
+                                type="tel" 
+                                v-model="loginForm.phone" 
+                                class="input-field"
+                                placeholder="请输入手机号码"
+                                maxlength="11"
+                                @input="validatePhone"
+                            >
+                        </div>
+                        <div v-if="phoneError" class="error-message">{{ phoneError }}</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">验证码</label>
+                        <div class="input-wrapper">
+                            <div class="input-icon">
+                                <iconify-icon icon="mdi:shield-key-outline" width="20" height="20"></iconify-icon>
+                            </div>
+                            <input 
+                                type="text" 
+                                v-model="loginForm.code" 
+                                class="input-field"
+                                placeholder="请输入验证码"
+                                maxlength="6"
+                            >
+                            <button 
+                                type="button" 
+                                class="code-btn" 
+                                @click="sendCode"
+                                :disabled="!canSendCode || countdown > 0"
+                            >
+                                <span v-if="countdown > 0" class="countdown">{{ countdown }}s</span>
+                                <span v-else>获取验证码</span>
+                            </button>
+                        </div>
+                        <div v-if="codeError" class="error-message">{{ codeError }}</div>
+                    </div>
+                    
+                    <div class="agreement-section">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" v-model="loginForm.agreed">
+                            <span class="checkmark"></span>
+                        </label>
+                        <div class="agreement-text">
+                            我已阅读并同意
+                            <a href="#" class="agreement-link" @click.prevent="showAgreement('user')">《用户协议》</a>
+                            和
+                            <a href="#" class="agreement-link" @click.prevent="showAgreement('privacy')">《隐私政策》</a>
+                        </div>
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        class="primary-btn" 
+                        :disabled="!canLogin"
+                    >
+                        <iconify-icon icon="mdi:login" width="20" height="20" style="margin-right: 8px;"></iconify-icon>
+                        立即登录
+                    </button>
+                    
+                    <div class="divider">
+                        <span>或</span>
+                    </div>
+                    
+                    <button type="button" class="wechat-btn" @click="wechatLogin">
+                        <iconify-icon icon="mdi:wechat" width="24" height="24"></iconify-icon>
+                        微信一键登录
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 加载指示器容器 -->
+        <div class="loader-container"></div>
+    </div>
+
+    <script src="shared-components.js"></script>
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    loginForm: {
+                        phone: '',
+                        code: '',
+                        agreed: false
+                    },
+                    phoneError: '',
+                    codeError: '',
+                    countdown: 0,
+                    countdownTimer: null
+                };
+            },
+            
+            computed: {
+                canSendCode() {
+                    return this.isValidPhone(this.loginForm.phone);
+                },
+                
+                canLogin() {
+                    return this.isValidPhone(this.loginForm.phone) &&
+                           this.loginForm.code.length >= 4 &&
+                           this.loginForm.agreed;
+                }
+            },
+            
+            methods: {
+                isValidPhone(phone) {
+                    return /^1[3-9]\d{9}$/.test(phone);
+                },
+                
+                validatePhone() {
+                    if (!this.loginForm.phone) {
+                        this.phoneError = '';
+                        return;
+                    }
+                    
+                    if (!this.isValidPhone(this.loginForm.phone)) {
+                        this.phoneError = '请输入正确的手机号码';
+                    } else {
+                        this.phoneError = '';
+                    }
+                },
+                
+                async sendCode() {
+                    if (!this.canSendCode) return;
+                    
+                    showLoader();
+                    
+                    // 模拟API调用
+                    try {
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        
+                        this.startCountdown();
+                        showToast('验证码已发送！（测试验证码：1234）', 'success');
+                        
+                    } catch (error) {
+                        showToast('验证码发送失败，请重试', 'error');
+                    } finally {
+                        hideLoader();
+                    }
+                },
+                
+                startCountdown() {
+                    this.countdown = 60;
+                    this.countdownTimer = setInterval(() => {
+                        this.countdown--;
+                        if (this.countdown <= 0) {
+                            clearInterval(this.countdownTimer);
+                            this.countdownTimer = null;
+                        }
+                    }, 1000);
+                },
+                
+                async handleLogin() {
+                    if (!this.canLogin) return;
+                    
+                    // 验证码校验
+                    if (this.loginForm.code !== '1234') {
+                        this.codeError = '验证码错误，请重试（测试验证码：1234）';
+                        return;
+                    } else {
+                        this.codeError = '';
+                    }
+                    
+                    showLoader();
+                    
+                    try {
+                        // 模拟登录API
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                        
+                        // 保存登录状态
+                        localStorage.setItem('alumni_token', 'mock_token_' + Date.now());
+                        localStorage.setItem('user_phone', this.loginForm.phone);
+                        
+                        showToast('登录成功！', 'success');
+                        
+                        setTimeout(() => {
+                            window.location.href = 'home.html';
+                        }, 1000);
+                        
+                    } catch (error) {
+                        showToast('登录失败，请重试', 'error');
+                    } finally {
+                        hideLoader();
+                    }
+                },
+                
+                async wechatLogin() {
+                    showLoader();
+                    
+                    try {
+                        // 模拟微信登录
+                        await new Promise(resolve => setTimeout(resolve, 2000));
+                        
+                        localStorage.setItem('alumni_token', 'wechat_token_' + Date.now());
+                        localStorage.setItem('login_type', 'wechat');
+                        
+                        showToast('微信登录成功！', 'success');
+                        
+                        setTimeout(() => {
+                            window.location.href = 'home.html';
+                        }, 1000);
+                        
+                    } catch (error) {
+                        showToast('微信登录失败，请重试', 'error');
+                    } finally {
+                        hideLoader();
+                    }
+                },
+                
+                showAgreement(type) {
+                    const titles = {
+                        user: '用户协议',
+                        privacy: '隐私政策'
+                    };
+                    
+                    const contents = {
+                        user: `
+                            <h4>1. 服务条款</h4>
+                            <p>欢迎使用中美校友APP，在使用我们的服务前，请仔细阅读本协议。</p>
+                            <h4>2. 账户管理</h4>
+                            <p>用户需要提供真实、准确的个人信息进行注册。</p>
+                            <h4>3. 服务规则</h4>
+                            <p>用户在使用服务时应遵守相关法律法规，不得发布违法违规内容。</p>
+                        `,
+                        privacy: `
+                            <h4>1. 信息收集</h4>
+                            <p>我们仅收集为您提供服务所必需的个人信息。</p>
+                            <h4>2. 信息使用</h4>
+                            <p>我们不会将您的个人信息出售给第三方。</p>
+                            <h4>3. 信息保护</h4>
+                            <p>我们采用业界标准的安全措施保护您的个人信息安全。</p>
+                        `
+                    };
+                    
+                    showModal(titles[type], contents[type], [
+                        { text: '我知道了', class: 'primary-btn' }
+                    ]);
+                }
+            },
+            
+            mounted() {
+                // 检查是否已经登录
+                if (localStorage.getItem('alumni_token')) {
+                    window.location.href = 'home.html';
+                }
+                
+                // 初始化页面组件
+                initializePage({
+                    topBar: false,
+                    bottomNav: false
+                });
+            },
+            
+            beforeUnmount() {
+                if (this.countdownTimer) {
+                    clearInterval(this.countdownTimer);
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>底部弹窗演示 - 南大校友</title>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        .demo-container {
+            padding: var(--spacing-xl);
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+            justify-content: center;
+            background-color: var(--color-background);
+        }
+
+        .demo-button {
+            width: 100%;
+            padding: var(--spacing-lg);
+            background-color: var(--color-surface);
+            color: var(--color-on-surface);
+            border: 2px solid var(--color-primary);
+            border-radius: var(--radius-md);
+            font-size: var(--text-body-large);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .demo-button:hover {
+            background-color: var(--color-primary);
+            color: var(--color-on-primary);
+            transform: translateY(-2px);
+        }
+
+        .demo-title {
+            text-align: center;
+            color: var(--color-on-surface);
+            margin-bottom: var(--spacing-xl);
+            font-size: var(--text-title-large);
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1 class="demo-title">底部弹窗演示</h1>
+        
+        <button class="demo-button" onclick="showActivityDetail()">
+            <iconify-icon icon="mdi:calendar-check" width="24" height="24"></iconify-icon>
+            活动详情弹窗
+        </button>
+
+        <button class="demo-button" onclick="showQRDemo()">
+            <iconify-icon icon="mdi:qrcode" width="24" height="24"></iconify-icon>
+            身份码弹窗
+        </button>
+
+        <button class="demo-button" onclick="showSettingsDemo()">
+            <iconify-icon icon="mdi:cog" width="24" height="24"></iconify-icon>
+            设置菜单弹窗
+        </button>
+
+        <button class="demo-button" onclick="showFormDemo()">
+            <iconify-icon icon="mdi:account-edit" width="24" height="24"></iconify-icon>
+            表单编辑弹窗
+        </button>
+
+        <button class="demo-button" onclick="showLongContentDemo()">
+            <iconify-icon icon="mdi:text-long" width="24" height="24"></iconify-icon>
+            长内容滚动演示
+        </button>
+    </div>
+
+    <script src="shared-components.js"></script>
+    <script>
+        function showActivityDetail() {
+            showBottomSheet('南京大学2025年毕业生秋季大型双选会', `
+                <div>
+                    <img src="https://images.unsplash.com/photo-1559136555-9303baea8ebd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" 
+                         alt="活动图片" 
+                         class="activity-detail-image">
+                    
+                    <div class="activity-detail-row">
+                        <span class="activity-detail-label">时间：</span>
+                        <span class="activity-detail-value">2024年9月27日 周五</span>
+                    </div>
+                    
+                    <div class="activity-detail-row">
+                        <span class="activity-detail-label">地点：</span>
+                        <span class="activity-detail-value">南京大学体育馆</span>
+                    </div>
+                    
+                    <div class="activity-detail-row">
+                        <span class="activity-detail-label">主办方：</span>
+                        <span class="activity-detail-value">南大就业指导中心</span>
+                    </div>
+                    
+                    <div class="activity-detail-row">
+                        <span class="activity-detail-label">参与人数：</span>
+                        <span class="activity-detail-value">328 人</span>
+                    </div>
+                    
+                    <div class="activity-detail-row">
+                        <span class="activity-detail-label">状态：</span>
+                        <span class="activity-status-badge open">报名中</span>
+                    </div>
+                    
+                    <div class="activity-description">
+                        为2025年毕业生提供优质就业机会，汇聚知名企业现场招聘，涵盖IT、金融、制造业等多个行业，助力毕业生找到心仪工作。
+                    </div>
+                </div>
+            `, [
+                { text: '关闭', class: 'outlined-btn' },
+                { text: '立即报名', class: 'primary-btn', onclick: 'showToast("报名成功！", "success"); closeBottomSheet(this);' }
+            ]);
+        }
+
+        function showQRDemo() {
+            showBottomSheet('我的身份码', `
+                <div class="qr-container">
+                    <div class="qr-code">
+                        <iconify-icon icon="mdi:qrcode" width="80" height="80" style="color: var(--color-primary);"></iconify-icon>
+                    </div>
+                    
+                    <div class="user-info-card">
+                        <div style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: var(--color-on-surface);">王贤希</div>
+                        <div style="color: var(--color-on-surface-variant); margin-bottom: 4px;">学号：20100001</div>
+                        <div style="color: var(--color-on-surface-variant);">2010级 软件学院</div>
+                    </div>
+                    
+                    <div style="padding: 16px; background-color: #f8f9fa; border-radius: 8px; font-size: 14px; color: var(--color-on-surface-variant); line-height: 1.5; text-align: center;">
+                        向其他校友展示此二维码，可快速交换联系方式和校友信息
+                    </div>
+                </div>
+            `, [
+                { text: '关闭', class: 'primary-btn' }
+            ]);
+        }
+
+        function showSettingsDemo() {
+            showBottomSheet('设置', `
+                <div>
+                    <div class="settings-menu-item" onclick="showToast('功能开发中...', 'info');">
+                        <iconify-icon icon="mdi:bell-outline" width="20" height="20"></iconify-icon>
+                        消息通知设置
+                    </div>
+                    <div class="settings-menu-item" onclick="showToast('功能开发中...', 'info');">
+                        <iconify-icon icon="mdi:shield-outline" width="20" height="20"></iconify-icon>
+                        隐私设置
+                    </div>
+                    <div class="settings-menu-item" onclick="showToast('功能开发中...', 'info');">
+                        <iconify-icon icon="mdi:theme-light-dark" width="20" height="20"></iconify-icon>
+                        主题设置
+                    </div>
+                    <div class="settings-menu-item" onclick="showToast('缓存已清除', 'success');">
+                        <iconify-icon icon="mdi:delete-outline" width="20" height="20"></iconify-icon>
+                        清除缓存
+                    </div>
+                </div>
+            `, [
+                { text: '关闭', class: 'primary-btn' }
+            ]);
+        }
+
+        function showFormDemo() {
+            showBottomSheet('编辑个人资料', `
+                <div>
+                    <div class="form-group">
+                        <label>头像</label>
+                        <div style="display: flex; align-items: center; gap: 16px; margin-top: 8px;">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="头像" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                            <button class="outlined-btn" style="padding: 8px 16px; font-size: 14px;">更换头像</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <input type="text" value="王贤希" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>联系方式</label>
+                        <input type="tel" placeholder="请输入手机号" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>工作单位</label>
+                        <input type="text" placeholder="请输入工作单位" class="form-input">
+                    </div>
+                </div>
+            `, [
+                { text: '取消', class: 'outlined-btn' },
+                { text: '保存', class: 'primary-btn', onclick: 'showToast("保存成功！", "success"); closeBottomSheet(this);' }
+            ]);
+        }
+
+        function showLongContentDemo() {
+            const longContent = `
+                <div style="line-height: 1.6;">
+                    <h3 style="color: var(--color-on-surface); margin-bottom: 16px;">用户服务协议</h3>
+                    <p style="margin-bottom: 16px;">欢迎使用南大校友APP！本协议详细说明了您在使用我们服务时的权利和义务。</p>
+                    
+                    <h4 style="color: var(--color-on-surface); margin: 24px 0 12px;">1. 服务条款</h4>
+                    <p style="margin-bottom: 16px;">通过访问和使用南大校友APP，您同意遵守本服务协议的所有条款和条件。如果您不同意这些条款，请不要使用我们的服务。</p>
+                    
+                    <h4 style="color: var(--color-on-surface); margin: 24px 0 12px;">2. 用户账户</h4>
+                    <p style="margin-bottom: 16px;">为了使用某些功能，您需要创建一个账户。您有责任维护账户信息的准确性和保密性。您同意不与他人分享您的账户凭据。</p>
+                    
+                    <h4 style="color: var(--color-on-surface); margin: 24px 0 12px;">3. 隐私政策</h4>
+                    <p style="margin-bottom: 16px;">我们重视您的隐私。我们的隐私政策详细说明了我们如何收集、使用和保护您的个人信息。通过使用我们的服务，您同意我们按照隐私政策处理您的信息。</p>
+                    
+                    <h4 style="color: var(--color-on-surface); margin: 24px 0 12px;">4. 内容和行为</h4>
+                    <p style="margin-bottom: 16px;">您同意不上传、发布或传输任何违法、有害、威胁、辱骂、骚扰、诽谤、粗俗、淫秽或其他令人反感的内容。我们保留删除任何违反这些规定的内容的权利。</p>
+                    
+                    <h4 style="color: var(--color-on-surface); margin: 24px 0 12px;">5. 知识产权</h4>
+                    <p style="margin-bottom: 16px;">南大校友APP及其所有内容，包括但不限于文本、图形、图像、音频、视频和软件，均受版权、商标和其他知识产权法律保护。</p>
+                    
+                    <h4 style="color: var(--color-on-surface); margin: 24px 0 12px;">6. 服务变更</h4>
+                    <p style="margin-bottom: 16px;">我们保留随时修改或终止服务（或服务的任何部分）的权利，无论是否另行通知。我们不会因修改、暂停或终止服务而对您或任何第三方承担责任。</p>
+                    
+                    <h4 style="color: var(--color-on-surface); margin: 24px 0 12px;">7. 联系我们</h4>
+                    <p style="margin-bottom: 16px;">如果您对本协议有任何疑问或意见，请通过以下方式联系我们：</p>
+                    <ul style="margin-bottom: 16px; padding-left: 20px;">
+                        <li style="margin-bottom: 8px;">邮箱：support@nju-alumni.com</li>
+                        <li style="margin-bottom: 8px;">电话：025-83593186</li>
+                        <li style="margin-bottom: 8px;">地址：南京市栖霞区仙林大道163号</li>
+                    </ul>
+                </div>
+            `;
+
+            showBottomSheet('服务协议', longContent, [
+                { text: '我已阅读', class: 'primary-btn', onclick: 'closeBottomSheet(this);' }
+            ], {
+                maxHeight: '80vh'
+            });
+        }
+    </script>
+</body>
+</html>

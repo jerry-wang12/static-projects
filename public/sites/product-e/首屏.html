@@ -1,0 +1,4160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>辅导帮</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        :root {
+            /* 设计规范颜色变量 - 根据design.md */
+            --color-background: #F8F9FA;     /* 应用主背景色 */
+            --color-surface: #FFFFFF;        /* 卡片、弹出层等内容区域背景 */
+            --color-text-primary: #121212;   /* 重要的标题和正文文字 */
+            --color-text-secondary: #6C757D; /* 辅助性文字、提示信息 */
+            --color-icon-and-border: #ADB5BD;/* 图标、分割线、输入框边框 */
+            --color-accent: #E0FFC2;         /* 主要按钮、高亮状态、关键操作 */
+            
+            /* 兼容性变量 - 保持向后兼容 */
+            --primary: #E0FFC2;              /* 强调色改为青柠绿 */
+            --secondary: #34a853;            /* 保持绿色 */
+            --accent: #fbbc05;               /* 保持黄色 */
+            --warning: #ea4335;              /* 保持红色 */
+            --light: #F8F9FA;                /* 背景色 */
+            --dark: #121212;                 /* 主文字色 */
+            --gray: #6C757D;                 /* 次要文字色 */
+            --light-gray: #ADB5BD;           /* 图标/边框色 */
+            --lighter-gray: #efefef;         /* 保持浅灰 */
+            --assistant-msg: #fafafa;        /* 助手消息背景 */
+            --user-msg: #e3f2fd;             /* 用户消息背景 */
+            --alert-msg: #fff8e6;            /* 提醒消息背景 */
+            --card-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05); /* 根据设计规范调整阴影 */
+        }
+
+        body {
+            background-color: var(--color-background);
+            color: var(--color-text-primary);
+            height: 100vh;
+        }
+
+        #app {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 顶部导航 */
+        .header {
+            background: var(--color-surface);
+            color: var(--dark);
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 4;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-toggle {
+            font-size: 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .header h1 {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .header-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+        }
+
+        .header-action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .notification-badge {
+            position: relative;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--warning);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 12px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 主内容区 */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* 侧边导航 */
+        .sidebar {
+            width: 300px;
+            background: var(--color-surface);
+            border-right: 1px solid var(--light-gray);
+            display: flex;
+            flex-direction: column;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 10;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            position: absolute;
+            top: 0;
+            height: 100%;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        /*  当侧边栏打开时，输入区域和录音控件右移 */
+        .sidebar.open~.chat-container .input-area {
+            left: 316px;
+            right: 16px;
+        }
+
+        .sidebar.open~.chat-container .recording-controls {
+            left: 316px;
+            right: 16px;
+        }
+
+
+
+        .sidebar-tabs {
+            display: flex;
+            background: var(--color-surface);
+            border-bottom: 1px solid var(--light-gray);
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .tab-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .recent-section {
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .section-action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .section-action-btn:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .recent-item {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: var(--light);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .recent-item:hover {
+            background: #e6f0ff;
+        }
+
+        .recent-item .title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .recent-item .time {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .todo-chat-item:hover {
+            background: linear-gradient(135deg, var(--color-accent), #ffe8b8);
+        }
+
+        .todo-chat-item .title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .unread-count {
+            background: var(--warning);
+            color: white;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: 500;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .favorite-item {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            background: var(--color-surface);
+            border: 1px solid var(--light-gray);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .favorite-item:hover {
+            border-color: var(--primary);
+        }
+
+        .favorite-item .title {
+            font-weight: 500;
+            margin-bottom: 4px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .favorite-item .content {
+            font-size: 14px;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+
+        .favorite-item .time {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* 快捷入口样式 */
+        .quick-access-section {
+            margin-top: 24px;
+            padding: 0 16px;
+        }
+
+        .quick-access-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .quick-access-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 12px;
+            border-radius: 12px;
+            background: var(--color-surface);
+            border: 1px solid var(--light-gray);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .quick-access-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .quick-access-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            color: white;
+            font-size: 20px;
+        }
+
+        .quick-access-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        /* 聊天容器 */
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-bottom: 150px;
+            width: 100%;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .message-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message-wrapper.user-wrapper {
+            align-items: flex-end;
+        }
+
+        .message-wrapper.assistant-wrapper {
+            align-items: flex-start;
+        }
+
+        .message {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            position: relative;
+            animation: fadeIn 0.3s ease;
+            line-height: 1.5;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .user-message {
+            background: var(--color-accent);
+            color: var(--color-text-primary);
+            align-self: flex-end;
+            border-bottom-right-radius: 6px;
+            max-width: 75%;
+            width: fit-content;
+        }
+
+        .assistant-message {
+            background: var(--assistant-msg);
+            align-self: flex-start;
+        }
+
+        .alert-message {
+            background: var(--alert-msg);
+            align-self: center;
+            border: 1px solid var(--accent);
+            max-width: 90%;
+            text-align: center;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .message-sender {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .message-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .message-action {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .message-action:hover {
+            color: var(--primary);
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: var(--gray);
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .alert-message .message-time {
+            text-align: center;
+        }
+
+        .priority-high {
+            border-left: 4px solid var(--warning);
+        }
+
+        .priority-medium {
+            border-left: 4px solid var(--accent);
+        }
+
+        .priority-low {
+            border-left: 4px solid var(--secondary);
+        }
+
+        /* 快速操作按钮 */
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        /* 消息操作栏 */
+        .message-actions-bar {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--lighter-gray);
+            display: flex;
+            justify-content: flex-end;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .message-action-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 6px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+        }
+
+        .message-action-btn:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .message-action-btn.active {
+            color: var(--primary);
+        }
+
+        /* Popover 样式 */
+        .popover {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            background: var(--color-surface);
+            border: 1px solid var(--light-gray);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            min-width: 120px;
+            z-index: 1000;
+            margin-bottom: 8px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(4px);
+            transition: all 0.2s ease;
+        }
+
+        .popover.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .popover-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 14px;
+            color: var(--dark);
+            transition: background 0.2s;
+        }
+
+        .popover-item:hover {
+            background: var(--light);
+        }
+
+        .popover-item:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .popover-item:last-child {
+            border-radius: 0 0 8px 8px;
+        }
+
+        .popover-item i {
+            color: var(--primary);
+        }
+
+        /* 相对定位容器用于 popover */
+        .message-action-relative {
+            position: relative;
+        }
+
+        .action-btn {
+            background: var(--color-surface);
+            border: 1px solid var(--light-gray);
+            color: var(--dark);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn:hover {
+            background: var(--light);
+            border-color: var(--primary);
+        }
+
+        /* 学生档案卡片新样式 */
+        .student-info-section {
+            margin-bottom: 16px;
+        }
+
+        .student-info-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--lighter-gray);
+        }
+
+        .section-header i {
+            color: var(--primary);
+            font-size: 16px;
+        }
+
+        .section-header strong {
+            color: var(--dark);
+            font-size: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .info-grid-2cols {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .info-label {
+            color: var(--gray);
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .ai-summary {
+            background: var(--light);
+            border-radius: 8px;
+            line-height: 1.6;
+            color: var(--dark);
+        }
+
+        /* 首屏推荐内容 */
+        .welcome-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* 欢迎语样式 */
+        .welcome-greeting {
+            margin-bottom: 24px;
+        }
+
+        .welcome-greeting h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0 0 8px 0;
+        }
+
+        .welcome-greeting p {
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--gray);
+            margin: 0;
+        }
+
+        .recommended-commands {
+            margin-bottom: 24px;
+        }
+
+        .section-title-home {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: var(--dark);
+        }
+
+        .commands-scroll {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .commands-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .commands-scroll {
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+        }
+
+        .command-card {
+            flex-shrink: 0;
+            width: 260px;
+            background: var(--color-surface);
+            border-radius: 20px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .command-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .command-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border-color: rgba(66, 133, 244, 0.2);
+        }
+
+        .command-card:hover::before {
+            opacity: 1;
+        }
+
+        .command-icon {
+            width: 28px;
+            height: 28px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: white;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        .command-icon::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            border-radius: 12px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .command-card:hover .command-icon::after {
+            opacity: 1;
+        }
+
+        .command-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .command-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--dark);
+            line-height: 1.4;
+            flex: 1;
+            letter-spacing: -0.01em;
+        }
+
+        .generate-btn {
+            width: 100%;
+            height: 44px;
+            background-color: var(--dark);
+            /* background: linear-gradient(135deg, var(--dark), var(--gray)); */
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: inline-flex;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+
+        .generate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(66, 133, 244, 0.4);
+        }
+
+        .generate-btn:hover::before {
+            left: 100%;
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .arrow-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            margin-left: 8px;
+            font-size: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        .generate-btn:hover .arrow-icon {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .recent-chats {
+            margin-bottom: 24px;
+        }
+
+        .chats-scroll {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-bottom: 8px;
+        }
+
+        .chats-row {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .chats-row::-webkit-scrollbar {
+            display: none;
+        }
+
+        .chats-row {
+            scrollbar-width: none;
+            /* Firefox */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+        }
+
+
+        .chat-preview-card {
+            flex-shrink: 0;
+            width: 280px;
+            background: var(--light);
+            border-radius: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .chat-preview-card.small {
+            width: 200px;
+            padding: 10px 12px;
+        }
+
+        .chat-type-icon {
+            width: 26px;
+            height: 26px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .chat-preview-card.small .chat-type-icon {
+            width: 26px;
+            height: 26px;
+            font-size: 12px;
+        }
+
+        .chat-type-icon.student-profile {
+            background: linear-gradient(135deg, #4285f4, #3367d6);
+        }
+
+        .chat-type-icon.work-log {
+            background: linear-gradient(135deg, #fbbc05, #f9ab00);
+        }
+
+        .chat-type-icon.heart-talk {
+            background: linear-gradient(135deg, #34a853, #2d7d32);
+        }
+
+        .chat-content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
+
+        .chat-preview-card:hover {
+            background: #e6f0ff;
+            transform: translateY(-1px);
+        }
+
+        .chat-preview-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--dark);
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .chat-preview-content {
+            font-size: 14px;
+            color: var(--gray);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* 录音功能按钮 */
+        .recording-controls {
+            display: flex;
+            gap: 8px;
+            padding: 12px 0px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            position: fixed;
+            bottom: 75px;
+            left: 16px;
+            right: 16px;
+            z-index: 4;
+        }
+
+        .recording-controls::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .recording-controls::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .recording-controls::-webkit-scrollbar-thumb {
+            background: var(--light-gray);
+            border-radius: 2px;
+        }
+
+        .recording-btn,
+        .image-ocr-btn {
+            flex: none;
+            height: 44px;
+            border-radius: 10px;
+            border: none;
+            font-size: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            font-weight: 500;
+            padding: 0 16px;
+            white-space: nowrap;
+            background: var(--color-surface);
+            color: var(--dark);
+            border: 1px solid var(--light-gray);
+        }
+
+        .recording-btn:hover,
+        .image-ocr-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+
+        /* 输入区域 */
+        .input-area {
+            padding: 5px 16px;
+            background: var(--color-surface);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: fixed;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+            z-index: 4;
+        }
+
+        .input-left {
+            display: flex;
+            gap: 8px;
+        }
+
+        .input-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            color: var(--gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .input-btn.primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .text-input-container {
+            flex: 1;
+            position: relative;
+        }
+
+        .text-input {
+            width: 100%;
+            border: 0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 16px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .text-input:focus {
+            border-color: var(--primary);
+        }
+
+        .voice-toggle {
+            background: var(--light);
+            color: var(--gary);
+        }
+
+        .voice-toggle.keyboard-mode {
+            background: var(--light);
+            color: var(--gary);
+        }
+
+        .voice-record-btn {
+            flex: 1;
+            height: 48px;
+            color: var(--dark);
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin: 0 8px;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--color-surface);
+        }
+
+        .input-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* 卡片组件 */
+        .card {
+            /* background: white; */
+            /* border-radius: 12px; */
+            /* padding: 16px; */
+            margin: 8px 0;
+            /* box-shadow: var(--card-shadow); */
+        }
+
+        .card-title {
+            font-weight: 500;
+            margin-bottom: 8px;
+            border-bottom: 1px solid var(--lighter-gray);
+            padding-bottom: 12px;
+            color: var(--dark);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-content {
+            font-size: 16px;
+            color: var(--dark);
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+            gap: 8px;
+        }
+
+        /* 待办事项样式 */
+        .todo-list {
+            margin: 8px 0;
+        }
+
+        .todo-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid var(--lighter-gray);
+        }
+
+        .todo-item:last-child {
+            border-bottom: none;
+        }
+
+        .todo-checkbox {
+            margin-right: 16px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .todo-content {
+            flex: 1;
+        }
+
+        .todo-title {
+            font-weight: 500;
+        }
+
+        .todo-time {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .todo-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .todo-action {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+        }
+
+        .todo-action:hover {
+            color: var(--primary);
+        }
+
+        .completed .todo-title {
+            text-decoration: line-through;
+            color: var(--gray);
+        }
+
+        /* 时间分隔符样式 */
+        .time-divider {
+            text-align: center;
+            margin: 16px 0;
+            position: relative;
+        }
+
+        .time-text {
+            background: var(--color-surface);
+            color: var(--gray);
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            border: 1px solid var(--light-gray);
+            display: inline-block;
+        }
+
+        .recording-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .recording-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .recording-title {
+            font-weight: 500;
+            color: var(--dark);
+            display: block;
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .recording-time {
+            font-size: 12px;
+            color: var(--gray);
+            line-height: 1.2;
+            font-weight: 400;
+        }
+
+        .play-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--dark);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            margin-left: 12px;
+            flex-shrink: 0;
+        }
+
+        .play-btn i {
+            position: relative;
+            left: 1px;
+        }
+
+        .play-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+
+        .play-btn.playing {
+            background: var(--warning);
+        }
+
+        .play-btn.playing i:before {
+            content: "\f04c";
+        }
+
+        /* 录音卡片内容样式 */
+        .recording-summary {
+            margin-bottom: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--lighter-gray);
+        }
+
+        .recording-summary p {
+            line-height: 1.5;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .recording-details {
+            margin-bottom: 12px;
+        }
+
+        .summary-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .summary-list>li {
+            margin-bottom: 12px;
+        }
+
+        .summary-list>li>strong {
+            color: var(--dark);
+            font-size: 15px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .detail-list {
+            list-style: none;
+            padding: 0 0 0 16px;
+            margin: 0;
+        }
+
+        .detail-list li {
+            line-height: 1.4;
+            color: var(--dark);
+            margin-bottom: 4px;
+            position: relative;
+        }
+
+        .detail-list li:before {
+            content: "•";
+            color: var(--gray);
+            position: absolute;
+            left: -12px;
+        }
+
+        .recording-info-details {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--lighter-gray);
+        }
+
+        .recording-info-details p {
+            margin: 6px 0;
+            font-size: 13px;
+        }
+
+        /* 底部导航 */
+        .bottom-nav {
+            background: var(--color-surface);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .nav-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 12px;
+            color: var(--gray);
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .nav-btn.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        /* 覆盖层 */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 5;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 抽屉样式 */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .drawer {
+            width: 100%;
+            background: var(--color-surface);
+            border-radius: 16px 16px 0 0;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .drawer-content {
+            padding: 24px 16px;
+        }
+
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 16px;
+        }
+
+        .drawer-item:hover {
+            background: var(--light);
+        }
+
+        .drawer-item i {
+            font-size: 20px;
+            color: var(--primary);
+            width: 24px;
+        }
+
+        /* 侧边栏底部用户信息区 */
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            background: var(--color-surface);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: var(--gray);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .settings-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--light);
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .settings-btn:hover {
+            background: var(--light-gray);
+            color: var(--primary);
+        }
+
+        /* 设置抽屉样式 */
+        .settings-drawer-overlay {
+            align-items: flex-end !important;
+        }
+
+        .settings-drawer {
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .drawer-header {
+            padding: 20px 16px 16px 16px;
+            /* border-bottom: 1px solid var(--light-gray); */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .drawer-header h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .settings-drawer .drawer-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .settings-drawer .drawer-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 20px 16px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 16px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+
+        .settings-drawer .drawer-item:hover {
+            background: var(--light);
+        }
+
+        .settings-drawer .drawer-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-drawer .drawer-item>i:first-child {
+            font-size: 20px;
+            color: var(--primary);
+            width: 24px;
+        }
+
+        .settings-drawer .drawer-item>i:last-child {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* 收藏消息抽屉样式 */
+        .favorite-messages-overlay {
+            align-items: flex-end !important;
+        }
+
+        .favorite-messages-drawer {
+            height: 95vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .favorite-messages-drawer .drawer-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .favorite-messages-list {
+            padding: 8px;
+        }
+
+        .favorite-message-item {
+            background: var(--color-surface);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid #f0f0f0;
+            transition: all 0.2s;
+        }
+
+        .favorite-message-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .favorite-message-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .favorite-message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .favorite-message-type {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary);
+        }
+
+        .favorite-message-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .favorite-action-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .favorite-action-btn:hover {
+            background: var(--light);
+            color: var(--primary);
+        }
+
+        .favorite-action-btn.active {
+            color: var(--warning);
+        }
+
+        .favorite-message-content {
+            font-size: 15px;
+            line-height: 1.4;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .favorite-message-time {
+            font-size: 12px;
+            color: var(--gray);
+            text-align: right;
+        }
+
+        /* 空状态样式 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            color: var(--light-gray);
+            margin-bottom: 16px;
+        }
+
+        .empty-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--gray);
+            margin-bottom: 8px;
+        }
+
+        .empty-desc {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* 确认Toast样式 */
+        .confirmation-toast {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--color-surface);
+            border-radius: 16px 16px 0 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            z-index: 2000;
+            border-top: 1px solid var(--light-gray);
+        }
+
+        .confirmation-toast.show {
+            transform: translateY(0);
+        }
+
+        .confirmation-toast-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .confirmation-toast-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .confirmation-toast-header {
+            padding: 20px 16px 16px 16px;
+            border-bottom: 1px solid var(--light-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .confirmation-toast-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .confirmation-toast-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .confirmation-toast-close:hover {
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .confirmation-toast-content {
+            padding: 20px 16px;
+        }
+
+        .confirmation-message {
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--dark);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .confirmation-message-highlight {
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .confirmation-details {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .confirmation-detail-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .confirmation-detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .confirmation-detail-label {
+            color: var(--gray);
+        }
+
+        .confirmation-detail-value {
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .confirmation-actions {
+            display: flex;
+            gap: 12px;
+            padding: 0 16px 24px 16px;
+        }
+
+        .confirmation-btn {
+            flex: 1;
+            height: 48px;
+            border-radius: 10px;
+            border: none;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .confirmation-btn-cancel {
+            background: var(--light);
+            color: var(--gray);
+            border: 1px solid var(--light-gray);
+        }
+
+        .confirmation-btn-cancel:hover {
+            background: var(--light-gray);
+            color: var(--dark);
+        }
+
+        .confirmation-btn-confirm {
+            background: var(--primary);
+            color: white;
+        }
+
+        .confirmation-btn-confirm:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .confirmation-btn-confirm:active {
+            transform: translateY(0);
+        }
+
+        /* 录音详情抽屉样式 */
+        .recording-detail-overlay {
+            align-items: flex-end !important;
+        }
+
+        .recording-detail-drawer {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            animation: slideInRight 0.3s ease;
+            border-radius: 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .recording-detail-drawer .drawer-header {
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            background: var(--color-surface);
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light);
+            border: none;
+            color: var(--dark);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--light-gray);
+            color: var(--primary);
+        }
+
+        .recording-detail-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .recording-detail-header {
+            margin-bottom: 24px;
+        }
+
+        .recording-detail-header .recording-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .recording-detail-header .recording-time {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* 详情卡片样式 */
+        .detail-card {
+            background: var(--light);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+        }
+
+        .detail-card-header {
+            padding: 8px 20px;
+            border-bottom: 1px solid var(--lighter-gray);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .detail-card-header h4 {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .edit-btn {
+            background: var(--color-surface);
+            color: var(--dark);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s;
+        }
+
+        .detail-card-content {
+            padding: 20px;
+        }
+
+        .detail-card-content .info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--lighter-gray);
+        }
+
+        .detail-card-content .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .detail-card-content .info-grid .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            border-bottom: none;
+            padding: 8px 0;
+            margin-bottom: 0;
+        }
+
+        .detail-card-content .info-grid .info-label {
+            margin-bottom: 4px;
+        }
+
+        .detail-card-content .info-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+        }
+
+        .detail-card-content .info-label {
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .detail-card-content .info-value {
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .emotion-positive {
+            color: var(--secondary) !important;
+        }
+
+        /* Tab 样式 */
+        .tab-container {
+            padding: 0;
+        }
+
+        .tab-header {
+            display: flex;
+            background: var(--light);
+            border-bottom: 1px solid var(--light-gray);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 16px 20px;
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            background: var(--color-surface);
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+            background: rgba(66, 133, 244, 0.05);
+        }
+
+        .tab-content {
+            padding: 20px;
+            min-height: 200px;
+        }
+
+        /* 摘要样式 */
+        .summary-category {
+            margin-bottom: 20px;
+        }
+
+        .summary-category:last-child {
+            margin-bottom: 0;
+        }
+
+        .summary-category h5 {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--lighter-gray);
+        }
+
+        .summary-category ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .summary-category li {
+            padding: 2px 0;
+            color: var(--dark);
+            line-height: 1.5;
+            position: relative;
+            padding-left: 16px;
+        }
+
+        .summary-category li:before {
+            content: "•";
+            color: var(--dark);
+            position: absolute;
+            left: 0;
+        }
+
+        /* 发言总结样式 */
+        .speaker-item {
+            margin-bottom: 20px;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .speaker-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .speaker-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .speaker-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .speaker-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .speaker-name {
+            color: var(--gray);
+            margin: 0;
+        }
+
+        .speaker-summary {
+            line-height: 1.6;
+            color: var(--dark);
+        }
+
+        /* 全文记录样式 */
+        .transcript-item {
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .transcript-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .transcript-meta {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .transcript-meta .speaker-name {
+            font-weight: 500;
+            /* color: var(--primary); */
+        }
+
+        .timestamp {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .transcript-content {
+            line-height: 1.6;
+            color: var(--dark);
+        }
+
+        /* 跟进计划样式 */
+        .followup-section {
+            text-align: center;
+        }
+
+        .add-followup-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--light);
+            border: 2px dashed var(--light-gray);
+            border-radius: 8px;
+            color: var(--gray);
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            margin-bottom: 16px;
+        }
+
+        .add-followup-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(66, 133, 244, 0.05);
+        }
+
+        .followup-list {
+            text-align: left;
+        }
+
+        .followup-item {
+            padding: 16px;
+            background: var(--color-surface);
+            border: 1px solid var(--lighter-gray);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+
+        .followup-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .followup-item h6 {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--dark);
+            margin: 0 0 8px 0;
+        }
+
+        .followup-item p {
+            line-height: 1.5;
+            color: var(--dark);
+            margin: 0 0 8px 0;
+        }
+
+        .followup-date {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* 关键词和话题标签样式 */
+        .summary-tags-section {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--lighter-gray);
+        }
+
+        .tags-container {
+            margin-bottom: 12px;
+        }
+
+        .tags-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tags-title i {
+            color: var(--primary);
+            font-size: 12px;
+        }
+
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .tag.keyword-tag {
+            background: rgba(66, 133, 244, 0.1);
+            color: var(--primary);
+            border-color: rgba(66, 133, 244, 0.3);
+        }
+
+        .tag.keyword-tag:hover {
+            background: rgba(66, 133, 244, 0.15);
+            border-color: var(--primary);
+        }
+
+        .tag.topic-tag {
+            background: rgba(52, 168, 83, 0.1);
+            color: var(--secondary);
+            border-color: rgba(52, 168, 83, 0.3);
+        }
+
+        .tag.topic-tag:hover {
+            background: rgba(52, 168, 83, 0.15);
+            border-color: var(--secondary);
+        }
+
+        .tag i {
+            margin-right: 4px;
+            font-size: 10px;
+        }
+
+        /* 录音播放器样式 */
+        .audio-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--color-surface);
+            border-top: 1px solid var(--light-gray);
+            padding: 16px 20px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .audio-controls {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .audio-play-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .audio-play-btn:hover {
+            background: #2563eb;
+            transform: scale(1.05);
+        }
+
+        .audio-play-btn:active {
+            transform: scale(0.95);
+        }
+
+        .audio-play-btn i {
+            position: relative;
+            left: 2px;
+        }
+
+        .audio-play-btn.playing i {
+            left: 0;
+        }
+
+        .audio-progress-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .audio-time {
+            font-size: 14px;
+            color: var(--gray);
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .audio-progress-bar {
+            flex: 1;
+            height: 6px;
+            background: var(--lighter-gray);
+            border-radius: 3px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .audio-progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 3px;
+            width: 35%;
+            transition: width 0.1s ease;
+        }
+
+        .audio-progress-thumb {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            width: 16px;
+            height: 16px;
+            background: var(--primary);
+            border-radius: 50%;
+            transform: translate(50%, -50%);
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .audio-progress-bar:hover .audio-progress-thumb {
+            opacity: 1;
+        }
+
+        .audio-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            min-width: 100px;
+        }
+
+        .audio-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--dark);
+            margin-bottom: 2px;
+        }
+
+        .audio-duration {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* 响应式调整 */
+        @media (min-width: 768px) {
+            .sidebar {
+                position: relative;
+                transform: translateX(0);
+            }
+
+            .menu-toggle {
+                display: none;
+            }
+
+            .overlay {
+                opacity: 0 !important;
+                visibility: hidden !important;
+            }
+
+            .input-area {
+                left: 316px;
+            }
+
+            .recording-controls {
+                left: 316px;
+            }
+        }
+    </style>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.5.19/vue.global.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@3.5.21/dist/vue.global.prod.js"></script> -->
+</head>
+
+<body>
+    <div id="app">
+        <!-- 顶部导航 -->
+        <div class="header">
+            <div class="header-left">
+                <button class="menu-toggle" @click="toggleSidebar">
+                    <i class="fas fa-bars" style="font-size: 19px;"></i>
+                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE<path fill="currentColor" d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h16q.425 0 .713.288T21 17t-.288.713T20 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h16q.425 0 .713.288T21 12t-.288.713T20 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z"/></svg> -->
+                </button>
+                <h1>辅导帮</h1>
+            </div>
+            <div class="header-actions">
+                <!-- <svg @click="newChat" style="width: 22px;" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                        stroke-width="1.5"
+                        d="M14 6h8m-4-4v8M6.099 19.5q-1.949-.192-2.927-1.172C2 17.157 2 15.271 2 11.5V11c0-3.771 0-5.657 1.172-6.828S6.229 3 10 3h1.5m-5 15c-.205 1.002-1.122 3.166-.184 3.865c.49.357 1.271-.024 2.834-.786c1.096-.535 2.206-1.148 3.405-1.424c.438-.1.885-.143 1.445-.155c3.771 0 5.657 0 6.828-1.172C21.947 17.21 21.998 15.44 22 12"
+                        color="currentColor" />
+                </svg> -->
+                <svg @click="newChat" style="width: 22px;" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                    viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE -->
+                    <path fill="currentColor"
+                        d="M11 14h2v-3h3V9h-3V6h-2v3H8v2h3zm-9 8V2h20v16H6zm3.15-6H20V4H4v13.125zM4 16V4z" />
+                </svg>
+                <!-- <div class="notification-badge">
+                <i class="fas fa-bell"></i>
+                <span class="badge">3</span>
+            </div> -->
+                <!-- <i class="fas fa-search"></i> -->
+            </div>
+        </div>
+
+        <!-- 主容器 -->
+        <div class="main-container">
+            <!-- 侧边导航 -->
+            <div class="sidebar" :class="{ open: sidebarOpen }">
+                <!-- <div class="sidebar-tabs">
+                    <button class="tab" :class="{ active: activeTab === 'chats' }"
+                        @click="switchTab('chats')">聊天列表</button>
+                    <button class="tab" :class="{ active: activeTab === 'recent' }"
+                        @click="switchTab('recent')">最近使用</button>
+                </div> -->
+
+                <div class="tab-content">
+                    <!-- 聊天列表标签内容 -->
+                    <div v-show="activeTab === 'chats'" class="tab-panel">
+                        <div class="recent-section">
+                            <!-- <div class="section-title">
+                            <i class="fas fa-bell"></i>
+                            <span>待办消息</span>
+                        </div> -->
+                            <div class="recent-item todo-chat-item">
+                                <div class="title">
+                                    <span>待办消息</span>
+                                    <span class="unread-count">1</span>
+                                </div>
+                                <div class="time">刚刚更新</div>
+                            </div>
+                        </div>
+
+                        <div class="recent-section">
+                            <div class="section-title">
+                                <span>我的对话</span>
+                            </div>
+                            <div class="recent-item">
+                                <div class="title">学生档案查询对话</div>
+                                <div class="time">今天 14:30</div>
+                            </div>
+                            <div class="recent-item">
+                                <div class="title">谈心谈话记录整理</div>
+                                <div class="time">今天 10:21</div>
+                            </div>
+                            <div class="recent-item">
+                                <div class="title">工作日志生成</div>
+                                <div class="time">昨天 16:45</div>
+                            </div>
+                            <div class="recent-item">
+                                <div class="title">学业数据分析</div>
+                                <div class="time">昨天 14:20</div>
+                            </div>
+                            <div class="recent-item">
+                                <div class="title">班级活动策划讨论</div>
+                                <div class="time">2天前</div>
+                            </div>
+                        </div>
+
+                        <!-- 快捷入口 -->
+                        <div class="quick-access-section">
+                            <div class="quick-access-grid">
+                                <div class="quick-access-item" @click="handleQuickAccess('student-profile')">
+                                    <div class="quick-access-icon" style="background: #4285f4;">
+                                        <i class="fas fa-user-graduate"></i>
+                                    </div>
+                                    <span class="quick-access-text">学生档案</span>
+                                </div>
+                                <div class="quick-access-item" @click="handleQuickAccess('talk-record')">
+                                    <div class="quick-access-icon" style="background: #34a853;">
+                                        <i class="fas fa-comments"></i>
+                                    </div>
+                                    <span class="quick-access-text">谈心谈话</span>
+                                </div>
+                                <div class="quick-access-item" @click="handleQuickAccess('work-log')">
+                                    <div class="quick-access-icon" style="background: #fbbc05;">
+                                        <i class="fas fa-clipboard-list"></i>
+                                    </div>
+                                    <span class="quick-access-text">工作日志</span>
+                                </div>
+                                <div class="quick-access-item" @click="handleQuickAccess('schedule')">
+                                    <div class="quick-access-icon" style="background: #ea4335;">
+                                        <i class="fas fa-calendar-alt"></i>
+                                    </div>
+                                    <span class="quick-access-text">日程安排</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 最近记录标签内容 -->
+                    <div v-show="activeTab === 'recent'" class="tab-panel">
+                        <div class="recent-section">
+                            <div class="section-title">
+                                <span>
+                                    <i class="fas fa-user-graduate"></i>
+                                    <span>学生档案</span>
+                                </span>
+                                <div class="section-actions">
+                                    <button class="section-action-btn" title="查看全部档案">
+                                        <i class="fas fa-list"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="recent-item">
+                                <div class="title">张伟 - 计算机科学2021级</div>
+                                <div class="time">今天 10:21</div>
+                            </div>
+                            <div class="recent-item">
+                                <div class="title">李明 - 软件工程2020级</div>
+                                <div class="time">昨天 15:43</div>
+                            </div>
+                        </div>
+
+                        <div class="recent-section">
+                            <div class="section-title">
+                                <span>
+                                    <i class="fas fa-comments"></i>
+                                    <span>谈心谈话</span>
+                                </span>
+                                <div class="section-actions">
+                                    <button class="section-action-btn" title="查看全部谈话">
+                                        <i class="fas fa-list"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="recent-item">
+                                <div class="title">与张伟的学业规划谈话</div>
+                                <div class="time">今天 10:25</div>
+                            </div>
+                            <div class="recent-item">
+                                <div class="title">与李明的心理辅导</div>
+                                <div class="time">昨天 16:30</div>
+                            </div>
+                        </div>
+
+                        <div class="recent-section">
+                            <div class="section-title">
+                                <span>
+                                    <i class="fas fa-clipboard-list"></i>
+                                    <span>工作日志</span>
+                                </span>
+                                <div class="section-actions">
+                                    <button class="section-action-btn" title="查看全部日志">
+                                        <i class="fas fa-list"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="recent-item">
+                                <div class="title">院系工作会议记录</div>
+                                <div class="time">今天 15:00</div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 侧边栏底部用户信息区 -->
+                <div class="sidebar-footer">
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <img src="https://eitest.innoentr.com/logo-without-text.png" alt="用户头像">
+                        </div>
+                        <div class="user-details">
+                            <div class="user-name">王老师</div>
+                            <div class="user-role">辅导员</div>
+                        </div>
+                    </div>
+                    <button class="settings-btn" @click="toggleSettingsDrawer" title="设置">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 聊天容器 -->
+            <div class="chat-container">
+                <!-- 首屏推荐内容 (当没有消息时显示) -->
+                <div v-if="messages.length === 0" class="welcome-content">
+                    <!-- 欢迎语 -->
+                    <div class="welcome-greeting">
+                        <h1>Hi，王老师！</h1>
+                        <p>我是你的私人辅导员助手，学生管理、谈心记录、事务管理，一切就绪。</p>
+                    </div>
+
+                    <!-- 推荐命令 -->
+                    <div class="recommended-commands">
+                        <h2 class="section-title-home">试试这些</h2>
+                        <div class="commands-scroll">
+                            <div v-for="command in recommendedCommands" :key="command.id" class="command-card"
+                                @click="executeCommand(command)">
+                                <div class="command-header">
+                                    <div class="command-icon" :style="{ backgroundColor: command.iconBg }">
+                                        <i class="fas fa-bolt"></i>
+                                    </div>
+                                    <div class="command-title">{{ command.title }}</div>
+                                </div>
+                                <button class="generate-btn">
+                                    {{command.btnText}}
+                                    <div class="arrow-icon">
+                                        <i class="fas fa-chevron-right"></i>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- 最近聊天记录 -->
+                    <div class="recent-chats">
+                        <h2 class="section-title-home">最近聊天</h2>
+                        <div class="chats-scroll">
+                            <!-- 第一行 - 正常大小卡片 -->
+                            <div class="chats-row">
+                                <div v-for="chat in recentChats.slice(0, 2)" :key="chat.id" class="chat-preview-card"
+                                    @click="openChat(chat)">
+                                    <div class="chat-type-icon" :class="getChatTypeClass(chat.type)">
+                                        <i v-if="getChatTypeIcon(chat.type)" :class="getChatTypeIcon(chat.type)"></i>
+                                        <svg v-else style="width: 15px;" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">Icon from TDesign Icons by TDesign - https://github.com/Tencent/tdesign-icons/blob/main/LICENSE<path fill="currentColor" d="M12 3a9 9 0 0 0-9 9c0 2.397.935 4.573 2.463 6.186l.504.532L4.7 21H12a9 9 0 1 0 0-18M1 12C1 5.925 5.925 1 12 1s11 4.925 11 11s-4.925 11-11 11H1.3l2.22-3.994A10.96 10.96 0 0 1 1 12m7-3h8v2H8zm0 4h6v2H8z"/></svg>
+                                    </div>
+                                    <div class="chat-content-wrapper">
+                                        <div class="chat-preview-title">{{ chat.title }}</div>
+                                        <div class="chat-preview-content">{{ chat.preview }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 第二行 - 小尺寸卡片 -->
+                            <div class="chats-row">
+                                <div v-for="chat in recentChats.slice(2, 4)" :key="chat.id"
+                                    class="chat-preview-card small" @click="openChat(chat)">
+                                    <div class="chat-type-icon" :class="getChatTypeClass(chat.type)">
+                                        <i v-if="getChatTypeIcon(chat.type)" :class="getChatTypeIcon(chat.type)"></i>
+                                        <svg v-else style="width: 15px;" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">Icon from TDesign Icons by TDesign - https://github.com/Tencent/tdesign-icons/blob/main/LICENSE<path fill="currentColor" d="M12 3a9 9 0 0 0-9 9c0 2.397.935 4.573 2.463 6.186l.504.532L4.7 21H12a9 9 0 1 0 0-18M1 12C1 5.925 5.925 1 12 1s11 4.925 11 11s-4.925 11-11 11H1.3l2.22-3.994A10.96 10.96 0 0 1 1 12m7-3h8v2H8zm0 4h6v2H8z"/></svg>
+                                    </div>
+                                    <div class="chat-content-wrapper">
+                                        <div class="chat-preview-title">{{ chat.title }}</div>
+                                        <div class="chat-preview-content">{{ chat.preview }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 消息列表 (当有消息时显示) -->
+                <div v-else class="chat-messages" id="chatMessages">
+                    <!-- Vue渲染消息列表 -->
+                    <div v-for="message in messages" :key="message.id">
+                        <!-- 时间分隔符 -->
+                        <div v-if="message.showTime" class="time-divider">
+                            <span class="time-text">{{ getFormattedDateTime(message.time) }}</span>
+                        </div>
+
+                        <div :class="['message-wrapper', message.type + '-wrapper']">
+                            <div :class="['message', message.type + '-message']">
+                                <!-- 普通文本消息 -->
+                                <div v-if="!message.hasCard" class="message-content">
+                                    {{ message.content }}
+                                </div>
+
+                                <!-- 带卡片的消息 -->
+                                <div v-if="message.hasCard">
+                                    <!-- 学生档案卡片 -->
+                                    <div v-if="!message.cardType" class="card">
+                                        <div class="card-content">
+                                            <div class="student-info-section">
+                                                <div class="section-header">
+                                                    <strong>学生基础信息</strong>
+                                                </div>
+                                                <div class="info-grid info-grid-2cols">
+                                                    <div class="info-item">
+                                                        <span class="info-label">姓名：</span>
+                                                        <span class="info-value">{{ message.cardData.name }}</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">学院：</span>
+                                                        <span class="info-value">{{ message.cardData.department
+                                                            }}</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">学号：</span>
+                                                        <span class="info-value">{{ message.cardData.basicInfo.studentId
+                                                            }}</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">专业：</span>
+                                                        <span class="info-value">{{ message.cardData.basicInfo.major
+                                                            }}</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">学历层次：</span>
+                                                        <span class="info-value">{{ message.cardData.basicInfo.degree
+                                                            }}</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">入学时间：</span>
+                                                        <span class="info-value">{{
+                                                            message.cardData.basicInfo.admissionDate }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="student-info-section">
+                                                <div class="section-header">
+                                                    <strong>学业成绩</strong>
+                                                </div>
+                                                <div class="info-grid info-grid-2cols">
+                                                    <div class="info-item">
+                                                        <span class="info-label">全部课程学分绩：</span>
+                                                        <span class="info-value">{{
+                                                            message.cardData.academicInfo.totalGPA }}</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">学位课程学分绩：</span>
+                                                        <span class="info-value">{{
+                                                            message.cardData.academicInfo.degreeGPA }}</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">挂科数：</span>
+                                                        <span class="info-value">{{
+                                                            message.cardData.academicInfo.failedCourses }}门</span>
+                                                    </div>
+                                                    <div class="info-item">
+                                                        <span class="info-label">挂科学分：</span>
+                                                        <span class="info-value">{{
+                                                            message.cardData.academicInfo.failedCredits }}分</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="student-info-section">
+                                                <div class="section-header">
+                                                    <strong>总结</strong>
+                                                </div>
+                                                <div class="ai-summary">
+                                                    {{ message.cardData.aiSummary }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-if="message.cardData.actions" class="card-actions">
+                                            <button v-for="action in message.cardData.actions" :key="action.text"
+                                                class="action-btn" @click="handleActionBtn(action.text, message)">
+                                                <i :class="action.icon"></i>
+                                                {{ action.text }}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- 录音卡片 -->
+                                    <div v-if="message.cardType === 'recording'" class="card recording-card">
+                                        <div class="card-title recording-header">
+                                            <div class="recording-info">
+                                                <span class="recording-title">{{ message.cardData.title }}</span>
+                                                <div class="recording-time">{{ message.cardData.time }}</div>
+                                            </div>
+                                            <button class="play-btn" :class="{ playing: message.isPlaying }"
+                                                :style="{ background: message.isRecording ? 'var(--warning)' : 'var(--dark)' }"
+                                                :title="message.isRecording ? '录音中' : '播放录音'">
+                                                <i v-if="message.isRecording" class="fas fa-microphone"
+                                                    style="animation: pulse 2s infinite;"></i>
+                                                <i v-else-if="message.isPlaying" class="fas fa-pause"></i>
+                                                <i v-else class="fas fa-play"></i>
+                                            </button>
+                                        </div>
+                                        <div class="card-content">
+                                            <!-- 录音总结 -->
+                                            <div class="recording-summary" v-if="message.cardData.summary">
+                                                <p>{{ message.cardData.summary }}</p>
+                                            </div>
+
+                                            <!-- 分条总结 -->
+                                            <div class="recording-details" v-if="message.cardData.categorizedSummary">
+                                                <ul class="summary-list">
+                                                    <li v-for="(category, categoryName) in message.cardData.categorizedSummary"
+                                                        :key="categoryName">
+                                                        <strong>{{ categoryName }}</strong>
+                                                        <ul class="detail-list">
+                                                            <li v-for="detail in category" :key="detail">{{ detail }}
+                                                            </li>
+                                                        </ul>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div v-if="message.cardData.actions" class="card-actions">
+                                            <button v-for="action in message.cardData.actions" :key="action.text"
+                                                class="action-btn" @click="handleActionBtn(action.text, message)">
+                                                <i :class="action.icon"></i>
+                                                {{ action.text }}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- 日程卡片 -->
+                                    <div v-if="message.cardType === 'schedule'" class="card">
+                                        <div class="card-title">
+                                            <span>{{ message.cardData.title }}</span>
+                                        </div>
+                                        <div class="todo-list">
+                                            <div v-for="todo in message.cardData.todos" :key="todo.id" class="todo-item"
+                                                :class="{ completed: todo.completed }">
+                                                <input type="checkbox" v-model="todo.completed" class="todo-checkbox">
+                                                <div class="todo-content">
+                                                    <div class="todo-title">{{ todo.title }}</div>
+                                                    <div class="todo-time">{{ todo.time }}</div>
+                                                </div>
+                                                <!-- <div class="todo-actions">
+                                            <button class="todo-action" title="编辑">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button class="todo-action" title="删除">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div> -->
+                                            </div>
+                                        </div>
+                                        <div v-if="message.cardData.actions" class="card-actions">
+                                            <button v-for="action in message.cardData.actions" :key="action.text"
+                                                class="action-btn" @click="handleActionBtn(action.text, message)">
+                                                <i :class="action.icon"></i>
+                                                {{ action.text }}
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- AI消息操作栏 -->
+                                <div v-if="message.type === 'assistant'" class="message-actions-bar">
+                                    <button class="message-action-btn" title="复制">
+                                        <svg style="width: 19px;" xmlns="http://www.w3.org/2000/svg" width="32"
+                                            height="32" viewBox="0 0 24 24">
+                                            <path fill="currentColor"
+                                                d="M9 18q-.825 0-1.412-.587T7 16V4q0-.825.588-1.412T9 2h9q.825 0 1.413.588T20 4v12q0 .825-.587 1.413T18 18zm0-2h9V4H9zm-4 6q-.825 0-1.412-.587T3 20V6h2v14h11v2zm4-6V4z" />
+                                        </svg>
+                                    </button>
+                                    <button class="message-action-btn" title="收藏">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                            viewBox="0 0 24 24">
+                                            <path fill="currentColor"
+                                                d="M5 21V5q0-.825.588-1.412T7 3h10q.825 0 1.413.588T19 5v16l-7-3zm2-3.05l5-2.15l5 2.15V5H7zM7 5h10z" />
+                                        </svg>
+                                    </button>
+                                    <button class="message-action-btn" title="点踩">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                            viewBox="0 0 24 24">
+                                            <path fill="none" stroke="currentColor" stroke-dasharray="80"
+                                                stroke-dashoffset="80" stroke-linecap="round" stroke-linejoin="round"
+                                                stroke-width="2" d="M7 4h11l3 7v3h-7l1 6l-3 1l-5 -8h-4v-9h4v9">
+                                                <animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s"
+                                                    values="80;0" />
+                                            </path>
+                                        </svg>
+                                    </button>
+                                    <div class="message-action-relative">
+                                        <button class="message-action-btn" title="重新生成"
+                                            @click="toggleRedoPopover(message.id)">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                                                viewBox="0 0 24 24">
+                                                <path fill="currentColor"
+                                                    d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" />
+                                            </svg>
+                                        </button>
+                                        <div class="popover" :class="{ show: redoPopoverVisible === message.id }">
+                                            <button class="popover-item" @click="handleRedoAction(message.id, '重新生成')">
+                                                <i class="fas fa-redo"></i>
+                                                重新生成
+                                            </button>
+                                            <button class="popover-item" @click="handleRedoAction(message.id, '更简单')">
+                                                <i class="fas fa-compress"></i>
+                                                更简单
+                                            </button>
+                                            <button class="popover-item" @click="handleRedoAction(message.id, '更详细')">
+                                                <i class="fas fa-expand"></i>
+                                                更详细
+                                            </button>
+                                            <button class="popover-item" @click="handleRedoAction(message.id, '更口语')">
+                                                <i class="fas fa-comments"></i>
+                                                更口语
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="message-time">{{ message.time }}</div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快捷功能按钮 -->
+                <div class="recording-controls">
+                    <button class="recording-btn" @click="toggleRecordingMode">
+                        <svg style="width: 18px;" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from TDesign Icons by TDesign - https://github.com/Tencent/tdesign-icons/blob/main/LICENSE --><path fill="currentColor" d="M7 6a5 5 0 0 1 10 0v5a5 5 0 0 1-10 0zm5-3a3 3 0 0 0-3 3v5a3 3 0 1 0 6 0V6a3 3 0 0 0-3-3m-6 7v1a6 6 0 0 0 12 0v-1h2v1a8 8 0 0 1-7 7.938V20h5v2H6v-2h5v-1.062A8 8 0 0 1 4 11v-1z"/></svg>
+                        <span>{{ isRecordingMode ? '结束录音' : '发起录音' }}</span>
+                    </button>
+                    <button class="recording-btn" @click="toggleTemplateDrawer">
+                        <i class="fas fa-list-ul"></i>
+                        <span>选择模板录音</span>
+                    </button>
+                    <button class="image-ocr-btn" style="display: none;">
+                        <i class="fas fa-camera"></i>
+                        <span>图片文字提取</span>
+                    </button>
+                </div>
+
+                <!-- 输入区域 -->
+                <div class="input-area">
+                    <!-- 语音/键盘切换按钮 -->
+                    <svg @click="toggleVoiceMode" style="width: 22px;" v-if="isVoiceMode"
+                        xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                            stroke-width="1.5"
+                            d="M12 6v12M9 9v6m9-4v2M6 11v2m9-6v10m-3 5c5.523 0 10-4.477 10-10S17.523 2 12 2S2 6.477 2 12s4.477 10 10 10" />
+                    </svg>
+                    <i v-else @click="toggleVoiceMode" class="fas fa-keyboard"></i>
+
+                    <!-- 文本输入容器 -->
+                    <div class="text-input-container" v-show="!isVoiceMode">
+                        <input type="text" class="text-input" placeholder="输入消息..." v-model="textInputValue"
+                            @keypress="handleKeyPress">
+                    </div>
+
+                    <!-- 语音录音按钮 -->
+                    <button class="voice-record-btn" v-show="isVoiceMode"
+                        :style="{ background: isRecording ? '#2563eb' : '' }" @mousedown="startRecording"
+                        @mouseup="stopRecording" @mouseleave="cancelRecording">
+                        <span>{{ isRecording ? '正在录音...' : '按住 说话' }}</span>
+                    </button>
+
+                    <!-- 右侧按钮组 -->
+                    <div class="input-right">
+                        <svg style="width: 22px;" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                            viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE -->
+                            <path fill="currentColor"
+                                d="M12 18q2.075 0 3.538-1.462Q17 15.075 17 13q0-2.075-1.462-3.538Q14.075 8 12 8Q9.925 8 8.463 9.462Q7 10.925 7 13q0 2.075 1.463 3.538Q9.925 18 12 18Zm0-2q-1.25 0-2.125-.875T9 13q0-1.25.875-2.125T12 10q1.25 0 2.125.875T15 13q0 1.25-.875 2.125T12 16Zm6-6q.425 0 .712-.288Q19 9.425 19 9t-.288-.713Q18.425 8 18 8t-.712.287Q17 8.575 17 9t.288.712Q17.575 10 18 10ZM4 21q-.825 0-1.412-.587Q2 19.825 2 19V7q0-.825.588-1.412Q3.175 5 4 5h3.15L8.7 3.325q.15-.15.337-.238Q9.225 3 9.425 3h5.15q.2 0 .388.087q.187.088.337.238L16.85 5H20q.825 0 1.413.588Q22 6.175 22 7v12q0 .825-.587 1.413Q20.825 21 20 21Zm16-2V7h-4.05l-1.825-2h-4.25L8.05 7H4v12Zm-8-6Z" />
+                        </svg>
+                        <svg style="width: 22px;" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
+                            viewBox="0 0 24 24"><!-- Icon from Material Symbols by Google - https://github.com/google/material-design-icons/blob/master/LICENSE -->
+                            <path fill="currentColor"
+                                d="M11 13v3q0 .425.288.713T12 17t.713-.288T13 16v-3h3q.425 0 .713-.288T17 12t-.288-.712T16 11h-3V8q0-.425-.288-.712T12 7t-.712.288T11 8v3H8q-.425 0-.712.288T7 12t.288.713T8 13zm1 9q-2.075 0-3.9-.788t-3.175-2.137T2.788 15.9T2 12t.788-3.9t2.137-3.175T8.1 2.788T12 2t3.9.788t3.175 2.137T21.213 8.1T22 12t-.788 3.9t-2.137 3.175t-3.175 2.138T12 22m0-2q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 抽屉弹出层 -->
+                <div v-show="showMoreActions" class="drawer-overlay" @click="closeAllDrawers">
+                    <div class="drawer">
+                        <div class="drawer-content">
+                            <div class="drawer-item" @click="handleDrawerAction('相册')">
+                                <i class="fas fa-images"></i>
+                                <span>相册</span>
+                            </div>
+                            <div class="drawer-item" @click="handleDrawerAction('文件')">
+                                <i class="fas fa-file"></i>
+                                <span>文件</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 设置抽屉 -->
+                <div v-show="showSettingsDrawer" class="drawer-overlay settings-drawer-overlay"
+                    @click="closeAllDrawers">
+                    <div class="drawer settings-drawer">
+                        <div class="drawer-header">
+                            <h3>我的</h3>
+                            <button class="close-btn" @click="closeAllDrawers">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="drawer-content">
+                            <div class="drawer-item" id="favoriteMessagesItem">
+                                <span>
+                                    <i class="fas fa-bookmark"></i>
+                                    <span>收藏消息</span>
+                                </span>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="drawer-item" id="notificationSettingsItem">
+                                <span>
+                                    <i class="fas fa-bell"></i>
+                                    <span>消息推送配置</span>
+                                </span>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="drawer-item" id="dataStatisticsItem">
+                                <span>
+                                    <i class="fas fa-chart-bar"></i>
+                                    <span>数据统计</span>
+                                </span>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                            <div class="drawer-item" id="logoutItem">
+                                <span>
+                                    <i class="fas fa-sign-out-alt"></i>
+                                    <span>退出登录</span>
+                                </span>
+                                <i class="fas fa-chevron-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 收藏消息抽屉 -->
+                <div class="drawer-overlay favorite-messages-overlay" id="favoriteMessagesOverlay"
+                    style="display: none;">
+                    <div class="drawer favorite-messages-drawer">
+                        <div class="drawer-header">
+                            <h3>收藏消息</h3>
+                            <button class="close-btn" id="closeFavoriteBtn">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="drawer-content">
+                            <div class="favorite-messages-list" id="favoriteMessagesList">
+                                <!-- 收藏消息列表将在这里动态生成 -->
+                            </div>
+                            <div class="empty-state" id="emptyFavoriteState" style="display: none;">
+                                <div class="empty-icon">
+                                    <i class="fas fa-bookmark"></i>
+                                </div>
+                                <div class="empty-text">暂无收藏消息</div>
+                                <div class="empty-desc">收藏的消息将在这里显示</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 录音模板抽屉 -->
+                <div v-show="showTemplateDrawer" class="drawer-overlay" @click="closeAllDrawers">
+                    <div class="drawer">
+                        <div class="drawer-content">
+                            <div class="drawer-item" @click="handleDrawerAction('谈心谈话')">
+                                <i class="fas fa-comments"></i>
+                                <span>谈心谈话</span>
+                            </div>
+                            <div class="drawer-item" @click="handleDrawerAction('会议纪要')">
+                                <i class="fas fa-clipboard-list"></i>
+                                <span>会议纪要</span>
+                            </div>
+                            <div class="drawer-item" @click="handleDrawerAction('日常记录')">
+                                <i class="fas fa-calendar-day"></i>
+                                <span>日常记录</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 谈心谈话抽屉 -->
+                <div v-show="showRecordingDetailDrawer" class="drawer-overlay recording-detail-overlay"
+                    @click="closeAllDrawers">
+                    <div class="drawer recording-detail-drawer" @click.stop>
+                        <div class="drawer-header">
+                            <i style="font-size: 20px;" class="fas fa-arrow-left" @click="closeAllDrawers"></i>
+                            <h3>谈心谈话</h3>
+                            <i style="font-size: 20px;" class="fas fa-times" @click="closeAllDrawers"></i>
+                        </div>
+                        <div class="drawer-content recording-detail-content">
+                            <!-- 标题和时间 -->
+                            <div class="recording-detail-header">
+                                <h2 class="recording-title">{{ recordingDetailData.title }}</h2>
+                                <p class="recording-time">{{ recordingDetailData.time }}</p>
+                            </div>
+
+                            <!-- 参与信息卡片 -->
+                            <div class="detail-card">
+                                <div class="detail-card-header">
+                                    <button class="edit-btn">
+                                        <i class="fas fa-edit"></i>
+                                        编辑
+                                    </button>
+                                </div>
+                                <div class="detail-card-content">
+                                    <div class="info-grid">
+                                        <div class="info-item">
+                                            <span class="info-label">参与学生</span>
+                                            <span class="info-value">{{ recordingDetailData.participant }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">谈话类型</span>
+                                            <span class="info-value">{{ recordingDetailData.talkType }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">谈话地点</span>
+                                            <span class="info-value">{{ recordingDetailData.location }}</span>
+                                        </div>
+                                        <div class="info-item">
+                                            <span class="info-label">情绪分析</span>
+                                            <span class="info-value emotion-positive">{{ recordingDetailData.emotion
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 内容详情卡片 -->
+                            <div class="detail-card">
+                                <div class="tab-container">
+                                    <div class="tab-header">
+                                        <button v-for="tab in recordingTabs" :key="tab.key" class="tab-btn"
+                                            :class="{ active: activeRecordingTab === tab.key }"
+                                            @click="switchRecordingTab(tab.key)">
+                                            {{ tab.name }}
+                                        </button>
+                                    </div>
+
+                                    <!-- 摘要 -->
+                                    <div v-show="activeRecordingTab === 'summary'" class="tab-content">
+                                        <!-- 关键词和话题标签 -->
+                                        <div v-if="recordingDetailData.keywords || recordingDetailData.topics"
+                                            class="summary-tags-section">
+                                            <!-- 关键词 -->
+                                            <div v-if="recordingDetailData.keywords" class="tags-container">
+                                                <div class="tags-title">
+                                                    <span>关键词</span>
+                                                </div>
+                                                <div class="tags-list">
+                                                    <span v-for="keyword in recordingDetailData.keywords" :key="keyword"
+                                                        class="tag keyword-tag"
+                                                        @click="handleTagClick('keyword', keyword)">
+                                                        <i class="fas fa-hashtag"></i>
+                                                        {{ keyword }}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <!-- 话题 -->
+                                            <div v-if="recordingDetailData.topics" class="tags-container">
+                                                <div class="tags-title">
+                                                    <span>主要话题</span>
+                                                </div>
+                                                <div class="tags-list">
+                                                    <span v-for="topic in recordingDetailData.topics" :key="topic"
+                                                        class="tag topic-tag" @click="handleTagClick('topic', topic)">
+                                                        <i class="fas fa-tag"></i>
+                                                        {{ topic }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="summary-list">
+                                            <div v-for="(items, category) in recordingDetailData.categorizedSummary"
+                                                :key="category" class="summary-category">
+                                                <h5>{{ category }}</h5>
+                                                <ul>
+                                                    <li v-for="item in items" :key="item">{{ item }}</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 发言总结 -->
+                                    <div v-show="activeRecordingTab === 'speakers'" class="tab-content">
+                                        <div class="speakers-list">
+                                            <div v-for="speaker in recordingDetailData.speakers" :key="speaker.name"
+                                                class="speaker-item">
+                                                <div class="speaker-header">
+                                                    <div class="speaker-avatar">
+                                                        <img :src="speaker.avatar" :alt="speaker.name">
+                                                    </div>
+                                                    <h5 class="speaker-name">{{ speaker.name }}</h5>
+                                                </div>
+                                                <div class="speaker-summary">
+                                                    {{ speaker.summary }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 全文记录 -->
+                                    <div v-show="activeRecordingTab === 'transcript'" class="tab-content">
+                                        <div class="transcript-list">
+                                            <div v-for="record in recordingDetailData.transcript" :key="record.id"
+                                                class="transcript-item">
+                                                <div class="transcript-meta">
+                                                    <span class="speaker-name">{{ record.speaker }}</span>
+                                                    <span class="timestamp">{{ record.time }}</span>
+                                                </div>
+                                                <div class="transcript-content">
+                                                    {{ record.content }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 跟进计划 -->
+                                    <div v-show="activeRecordingTab === 'followup'" class="tab-content">
+                                        <div class="followup-section">
+                                            <button class="add-followup-btn">
+                                                <i class="fas fa-plus"></i>
+                                                添加跟进计划
+                                            </button>
+                                            <!-- <div v-if="recordingDetailData.followupPlans.length > 0" class="followup-list">
+                                                <div v-for="plan in recordingDetailData.followupPlans" :key="plan.id" class="followup-item">
+                                                    <h6>{{ plan.title }}</h6>
+                                                    <p>{{ plan.description }}</p>
+                                                    <span class="followup-date">{{ plan.date }}</span>
+                                                </div>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 录音播放器 -->
+                        <div v-if="showRecordingDetailDrawer" class="audio-player">
+                            <div class="audio-controls">
+                                <!-- 播放按钮 -->
+                                <i v-if="isAudioPlaying" class="fas fa-pause"></i>
+                                <i v-else class="fas fa-play"></i>
+
+                                <!-- 进度条容器 -->
+                                <div class="audio-progress-container">
+                                    <!-- 当前时间 -->
+                                    <span class="audio-time">{{ currentTime }}</span>
+
+                                    <!-- 进度条 -->
+                                    <div class="audio-progress-bar" @click="handleProgressClick">
+                                        <div class="audio-progress-fill" :style="{ width: audioProgress + '%' }"></div>
+                                        <div class="audio-progress-thumb" :style="{ left: audioProgress + '%' }"></div>
+                                    </div>
+
+                                    <!-- 总时长 -->
+                                    <span class="audio-time">{{ totalTime }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 覆盖层 -->
+        <div class="overlay" :class="{ active: sidebarOpen }" @click="toggleSidebar"></div>
+
+        <!-- 确认Toast -->
+        <div class="confirmation-toast-overlay" id="confirmationToastOverlay"></div>
+        <div class="confirmation-toast" id="confirmationToast">
+            <!-- <div class="confirmation-toast-header">
+            <h3 class="confirmation-toast-title">确认操作</h3>
+            <button class="confirmation-toast-close" id="confirmationToastClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div> -->
+            <div class="confirmation-toast-content">
+                <div class="confirmation-message" id="confirmationMessage">
+                    准备与<span class="confirmation-message-highlight" id="confirmationStudent">张伟</span>进行<span
+                        class="confirmation-message-highlight" id="confirmationTopic">学业问题</span>主题的谈话
+                </div>
+                <div class="confirmation-details" id="confirmationDetails">
+                    <div class="confirmation-detail-item">
+                        <span class="confirmation-detail-label">学生姓名</span>
+                        <span class="confirmation-detail-value" id="confirmationStudentName">张伟</span>
+                    </div>
+                    <div class="confirmation-detail-item">
+                        <span class="confirmation-detail-label">谈话主题</span>
+                        <span class="confirmation-detail-value" id="confirmationTopicName">学业问题</span>
+                    </div>
+                    <div class="confirmation-detail-item">
+                        <span class="confirmation-detail-label">预计时长</span>
+                        <span class="confirmation-detail-value" id="confirmationDuration">30分钟</span>
+                    </div>
+                </div>
+            </div>
+            <div class="confirmation-actions">
+                <button class="confirmation-btn confirmation-btn-cancel" id="confirmationCancel">
+                    <i class="fas fa-times"></i>
+                    取消
+                </button>
+                <button class="confirmation-btn confirmation-btn-confirm" id="confirmationConfirm">
+                    <i class="fas fa-check"></i>
+                    确认开始
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 获取Vue对象
+        const { createApp, ref, reactive, computed, onMounted, nextTick } = window.Vue;
+
+        // 创建Vue应用
+        createApp({
+            setup() {
+                // 响应式数据
+                const sidebarOpen = ref(false);
+                const isVoiceMode = ref(true);
+                const isRecording = ref(false);
+                const isRecordingMode = ref(false);
+                const activeTab = ref('chats');
+                const textInputValue = ref('');
+                const messages = ref([]);
+                const currentRecordingMessage = ref(null);
+                const recordingTimer = ref(null);
+                const recordingStartTime = ref(null);
+
+                // 推荐命令数据
+                const recommendedCommands = ref([
+                    {
+                        id: 1,
+                        title: '找出重点关注的学生信息',
+                        icon: 'fas fa-user-graduate',
+                        iconBg: '#4285f4',
+                        command: '查找学生档案信息',
+                        btnText: '查询',
+                    },
+                    {
+                        id: 2,
+                        title: '昨日工作日志',
+                        icon: 'fas fa-clipboard-list',
+                        iconBg: '#fbbc05',
+                        command: '生成今日工作日志',
+                        btnText: '生成',
+                    },
+                    {
+                        id: 3,
+                        title: '安排谈心谈话',
+                        icon: 'fas fa-comments',
+                        iconBg: '#fbbc05',
+                        command: '安排学生谈心谈话',
+                        btnText: '查询',
+                    },
+                    {
+                        id: 4,
+                        title: '查看今日日程',
+                        icon: 'fas fa-calendar-alt',
+                        iconBg: '#ea4335',
+                        command: '查看我的今日日程安排',
+                        btnText: '查询',
+                    },
+                    {
+                        id: 5,
+                        title: '分析学业数据',
+                        icon: 'fas fa-chart-bar',
+                        iconBg: '#9c27b0',
+                        command: '分析班级学业数据报告'
+                    }
+                ]);
+
+                // 最近聊天数据
+                const recentChats = ref([
+                    {
+                        id: 1,
+                        type: 'student-profile',
+                        title: '张伟-计算机科学2021级',
+                        preview: '上学期绩点4.5，专业排名前20%，该学期参加活动5次...'
+                    },
+                    {
+                        id: 2,
+                        type: 'heart-talk',
+                        title: '张伟的学业谈话记录',
+                        preview: '与张伟同学进行了心理辅导谈话，主要讨论了学业压力问题...'
+                    },
+                    {
+                        id: 3,
+                        type: 'work-log',
+                        title: '9月7号工作日志',
+                        preview: '今日完成了3次学生谈话，处理了2个学业问题咨询...'
+                    },
+                    {
+                        id: 4,
+                        type: 'heart-talk',
+                        title: '李荣的就业谈话记录',
+                        preview: '与李荣同学进行了心理辅导谈话，主要讨论了就业问题...'
+                    }
+                ]);
+
+                // 初始化消息数据 (清空)
+                const initMessages = () => {
+                    messages.value = [];
+                };
+
+                // 工具函数
+                const getCurrentTime = () => {
+                    const now = new Date();
+                    return now.getHours() + ':' + String(now.getMinutes()).padStart(2, '0');
+                };
+
+                // 格式化日期时间，包含星期几
+                const getFormattedDateTime = (time) => {
+                    const now = new Date();
+                    const weekdays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+                    const weekday = weekdays[now.getDay()];
+
+                    const year = now.getFullYear();
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const day = String(now.getDate()).padStart(2, '0');
+
+                    return `${weekday} ${time}`;
+                };
+
+                // 切换侧边栏
+                const toggleSidebar = () => {
+                    sidebarOpen.value = !sidebarOpen.value;
+                };
+
+                // 关闭侧边栏
+                const closeSidebar = () => {
+                    sidebarOpen.value = false;
+                };
+
+                // 标签切换
+                const switchTab = (tabName) => {
+                    activeTab.value = tabName;
+                };
+
+                // 语音/键盘模式切换
+                const toggleVoiceMode = () => {
+                    isVoiceMode.value = !isVoiceMode.value;
+                };
+
+                // 添加消息
+                const addMessage = (content, isUser = false, cardData = null) => {
+                    const newMessage = {
+                        id: Date.now(),
+                        type: isUser ? 'user' : 'assistant',
+                        content,
+                        time: getCurrentTime(),
+                        hasCard: !!cardData,
+                        cardData
+                    };
+                    messages.value.push(newMessage);
+                    nextTick(() => {
+                        scrollToBottom();
+                    });
+                };
+
+                // 滚动到底部
+                const scrollToBottom = () => {
+                    const chatMessagesEl = document.getElementById('chatMessages');
+                    if (chatMessagesEl) {
+                        chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+                    }
+                };
+
+                // 发送文本消息
+                const sendTextMessage = () => {
+                    if (textInputValue.value.trim()) {
+                        const message = textInputValue.value.trim();
+                        addMessage(message, true);
+                        textInputValue.value = '';
+
+                        // 模拟AI回复
+                        setTimeout(() => {
+                            addMessage('已收到您的消息: ' + message);
+                        }, 1000);
+                    }
+                };
+
+                // 处理键盘事件
+                const handleKeyPress = (event) => {
+                    if (event.key === 'Enter') {
+                        sendTextMessage();
+                    }
+                };
+
+                // 语音录音功能
+                const startRecording = () => {
+                    isRecording.value = true;
+                    console.log('开始录音');
+                };
+
+                const stopRecording = () => {
+                    if (isRecording.value) {
+                        isRecording.value = false;
+                        console.log('结束录音');
+
+                        // 模拟语音消息发送
+                        addMessage('语音消息 (3秒)', true);
+                        setTimeout(() => {
+                            addMessage('已收到您的语音消息');
+                        }, 1000);
+                    }
+                };
+
+                const cancelRecording = () => {
+                    if (isRecording.value) {
+                        isRecording.value = false;
+                        console.log('录音取消');
+                    }
+                };
+
+                // 抽屉状态
+                const showMoreActions = ref(false);
+                const showTemplateDrawer = ref(false);
+                const showSettingsDrawer = ref(false);
+                const showFavoriteDrawer = ref(false);
+                const showConfirmationToast = ref(false);
+                const showRecordingDetailDrawer = ref(false);
+                const redoPopoverVisible = ref(null);
+
+                // 录音详情数据
+                const recordingDetailData = ref({});
+                const activeRecordingTab = ref('summary');
+                const recordingTabs = ref([
+                    { key: 'summary', name: '摘要' },
+                    { key: 'speakers', name: '发言总结' },
+                    { key: 'transcript', name: '全文记录' },
+                    { key: 'followup', name: '跟进计划' }
+                ]);
+
+                // 音频播放器数据
+                const isAudioPlaying = ref(false);
+                const audioProgress = ref(35); // 当前播放进度（百分比）
+                const currentTime = ref('2:58'); // 当前播放时间
+                const totalTime = ref('8:32'); // 总时长
+
+                // 控制抽屉显示
+                const toggleMoreActions = () => {
+                    showMoreActions.value = !showMoreActions.value;
+                };
+
+                const toggleTemplateDrawer = () => {
+                    showTemplateDrawer.value = !showTemplateDrawer.value;
+                };
+
+                const toggleSettingsDrawer = () => {
+                    showSettingsDrawer.value = !showSettingsDrawer.value;
+                };
+
+                const toggleRecordingDetailDrawer = () => {
+                    showRecordingDetailDrawer.value = !showRecordingDetailDrawer.value;
+                };
+
+                const switchRecordingTab = (tabKey) => {
+                    activeRecordingTab.value = tabKey;
+                };
+
+                const closeAllDrawers = () => {
+                    showMoreActions.value = false;
+                    showTemplateDrawer.value = false;
+                    showSettingsDrawer.value = false;
+                    showFavoriteDrawer.value = false;
+                    showConfirmationToast.value = false;
+                    showRecordingDetailDrawer.value = false;
+                    redoPopoverVisible.value = null;
+                };
+
+                // 抽屉选项点击处理
+                const handleDrawerAction = (action) => {
+                    closeAllDrawers();
+
+                    if (action === '相册') {
+                        console.log('打开相册');
+                    } else if (action === '文件') {
+                        console.log('打开文件选择');
+                    }
+                };
+
+                // 快捷入口点击处理
+                const handleQuickAccess = (type) => {
+                    let response = "";
+
+                    switch (type) {
+                        case 'student-profile':
+                            response = "正在打开学生档案系统，您想查询哪位学生的档案信息？";
+                            break;
+                        case 'talk-record':
+                            response = "正在打开谈心谈话模块，您可以新建谈话记录或查看历史记录。";
+                            break;
+                        case 'work-log':
+                            response = "正在打开工作日志系统，您可以记录今日的工作内容。";
+                            break;
+                        case 'schedule':
+                            response = "正在打开日程安排模块，今日共有3个安排：上午10点谈心谈话，下午3点会议，晚上7点活动策划。";
+                            break;
+                        default:
+                            response = "正在打开相关功能...";
+                    }
+
+                    if (response) {
+                        addMessage(response);
+                    }
+                };
+
+                // 执行推荐命令
+                const executeCommand = (command) => {
+                    addMessage(command.command, true);
+
+                    setTimeout(() => {
+                        let response = "";
+                        switch (command.id) {
+                            case 1:
+                                response = "正在查找学生档案信息，请告诉我您要查找的学生姓名或学号。";
+                                break;
+                            case 2:
+                                response = "正在生成今日工作日志...已完成3次学生谈话，处理了2个学业问题咨询，参加了1次院系会议。";
+                                break;
+                            case 3:
+                                response = "谈心谈话安排模块已打开，您可以选择学生并安排谈话时间。";
+                                break;
+                            case 4:
+                                response = "今日日程：上午10点与李明谈心谈话，下午3点院系工作会议，晚上7点班级活动策划。";
+                                break;
+                            case 5:
+                                response = "正在分析班级学业数据...本月班级平均绩点3.2，及格率95%，需要重点关注3名同学。";
+                                break;
+                            default:
+                                response = "命令执行完成。";
+                        }
+                        addMessage(response);
+                    }, 1000);
+                };
+
+                // 打开聊天记录
+                const openChat = (chat) => {
+                    addMessage("正在打开聊天记录：" + chat.title, true);
+                    setTimeout(() => {
+                        addMessage("聊天记录已加载，您可以继续之前的对话。");
+                    }, 500);
+                };
+
+                // 操作按钮处理
+                const handleActionBtn = (actionText, message) => {
+                    let response = "";
+
+                    if (actionText.includes("今日日程")) {
+                        response = "这是您今天的日程安排：上午10点与李明谈心谈话，下午3点院系工作会议，晚上7点班级活动策划。";
+                    } else if (actionText.includes("学生档案查询")) {
+                        response = "请告诉我您想查询哪位学生的档案？";
+                    } else if (actionText.includes("记录工作日志")) {
+                        response = "请告诅我您想记录的工作内容，或者您可以直接发送语音。";
+                    } else if (actionText.includes("完整档案")) {
+                        response = "正在跳转到张伟的完整档案页面...";
+                        setTimeout(() => {
+                            alert("跳转到学生详情页面");
+                        }, 500);
+                    } else if (actionText.includes("谈心记录")) {
+                        response = "以下是张伟的谈心谈话记录：共3次谈话，最近一次在2023年10月15日";
+                    } else if (actionText.includes("查看详情")) {
+                        // 打开录音详情抽屉
+                        recordingDetailData.value = {
+                            title: message.cardData.title || '录音详情',
+                            time: message.cardData.time || '时间未知',
+                            participant: '张伟',
+                            talkType: '学业问题',
+                            location: '办公室',
+                            emotion: '积极向上',
+                            keywords: message.cardData.keywords || ['考研', '人工智能', '学业规划', '实习', '清华大学'],
+                            topics: message.cardData.topics || ['学业表现', '考研规划', '职业发展', '技能提升'],
+                            categorizedSummary: message.cardData.categorizedSummary || {},
+                            speakers: [
+                                {
+                                    name: '王老师',
+                                    avatar: 'https://eitest.innoentr.com/logo-without-text.png',
+                                    summary: '在本次谈话中，王老师主要关注了张伟同学的学业规划和职业发展方向。王老师建议张伟要制定明确的学习目标，合理安排时间，加强专业课程的学习。同时也鼓励张伟积极参与实习和项目实践，提升综合能力。整体而言，王老师对张伟的表现给予了积极的肯定和指导。'
+                                },
+                                {
+                                    name: '张伟',
+                                    avatar: 'https://eitest.innoentr.com/logo-without-text.png',
+                                    summary: '张伟在谈话中表现出了强烈的上进心和明确的目标导向。他详细阐述了自己的考研规划，包括目标院校的选择、复习时间安排等。同时也表达了对人工智能领域的浓厚兴趣，希望能够在这个方向深入发展。张伟的态度诚恳，对老师的建议也表示会认真考虑和执行。'
+                                }
+                            ],
+                            transcript: [
+                                {
+                                    id: 1,
+                                    speaker: '王老师',
+                                    time: '14:30:15',
+                                    content: '张伟，今天想和你聊聊你的学业规划，你最近的学习情况怎么样？'
+                                },
+                                {
+                                    id: 2,
+                                    speaker: '张伟',
+                                    time: '14:30:28',
+                                    content: '老师，我最近学习状态还不错，上学期的绩点是3.42，专业课成绩也都还可以。'
+                                },
+                                {
+                                    id: 3,
+                                    speaker: '王老师',
+                                    time: '14:30:45',
+                                    content: '很好，我看你还参加了编程竞赛并获得了二等奖，这说明你的专业能力是很扎实的。那你对未来有什么规划吗？'
+                                },
+                                {
+                                    id: 4,
+                                    speaker: '张伟',
+                                    time: '14:31:02',
+                                    content: '我想考研，目标是清华大学的计算机系，主要想在人工智能方向深入学习。'
+                                },
+                                {
+                                    id: 5,
+                                    speaker: '王老师',
+                                    time: '14:31:20',
+                                    content: '这个目标很明确，也很有挑战性。你准备什么时候开始全面复习？'
+                                },
+                                {
+                                    id: 6,
+                                    speaker: '张伟',
+                                    time: '14:31:35',
+                                    content: '我计划从大三下学期开始全面复习，现在已经制定了详细的复习计划和时间表。'
+                                }
+                            ],
+                            followupPlans: [
+                                {
+                                    id: 1,
+                                    title: '制定详细学习计划',
+                                    description: '帮助张伟完善考研复习计划，包括各科目的学习安排和时间分配',
+                                    date: '2024年10月15日'
+                                },
+                                {
+                                    id: 2,
+                                    title: '寻找实习机会',
+                                    description: '协助张伟寻找人工智能相关的实习机会，提升实践经验',
+                                    date: '2024年11月01日'
+                                }
+                            ]
+                        };
+                        showRecordingDetailDrawer.value = true;
+                        return; // 不需要发送响应消息
+                    }
+
+                    if (response) {
+                        addMessage(response);
+                    }
+                };
+
+
+                // 录音模式切换
+                const toggleRecordingMode = () => {
+                    if (!isRecordingMode.value) {
+                        // 开始录音
+                        console.log('开始直接录音');
+                        isRecordingMode.value = true;
+
+                        // 添加录音中的消息
+                        const recordingMessage = {
+                            id: Date.now(),
+                            type: 'assistant',
+                            content: '',
+                            time: getCurrentTime(),
+                            hasCard: true,
+                            cardType: 'recording',
+                            isRecording: true,
+                            cardData: {
+                                title: '录音进行中...',
+                                time: '开始时间: ' + new Date().toLocaleTimeString(),
+                                details: { '转录文本': '转录文本转录文本转录文本转录文本' }
+                            }
+                        };
+                        messages.value.push(recordingMessage);
+                        currentRecordingMessage.value = recordingMessage;
+
+                        startRecordingTimer();
+                    } else {
+                        // 结束录音
+                        console.log('结束录音');
+                        isRecordingMode.value = false;
+
+                        if (currentRecordingMessage.value) {
+                            currentRecordingMessage.value.isRecording = false;
+                            currentRecordingMessage.value.cardData.title = '录音已完成';
+                            currentRecordingMessage.value.cardData.actions = [
+                                { icon: 'fas fa-file-text', text: '查看详情' },
+                                { icon: 'fas fa-download', text: '下载录音' }
+                            ];
+                        }
+
+                        stopRecordingTimer();
+                    }
+                };
+
+                // 录音计时器功能
+                const startRecordingTimer = () => {
+                    recordingStartTime.value = Date.now();
+                    recordingTimer.value = setInterval(() => {
+                        const elapsed = Math.floor((Date.now() - recordingStartTime.value) / 1000);
+                        const minutes = Math.floor(elapsed / 60);
+                        const seconds = elapsed % 60;
+                        const timeStr = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+                        if (currentRecordingMessage.value) {
+                            currentRecordingMessage.value.duration = timeStr;
+                        }
+                    }, 1000);
+                };
+
+                const stopRecordingTimer = () => {
+                    if (recordingTimer.value) {
+                        clearInterval(recordingTimer.value);
+                        recordingTimer.value = null;
+                    }
+                };
+
+                // 重新生成相关功能
+                const toggleRedoPopover = (messageId) => {
+                    redoPopoverVisible.value = redoPopoverVisible.value === messageId ? null : messageId;
+                };
+
+                const handleRedoAction = (messageId, action) => {
+                    redoPopoverVisible.value = null;
+
+                    // 找到对应的消息
+                    const messageIndex = messages.value.findIndex(msg => msg.id === messageId);
+                    if (messageIndex === -1) return;
+
+                    const originalMessage = messages.value[messageIndex];
+                    let newContent = '';
+
+                    // 根据不同的操作生成不同的内容
+                    switch (action) {
+                        case '重新生成':
+                            newContent = '这是重新生成的回答：' + originalMessage.content;
+                            break;
+                        case '更简单':
+                            newContent = '简化版回答：' + originalMessage.content.substring(0, 50) + '...';
+                            break;
+                        case '更详细':
+                            newContent = '详细回答：' + originalMessage.content + ' 补充更多详细信息和背景说明...';
+                            break;
+                        case '更口语':
+                            newContent = '口语化回答：嗯，' + originalMessage.content.replace(/。/g, '，') + '，就是这样子的。';
+                            break;
+                        default:
+                            newContent = originalMessage.content;
+                    }
+
+                    // 更新消息内容
+                    messages.value[messageIndex] = {
+                        ...originalMessage,
+                        content: newContent,
+                        time: getCurrentTime()
+                    };
+
+                    console.log(`执行${action}操作，消息ID: ${messageId}`);
+                };
+
+                // 处理标签点击
+                const handleTagClick = (type, tag) => {
+                    console.log(`点击了${type}标签: ${tag}`);
+
+                    // 根据标签类型和内容执行不同的操作
+                    if (type === 'keyword') {
+                        // 可以添加关键词搜索功能
+                        addMessage(`正在搜索关键词"${tag}"相关的谈话记录...`);
+                        setTimeout(() => {
+                            addMessage(`找到3条与"${tag}"相关的谈话记录，为您展示最新的一条。`);
+                        }, 1000);
+                    } else if (type === 'topic') {
+                        // 可以添加话题分析功能
+                        addMessage(`正在分析话题"${tag}"的相关内容...`);
+                        setTimeout(() => {
+                            addMessage(`"${tag}"是您最关注的话题之一，已为您整理相关建议和跟进方案。`);
+                        }, 1000);
+                    }
+                };
+
+                // 音频播放器方法
+                const toggleAudioPlay = () => {
+                    isAudioPlaying.value = !isAudioPlaying.value;
+                    console.log(isAudioPlaying.value ? '开始播放' : '暂停播放');
+                };
+
+                const handleProgressClick = (event) => {
+                    const progressBar = event.currentTarget;
+                    const rect = progressBar.getBoundingClientRect();
+                    const clickX = event.clientX - rect.left;
+                    const newProgress = (clickX / rect.width) * 100;
+                    audioProgress.value = Math.max(0, Math.min(100, newProgress));
+
+                    // 根据进度更新当前时间（这里只是UI演示）
+                    const totalSeconds = 8 * 60 + 32; // 8分32秒
+                    const currentSeconds = Math.floor((newProgress / 100) * totalSeconds);
+                    const minutes = Math.floor(currentSeconds / 60);
+                    const seconds = currentSeconds % 60;
+                    currentTime.value = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+                    console.log(`跳转到进度: ${newProgress.toFixed(1)}%`);
+                };
+
+                // 获取聊天类型对应的CSS类名
+                const getChatTypeClass = (type) => {
+                    switch (type) {
+                        case 'student-profile':
+                            return 'student-profile';
+                        case 'work-log':
+                            return 'work-log';
+                        case 'heart-talk':
+                            return 'heart-talk';
+                        default:
+                            return 'student-profile';
+                    }
+                };
+
+                // 获取聊天类型对应的图标类名
+                const getChatTypeIcon = (type) => {
+                    switch (type) {
+                        case 'student-profile':
+                            return 'fas fa-user-graduate';
+                        case 'work-log':
+                            return 'fas fa-clipboard-list';
+                        case 'heart-talk':
+                            return null
+                            // return 'fas fa-comments';
+                        default:
+                            return 'fas fa-user-graduate';
+                    }
+                };
+
+                // 新建对话
+                const newChat = () => {
+                    messages.value = [];
+
+                    // 添加欢迎消息
+                    setTimeout(() => {
+                        addMessage('您好！我是辅导员AI助手，很高兴为您服务。请问有什么可以帮助您的吗？');
+                    }, 100);
+
+                    setTimeout(() => {
+                        addMessage('您可以：\n• 查询学生档案信息\n• 安排谈心谈话\n• 记录工作日志\n• 生成各类报表');
+                    }, 1000);
+                };
+
+                // 组件挂载时初始化
+                onMounted(() => {
+                    initMessages();
+                });
+
+                return {
+                    // 响应式数据
+                    sidebarOpen,
+                    isVoiceMode,
+                    isRecording,
+                    isRecordingMode,
+                    activeTab,
+                    textInputValue,
+                    messages,
+                    showMoreActions,
+                    showTemplateDrawer,
+                    showSettingsDrawer,
+                    showFavoriteDrawer,
+                    showConfirmationToast,
+                    showRecordingDetailDrawer,
+                    recordingDetailData,
+                    activeRecordingTab,
+                    recordingTabs,
+                    redoPopoverVisible,
+                    isAudioPlaying,
+                    audioProgress,
+                    currentTime,
+                    totalTime,
+
+                    // 方法
+                    toggleSidebar,
+                    closeSidebar,
+                    switchTab,
+                    toggleVoiceMode,
+                    sendTextMessage,
+                    handleKeyPress,
+                    startRecording,
+                    stopRecording,
+                    cancelRecording,
+                    toggleRecordingMode,
+                    toggleMoreActions,
+                    toggleTemplateDrawer,
+                    toggleSettingsDrawer,
+                    toggleRecordingDetailDrawer,
+                    switchRecordingTab,
+                    closeAllDrawers,
+                    handleDrawerAction,
+                    handleQuickAccess,
+                    executeCommand,
+                    openChat,
+                    recommendedCommands,
+                    recentChats,
+                    handleActionBtn,
+                    addMessage,
+                    newChat,
+                    getCurrentTime,
+                    getFormattedDateTime,
+                    toggleRedoPopover,
+                    handleRedoAction,
+                    handleTagClick,
+                    toggleAudioPlay,
+                    handleProgressClick,
+                    getChatTypeClass,
+                    getChatTypeIcon
+                };
+            }
+        }).mount('#app');
+
+    </script>
+</body>
+
+</html>

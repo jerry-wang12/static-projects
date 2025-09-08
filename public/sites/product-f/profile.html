@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人中心 - 南大校友</title>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.5.19/vue.global.min.js"></script>
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        /* 个人中心页面专用样式 */
+        .profile-page {
+            background-color: #F8F9FA;
+            min-height: 100vh;
+        }
+
+        .page-content {
+            padding: 0;
+            background-color: #F8F9FA;
+        }
+
+        /* 简化用户信息头部 */
+        .profile-header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            padding: var(--spacing-md) var(--spacing-lg);
+            color: var(--color-on-primary);
+            position: relative;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            position: relative;
+            z-index: 2;
+        }
+
+        .avatar-container {
+            position: relative;
+        }
+
+        .avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: var(--radius-full);
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            overflow: hidden;
+            background-color: var(--color-surface);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .verification-badge {
+            position: absolute;
+            bottom: -2px;
+            right: -2px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: var(--radius-full);
+            padding: 4px;
+            border: 3px solid white;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-details {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: var(--text-title-large);
+            font-weight: 600;
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-on-primary);
+        }
+
+        .user-subtitle {
+            font-size: var(--text-body-medium);
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .user-status {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            font-size: var(--text-label-large);
+        }
+
+        .edit-profile-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: var(--color-on-primary);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: var(--radius-sm);
+            padding: var(--spacing-xs) var(--spacing-md);
+            font-size: var(--text-label-large);
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .edit-profile-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* 简化的校友卡 */
+        .alumni-card {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            border-radius: var(--radius-lg);
+            margin: 0 var(--spacing-md) 0;
+            padding: var(--spacing-lg);
+            position: relative;
+            box-shadow: 0 4px 16px rgba(112, 44, 138, 0.2);
+            transform: translateY(-var(--spacing-md));
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-lg);
+            position: relative;
+            z-index: 2;
+        }
+
+        .university-info {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .university-logo-small {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: var(--radius-xs);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--color-primary);
+            font-size: 12px;
+        }
+
+        .university-name {
+            font-size: var(--text-body-large);
+            font-weight: 500;
+            color: var(--color-on-primary);
+        }
+
+        .card-number {
+            font-size: var(--text-body-medium);
+            color: rgba(255, 255, 255, 0.9);
+            font-family: 'Courier New', monospace;
+        }
+
+        .card-body {
+            display: flex;
+            gap: var(--spacing-lg);
+            position: relative;
+            z-index: 2;
+        }
+
+        .user-photo {
+            width: 80px;
+            height: 100px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            flex-shrink: 0;
+        }
+
+        .user-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .info-row {
+            display: flex;
+            color: var(--color-on-primary);
+            font-size: var(--text-body-medium);
+        }
+
+        .info-label {
+            opacity: 0.9;
+            min-width: 60px;
+            flex-shrink: 0;
+        }
+
+        .info-value {
+            font-weight: 500;
+            flex: 1;
+        }
+
+
+        .qr-btn {
+            width: calc(100% - 2 * var(--spacing-md));
+            margin: var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+            padding: var(--spacing-md);
+            background-color: var(--color-surface);
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+            border-radius: var(--radius-md);
+            font-size: var(--text-body-medium);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+        }
+
+        .qr-btn:hover {
+            background-color: var(--color-primary);
+            color: var(--color-on-primary);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(112, 44, 138, 0.3);
+        }
+
+
+        /* 简化的菜单区域 */
+        .menu-section {
+            background-color: var(--color-surface);
+            margin: 0 var(--spacing-md) var(--spacing-md);
+            border-radius: var(--radius-md);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-bottom: 1px solid #F8F9FA;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .menu-item:hover {
+            background-color: #F8F9FA;
+            transform: translateX(4px);
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background-color: #F8F9FA;
+            color: var(--color-primary);
+            flex-shrink: 0;
+        }
+
+        .menu-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .menu-title {
+            font-size: var(--text-body-large);
+            font-weight: 500;
+            color: var(--color-on-surface);
+            margin-bottom: 2px;
+        }
+
+        .menu-subtitle {
+            font-size: var(--text-body-medium);
+            color: var(--color-on-surface-variant);
+        }
+
+        .menu-badge {
+            background-color: var(--color-error);
+            color: var(--color-on-error);
+            border-radius: var(--radius-full);
+            padding: 2px 8px;
+            font-size: var(--text-label-medium);
+            font-weight: 500;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .menu-arrow {
+            font-size: 20px;
+            color: var(--color-on-surface-variant);
+            transition: transform 0.3s ease;
+        }
+
+        .menu-item:hover .menu-arrow {
+            transform: translateX(4px);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .user-info {
+                gap: var(--spacing-sm);
+            }
+
+            .avatar {
+                width: 56px;
+                height: 56px;
+            }
+
+            .alumni-card {
+                margin: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+                transform: translateY(-var(--spacing-lg));
+            }
+
+            .card-body {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: var(--spacing-md);
+            }
+
+            .user-photo {
+                width: 100px;
+                height: 120px;
+            }
+
+            .info-row {
+                justify-content: center;
+                gap: var(--spacing-xs);
+            }
+
+            .qr-btn {
+                margin: 0 var(--spacing-md) var(--spacing-md);
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="profile-page app-container">
+            <main class="page-content">
+                <!-- 个人信息头部 -->
+                <section class="profile-header">
+                    <div class="user-info">
+                        <div class="avatar-container">
+                            <div class="avatar">
+                                <img :src="user.avatar" :alt="user.name">
+                            </div>
+                            <div class="verification-badge">
+                                <iconify-icon icon="mdi:check" width="12" height="12"></iconify-icon>
+                            </div>
+                        </div>
+
+                        <div class="user-details">
+                            <h1 class="user-name">{{ user.name }}</h1>
+                            <div class="user-subtitle">{{ user.grade }}级 {{ user.department }}</div>
+                            <div class="user-status">
+                                <iconify-icon icon="mdi:shield-check" width="16" height="16"></iconify-icon>
+                                已认证校友
+                            </div>
+                        </div>
+
+                        <button class="edit-profile-btn" @click="editProfile">
+                            个人资料
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 校友卡 -->
+                <section class="alumni-card">
+                    <div class="card-header">
+                        <div class="university-info">
+                            <div class="university-logo-small">
+                                南大
+                            </div>
+                            <div class="university-name">南京大学</div>
+                        </div>
+                        <div class="card-number">{{ user.cardNumber }}</div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="user-photo">
+                            <img :src="user.photo" :alt="user.name">
+                        </div>
+
+                        <div class="card-info">
+                            <div class="info-row">
+                                <span class="info-label">类型：</span>
+                                <span class="info-value">{{ user.universityType }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">姓名：</span>
+                                <span class="info-value">{{ user.name }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">年级：</span>
+                                <span class="info-value">{{ user.grade }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">院系：</span>
+                                <span class="info-value">{{ user.department }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 身份码按钮 -->
+                <button class="qr-btn" @click="showQR">
+                    <iconify-icon icon="mdi:qrcode" width="24" height="24"></iconify-icon>
+                    身份码
+                </button>
+
+
+                <!-- 菜单区域 -->
+                <section class="menu-section">
+                    <div class="menu-item" @click="goToAcademicInfo">
+                        <div class="menu-icon">
+                            <iconify-icon icon="mdi:school-outline" width="24" height="24"></iconify-icon>
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-title">我的学籍</div>
+                        </div>
+                        <div class="menu-arrow">
+                            <iconify-icon icon="mdi:chevron-right" width="20" height="20"></iconify-icon>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" @click="goToOrganizations">
+                        <div class="menu-icon">
+                            <iconify-icon icon="mdi:account-group-outline" width="24" height="24"></iconify-icon>
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-title">我的组织</div>
+                            <div class="menu-subtitle">已加入1个组织</div>
+                        </div>
+                        <div class="menu-arrow">
+                            <iconify-icon icon="mdi:chevron-right" width="20" height="20"></iconify-icon>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 设置和其他 -->
+                <section class="menu-section">
+                    <div class="menu-item" @click="goToSettings">
+                        <div class="menu-icon">
+                            <iconify-icon icon="mdi:cog-outline" width="24" height="24"></iconify-icon>
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-title">设置</div>
+                        </div>
+                        <div class="menu-arrow">
+                            <iconify-icon icon="mdi:chevron-right" width="20" height="20"></iconify-icon>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" @click="showAbout">
+                        <div class="menu-icon">
+                            <iconify-icon icon="mdi:information-outline" width="24" height="24"></iconify-icon>
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-title">关于南大校友</div>
+                        </div>
+                        <div class="menu-arrow">
+                            <iconify-icon icon="mdi:chevron-right" width="20" height="20"></iconify-icon>
+                        </div>
+                    </div>
+
+                    <div class="menu-item" @click="logout" style="color: var(--color-error);">
+                        <div class="menu-icon"
+                            style="background-color: var(--color-error-container); color: var(--color-on-error-container);">
+                            <iconify-icon icon="mdi:logout" width="24" height="24"></iconify-icon>
+                        </div>
+                        <div class="menu-content">
+                            <div class="menu-title" style="color: var(--color-error);">退出登录</div>
+                        </div>
+                        <div class="menu-arrow">
+                            <iconify-icon icon="mdi:chevron-right" width="20" height="20"></iconify-icon>
+                        </div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- 底部导航栏容器 -->
+            <div class="bottom-nav-container"></div>
+        </div>
+
+        <!-- 加载指示器容器 -->
+        <div class="loader-container"></div>
+    </div>
+
+    <script src="shared-components.js"></script>
+    <script src="page-loader.js"></script>
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    user: {
+                        id: '20100001',
+                        name: '王贤希',
+                        avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+                        photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+                        cardNumber: '2023061236',
+                        universityType: '南京大学',
+                        grade: '2010',
+                        department: '软件学院',
+                        verified: true
+                    },
+
+                };
+            },
+
+            methods: {
+                editProfile() {
+                    showModal('编辑个人资料', `
+                        <div>
+                            <div class="form-group">
+                                <label>头像</label>
+                                <div style="display: flex; align-items: center; gap: 16px; margin-top: 8px;">
+                                    <img src="${this.user.avatar}" alt="头像" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                                    <button class="outlined-btn" style="padding: 8px 16px; font-size: 14px;">更换头像</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>姓名</label>
+                                <input type="text" value="${this.user.name}" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>联系方式</label>
+                                <input type="tel" placeholder="请输入手机号" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label>工作单位</label>
+                                <input type="text" placeholder="请输入工作单位" class="form-input">
+                            </div>
+                        </div>
+                    `, [
+                        { text: '取消', class: 'outlined-btn' },
+                        { text: '保存', class: 'primary-btn', onclick: 'saveProfile()' }
+                    ]);
+                },
+
+                showQR() {
+                    showModal('我的身份码', `
+                        <div class="qr-container">
+                            <div class="qr-code">
+                                <iconify-icon icon="mdi:qrcode" width="80" height="80" style="color: var(--color-primary);"></iconify-icon>
+                            </div>
+                            
+                            <div class="user-info-card">
+                                <div style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: var(--color-on-surface);">${this.user.name}</div>
+                                <div style="color: var(--color-on-surface-variant); margin-bottom: 4px;">学号：${this.user.id}</div>
+                                <div style="color: var(--color-on-surface-variant);">${this.user.grade}级 ${this.user.department}</div>
+                            </div>
+                            
+                            <div style="padding: 16px; background-color: #f8f9fa; border-radius: 8px; font-size: 14px; color: var(--color-on-surface-variant); line-height: 1.5; text-align: center;">
+                                向其他校友展示此二维码，可快速交换联系方式和校友信息
+                            </div>
+                        </div>
+                    `, [
+                        { text: '关闭', class: 'primary-btn' }
+                    ]);
+                },
+
+
+                goToAcademicInfo() {
+                    showModal('我的学籍', `
+                        <div style="text-align: left;">
+                            <div style="margin-bottom: 16px; padding: 16px; background-color: #f8f9fa; border-radius: 8px;">
+                                <div style="font-weight: 600; margin-bottom: 12px; color: var(--color-primary);">学籍信息</div>
+                                <div style="margin-bottom: 8px;"><span style="font-weight: 500;">学校：</span>${this.user.universityType}</div>
+                                <div style="margin-bottom: 8px;"><span style="font-weight: 500;">院系：</span>${this.user.department}</div>
+                                <div style="margin-bottom: 8px;"><span style="font-weight: 500;">年级：</span>${this.user.grade}级</div>
+                                <div style="margin-bottom: 8px;"><span style="font-weight: 500;">学号：</span>${this.user.id}</div>
+                                <div><span style="font-weight: 500;">认证状态：</span><span style="color: #4CAF50; font-weight: 500;">已认证 ✓</span></div>
+                            </div>
+                            <div style="color: var(--color-on-surface-variant); font-size: 14px; line-height: 1.5;">
+                                如需修改学籍信息，请联系校友总会进行人工审核。
+                            </div>
+                        </div>
+                    `, [
+                        { text: '我知道了', class: 'primary-btn' }
+                    ]);
+                },
+
+                goToOrganizations() {
+                    showModal('我的组织', `
+                        <div style="text-align: left;">
+                            <div style="margin-bottom: 16px;">
+                                <div style="display: flex; align-items: center; gap: 12px; padding: 16px; background-color: #f8f9fa; border-radius: 8px;">
+                                    <div style="width: 48px; height: 48px; background-color: var(--color-primary); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600;">
+                                        南大
+                                    </div>
+                                    <div style="flex: 1;">
+                                        <div style="font-weight: 600; margin-bottom: 4px;">南京大学校友总会</div>
+                                        <div style="color: var(--color-on-surface-variant); font-size: 14px;">成员 · 2023年加入</div>
+                                    </div>
+                                    <div style="color: #4CAF50;">
+                                        <iconify-icon icon="mdi:check-circle" width="20" height="20"></iconify-icon>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="text-align: center; padding: 16px; color: var(--color-on-surface-variant);">
+                                <iconify-icon icon="mdi:account-group-outline" width="48" height="48" style="margin-bottom: 8px; opacity: 0.5;"></iconify-icon>
+                                <div style="font-size: 14px;">加入更多校友组织，扩展人脉网络</div>
+                            </div>
+                        </div>
+                    `, [
+                        { text: '探索更多组织', class: 'outlined-btn' },
+                        { text: '关闭', class: 'primary-btn' }
+                    ]);
+                },
+
+                goToSettings() {
+                    showModal('设置', `
+                        <div>
+                            <div class="settings-menu-item" onclick="showToast('功能开发中...', 'info'); closeBottomSheet(this);">
+                                <iconify-icon icon="mdi:bell-outline" width="20" height="20"></iconify-icon>
+                                消息通知设置
+                            </div>
+                            <div class="settings-menu-item" onclick="showToast('功能开发中...', 'info'); closeBottomSheet(this);">
+                                <iconify-icon icon="mdi:shield-outline" width="20" height="20"></iconify-icon>
+                                隐私设置
+                            </div>
+                            <div class="settings-menu-item" onclick="showToast('功能开发中...', 'info'); closeBottomSheet(this);">
+                                <iconify-icon icon="mdi:theme-light-dark" width="20" height="20"></iconify-icon>
+                                主题设置
+                            </div>
+                            <div class="settings-menu-item" onclick="clearCache(); closeBottomSheet(this);">
+                                <iconify-icon icon="mdi:delete-outline" width="20" height="20"></iconify-icon>
+                                清除缓存
+                            </div>
+                        </div>
+                    `, [
+                        { text: '关闭', class: 'primary-btn' }
+                    ]);
+                },
+
+                showAbout() {
+                    showModal('关于南大校友', `
+                        <div style="text-align: center;">
+                            <div style="margin-bottom: 24px;">
+                                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: white; font-weight: 700; font-size: 24px;">
+                                    南大
+                                </div>
+                                <div style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">南大校友</div>
+                                <div style="color: var(--color-on-surface-variant);">版本 1.0.0</div>
+                            </div>
+                            <div style="text-align: left; padding: 16px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 16px;">
+                                <div style="font-weight: 500; margin-bottom: 8px;">产品介绍</div>
+                                <div style="color: var(--color-on-surface-variant); font-size: 14px; line-height: 1.5;">
+                                    南大校友APP是南京大学官方校友服务平台，为校友提供活动参与、住宿预订、信息交流等服务，旨在加强校友间的联系与合作。
+                                </div>
+                            </div>
+                            <div style="font-size: 14px; color: var(--color-on-surface-variant); line-height: 1.5;">
+                                © 2024 南京大学校友总会<br>
+                                技术支持：南大信息技术中心
+                            </div>
+                        </div>
+                    `, [
+                        { text: '我知道了', class: 'primary-btn' }
+                    ]);
+                },
+
+                logout() {
+                    showModal('退出登录', `
+                        <div style="text-align: center;">
+                            <iconify-icon icon="mdi:logout" width="48" height="48" style="color: var(--color-error); margin-bottom: 16px;"></iconify-icon>
+                            <p>确定要退出登录吗？</p>
+                            <p style="color: var(--color-on-surface-variant); font-size: 14px;">退出后需要重新输入验证码登录</p>
+                        </div>
+                    `, [
+                        { text: '取消', class: 'outlined-btn' },
+                        { text: '退出登录', class: 'primary-btn', onclick: 'confirmLogout()' }
+                    ]);
+                }
+            },
+
+            mounted() {
+                // 检查登录状态
+                if (!localStorage.getItem('alumni_token')) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // 初始化页面组件
+                initializePage({
+                    title: '个人中心',
+                    activePage: 'profile',
+                    topBar: false
+                });
+
+                // 加载用户数据（从localStorage或API）
+                const userPhone = localStorage.getItem('user_phone');
+                if (userPhone) {
+                    // 可以根据手机号加载不同用户数据
+                    console.log('加载用户数据:', userPhone);
+                }
+            }
+        }).mount('#app');
+
+        // 全局函数
+        function saveProfile() {
+            showToast('个人资料保存成功！', 'success');
+            closeModal(event.target);
+        }
+
+        function clearCache() {
+            showToast('缓存清除成功！', 'success');
+        }
+
+        function confirmLogout() {
+            localStorage.removeItem('alumni_token');
+            localStorage.removeItem('user_phone');
+            localStorage.removeItem('login_type');
+            closeModal(event.target);
+            showToast('已退出登录', 'info');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1000);
+        }
+    </script>
+</body>
+
+</html>

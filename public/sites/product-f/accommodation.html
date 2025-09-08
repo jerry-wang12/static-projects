@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>住宿预订 - 南大校友</title>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@2.1.0/dist/iconify-icon.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/3.5.19/vue.global.min.js"></script>
+    <link rel="stylesheet" href="shared-styles.css">
+    <style>
+        /* 住宿预订页面专用样式 */
+        .accommodation-page {
+            background-color: #F8F9FA;
+            min-height: 100vh;
+        }
+
+        .page-content {
+            padding: 0;
+            background-color: #F8F9FA;
+        }
+
+        .date-section {
+            background-color: var(--color-surface);
+            padding: 12px var(--spacing-lg);
+            border-bottom: 1px solid #F1F3F4;
+        }
+
+        .date-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+        }
+
+        .date-input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .date-label {
+            font-size: var(--text-body-medium);
+            font-weight: 500;
+            color: var(--color-on-surface);
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .date-input-wrapper {
+            position: relative;
+            background-color: #F8F9FA;
+            border: 2px solid #E9ECEF;
+            border-radius: var(--radius-sm);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .date-input-wrapper:focus-within {
+            border-color: var(--color-primary);
+            background-color: var(--color-surface);
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-primary) 8%, transparent);
+        }
+
+        .date-input {
+            width: 100%;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: none;
+            background: transparent;
+            font-size: var(--text-body-large);
+            color: var(--color-on-surface);
+            outline: none;
+            font-weight: 500;
+        }
+
+        .date-input::-webkit-calendar-picker-indicator {
+            background: transparent;
+            bottom: 0;
+            color: transparent;
+            cursor: pointer;
+            height: auto;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: auto;
+        }
+
+        .date-icon {
+            position: absolute;
+            right: var(--spacing-md);
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-on-surface-variant);
+            pointer-events: none;
+        }
+
+        .rooms-section {
+            padding: var(--spacing-md);
+        }
+
+        .section-title {
+            font-size: var(--text-title-large);
+            font-weight: 600;
+            color: var(--color-on-surface);
+            margin-bottom: var(--spacing-lg);
+            text-align: center;
+        }
+
+        .room-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-lg);
+        }
+
+        .room-card {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid #F1F3F4;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .room-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border-color: var(--color-primary-container);
+        }
+
+        .room-image-container {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .room-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .room-card:hover .room-image {
+            transform: scale(1.05);
+        }
+
+        .room-badge {
+            position: absolute;
+            top: var(--spacing-md);
+            left: var(--spacing-md);
+            background-color: rgba(112, 44, 138, 0.9);
+            color: white;
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: var(--radius-full);
+            font-size: var(--text-label-medium);
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .room-info {
+            padding: var(--spacing-lg);
+        }
+
+        .room-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .room-name {
+            font-size: var(--text-title-medium);
+            font-weight: 600;
+            color: var(--color-on-surface);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .room-size {
+            font-size: var(--text-body-medium);
+            color: var(--color-on-surface-variant);
+        }
+
+        .room-price {
+            text-align: right;
+        }
+
+        .price-amount {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--color-primary);
+            line-height: 1;
+        }
+
+        .price-unit {
+            font-size: var(--text-body-medium);
+            color: var(--color-on-surface-variant);
+            margin-top: 2px;
+        }
+
+        .room-facilities {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .facility-tag {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background-color: var(--color-primary-container);
+            color: var(--color-on-primary-container);
+            padding: 4px var(--spacing-sm);
+            border-radius: var(--radius-xs);
+            font-size: var(--text-label-medium);
+            font-weight: 500;
+        }
+
+        .facility-icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        .room-description {
+            font-size: var(--text-body-medium);
+            color: var(--color-on-surface-variant);
+            line-height: 1.5;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .booking-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+            color: var(--color-on-primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-size: var(--text-label-large);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--spacing-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .booking-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .booking-btn:hover::before {
+            left: 100%;
+        }
+
+        .booking-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(112, 44, 138, 0.25);
+        }
+
+        .booking-btn:active {
+            transform: translateY(0);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-xl) var(--spacing-lg);
+            color: var(--color-on-surface-variant);
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: var(--spacing-md);
+            opacity: 0.5;
+        }
+
+        .empty-message {
+            font-size: var(--text-body-large);
+        }
+
+        /* 日期差异显示 */
+        .date-summary {
+            background-color: var(--color-primary-container);
+            color: var(--color-on-primary-container);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-sm);
+            font-size: var(--text-body-medium);
+            text-align: center;
+            margin-top: var(--spacing-md);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .date-section {
+                padding: 10px var(--spacing-md);
+            }
+            
+            .date-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-md);
+            }
+            
+            .rooms-section {
+                padding: var(--spacing-sm) var(--spacing-md);
+            }
+            
+            .room-header {
+                flex-direction: column;
+                gap: var(--spacing-sm);
+                align-items: stretch;
+            }
+            
+            .room-price {
+                text-align: left;
+            }
+            
+            .room-facilities {
+                gap: 6px;
+            }
+            
+            .facility-tag {
+                font-size: 11px;
+                padding: 2px 6px;
+            }
+        }
+
+        /* 加载动画 */
+        .room-card-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="accommodation-page app-container">
+            <!-- 顶部导航栏容器 -->
+            <div class="top-bar-container"></div>
+            
+            <!-- 搜索栏容器 -->
+            <div class="search-bar-container"></div>
+
+            <main class="page-content">
+                <!-- 日期选择区域 -->
+                <section class="date-section">
+                    <div class="date-grid">
+                        <div class="date-input-group">
+                            <label class="date-label">入住日期</label>
+                            <div class="date-input-wrapper">
+                                <input 
+                                    type="date" 
+                                    v-model="bookingForm.checkin" 
+                                    class="date-input"
+                                    :min="minDate"
+                                    @change="updateDateSummary"
+                                >
+                                <iconify-icon icon="mdi:calendar-outline" width="20" height="20" class="date-icon"></iconify-icon>
+                            </div>
+                        </div>
+                        
+                        <div class="date-input-group">
+                            <label class="date-label">离店日期</label>
+                            <div class="date-input-wrapper">
+                                <input 
+                                    type="date" 
+                                    v-model="bookingForm.checkout" 
+                                    class="date-input"
+                                    :min="minCheckout"
+                                    @change="updateDateSummary"
+                                >
+                                <iconify-icon icon="mdi:calendar-outline" width="20" height="20" class="date-icon"></iconify-icon>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div v-if="dateSummary" class="date-summary">
+                        {{ dateSummary }}
+                    </div>
+                </section>
+
+                <!-- 房间列表区域 -->
+                <section class="rooms-section">
+                    <div class="room-list">
+                        <div 
+                            v-for="room in rooms" 
+                            :key="room.id"
+                            class="room-card"
+                            @click="selectRoom(room)"
+                        >
+                            <div class="room-image-container">
+                                <img :src="room.image" :alt="room.name" class="room-image" loading="lazy">
+                                <div class="room-badge">推荐</div>
+                            </div>
+                            
+                            <div class="room-info">
+                                <div class="room-header">
+                                    <div class="room-details">
+                                        <h3 class="room-name">{{ room.name }}</h3>
+                                        <div class="room-size">{{ room.size }}</div>
+                                    </div>
+                                    <div class="room-price">
+                                        <div class="price-amount">¥{{ room.price }}</div>
+                                        <div class="price-unit">/晚</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="room-facilities">
+                                    <span 
+                                        v-for="facility in room.facilities" 
+                                        :key="facility.name"
+                                        class="facility-tag"
+                                    >
+                                        <iconify-icon :icon="facility.icon" class="facility-icon"></iconify-icon>
+                                        {{ facility.name }}
+                                    </span>
+                                </div>
+                                
+                                <p class="room-description">{{ room.description }}</p>
+                                
+                                <button class="booking-btn" @click.stop="bookRoom(room)">
+                                    <iconify-icon icon="mdi:bed-outline" width="20" height="20"></iconify-icon>
+                                    预订
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div v-if="rooms.length === 0" class="empty-state">
+                        <div class="empty-icon">🏨</div>
+                        <div class="empty-message">暂无可预订的房间</div>
+                    </div>
+                </section>
+            </main>
+
+            <!-- 底部导航栏容器 -->
+            <div class="bottom-nav-container"></div>
+        </div>
+
+        <!-- 加载指示器容器 -->
+        <div class="loader-container"></div>
+    </div>
+
+    <script src="shared-components.js"></script>
+    <script src="page-loader.js"></script>
+    <script>
+        const { createApp } = Vue;
+
+        createApp({
+            data() {
+                return {
+                    bookingForm: {
+                        checkin: '',
+                        checkout: ''
+                    },
+                    
+                    dateSummary: '',
+                    
+                    rooms: [
+                        {
+                            id: 1,
+                            name: '标准单人间',
+                            size: '约25㎡',
+                            price: 150,
+                            image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                            facilities: [
+                                { name: '独卫', icon: 'mdi:shower' },
+                                { name: 'Wi-Fi', icon: 'mdi:wifi' },
+                                { name: '空调', icon: 'mdi:air-conditioner' },
+                                { name: '办公桌', icon: 'mdi:desk' }
+                            ],
+                            description: '温馨舒适的单人间，配备现代化设施，为您的住宿提供便利。房间朝南采光良好，配有独立卫生间和办公区域。'
+                        },
+                        {
+                            id: 2,
+                            name: '豪华双人间',
+                            size: '约35㎡',
+                            price: 220,
+                            image: 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                            facilities: [
+                                { name: '独卫', icon: 'mdi:shower' },
+                                { name: 'Wi-Fi', icon: 'mdi:wifi' },
+                                { name: '空调', icon: 'mdi:air-conditioner' },
+                                { name: '阳台', icon: 'mdi:balcony' },
+                                { name: '冰箱', icon: 'mdi:fridge' }
+                            ],
+                            description: '宽敞明亮的双人间，带有观景阳台，可欣赏校园美景。房间内设施完善，适合家庭入住或商务接待。'
+                        },
+                        {
+                            id: 3,
+                            name: '商务套房',
+                            size: '约50㎡',
+                            price: 350,
+                            image: 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+                            facilities: [
+                                { name: '独卫', icon: 'mdi:shower' },
+                                { name: 'Wi-Fi', icon: 'mdi:wifi' },
+                                { name: '空调', icon: 'mdi:air-conditioner' },
+                                { name: '办公桌', icon: 'mdi:desk' },
+                                { name: '客厅', icon: 'mdi:sofa' },
+                                { name: '小厨房', icon: 'mdi:stove' }
+                            ],
+                            description: '豪华商务套房，独立客厅和卧室设计，配备简易厨房设施。专为商务人士和长期住宿客人设计，提供舒适的办公和生活环境。'
+                        }
+                    ]
+                };
+            },
+            
+            computed: {
+                minDate() {
+                    return new Date().toISOString().split('T')[0];
+                },
+                
+                minCheckout() {
+                    if (!this.bookingForm.checkin) return this.minDate;
+                    const checkin = new Date(this.bookingForm.checkin);
+                    checkin.setDate(checkin.getDate() + 1);
+                    return checkin.toISOString().split('T')[0];
+                },
+                
+                nightsCount() {
+                    if (!this.bookingForm.checkin || !this.bookingForm.checkout) return 0;
+                    const checkin = new Date(this.bookingForm.checkin);
+                    const checkout = new Date(this.bookingForm.checkout);
+                    const diffTime = checkout.getTime() - checkin.getTime();
+                    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                }
+            },
+            
+            methods: {
+                initializeDates() {
+                    const today = new Date();
+                    const tomorrow = new Date(today);
+                    tomorrow.setDate(tomorrow.getDate() + 1);
+                    
+                    this.bookingForm.checkin = today.toISOString().split('T')[0];
+                    this.bookingForm.checkout = tomorrow.toISOString().split('T')[0];
+                    this.updateDateSummary();
+                },
+                
+                updateDateSummary() {
+                    if (this.bookingForm.checkin && this.bookingForm.checkout && this.nightsCount > 0) {
+                        const checkinDate = new Date(this.bookingForm.checkin);
+                        const checkoutDate = new Date(this.bookingForm.checkout);
+                        
+                        const checkinStr = checkinDate.toLocaleDateString('zh-CN', {
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        
+                        const checkoutStr = checkoutDate.toLocaleDateString('zh-CN', {
+                            month: 'long',
+                            day: 'numeric'
+                        });
+                        
+                        this.dateSummary = `${checkinStr} 至 ${checkoutStr}，共 ${this.nightsCount} 晚`;
+                    } else {
+                        this.dateSummary = '';
+                    }
+                },
+                
+                selectRoom(room) {
+                    // 可以在这里添加房间详情展示逻辑
+                    console.log('查看房间详情:', room.name);
+                },
+                
+                async bookRoom(room) {
+                    if (!this.bookingForm.checkin || !this.bookingForm.checkout) {
+                        showToast('请先选择入住和离店日期', 'warning');
+                        return;
+                    }
+                    
+                    if (this.nightsCount <= 0) {
+                        showToast('离店日期必须晚于入住日期', 'warning');
+                        return;
+                    }
+                    
+                    const totalPrice = room.price * this.nightsCount;
+                    const checkinDate = new Date(this.bookingForm.checkin).toLocaleDateString('zh-CN');
+                    const checkoutDate = new Date(this.bookingForm.checkout).toLocaleDateString('zh-CN');
+                    
+                    const confirmContent = `
+                        <div style="text-align: left;">
+                            <h4 style="margin-bottom: 16px; color: var(--color-primary);">预订确认</h4>
+                            <div style="margin-bottom: 12px;"><strong>房型：</strong>${room.name}</div>
+                            <div style="margin-bottom: 12px;"><strong>入住：</strong>${checkinDate}</div>
+                            <div style="margin-bottom: 12px;"><strong>离店：</strong>${checkoutDate}</div>
+                            <div style="margin-bottom: 12px;"><strong>住宿天数：</strong>${this.nightsCount} 晚</div>
+                            <div style="margin-bottom: 16px; font-size: 18px; color: var(--color-primary);"><strong>总价：¥${totalPrice}</strong></div>
+                            <p style="color: var(--color-on-surface-variant); font-size: 14px; margin: 0;">
+                                预订申请提交后，我们将在24小时内处理并通知您结果。
+                            </p>
+                        </div>
+                    `;
+                    
+                    showModal('预订确认', confirmContent, [
+                        { 
+                            text: '取消', 
+                            class: 'outlined-btn',
+                            onclick: 'closeModal(this)'
+                        },
+                        { 
+                            text: '确认预订', 
+                            class: 'primary-btn',
+                            onclick: 'confirmBooking(' + room.id + ', ' + totalPrice + ')'
+                        }
+                    ]);
+                }
+            },
+            
+            mounted() {
+                // 检查登录状态
+                if (!localStorage.getItem('alumni_token')) {
+                    window.location.href = 'login.html';
+                    return;
+                }
+                
+                // 初始化页面组件
+                initializePage({
+                    title: '住宿预订',
+                    activePage: 'accommodation',
+                    showNotification: true
+                });
+                
+                // 初始化日期
+                this.initializeDates();
+            }
+        }).mount('#app');
+
+        // 全局函数用于模态框按钮
+        function confirmBooking(roomId, totalPrice) {
+            closeModal(event.target);
+            
+            showLoader();
+            
+            // 模拟预订API调用
+            setTimeout(() => {
+                hideLoader();
+                showToast('预订申请已提交，等待审核！', 'success');
+                
+                // 可以在这里跳转到预订列表或发送通知
+                setTimeout(() => {
+                    window.location.href = 'messages.html';
+                }, 1500);
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
