@@ -26,5 +26,12 @@
     "description": "汇聚南大校友真实职业发展经历的动态案例库，涵盖互联网、金融、咨询等多个行业，通过AI智能生成和结构化展示，为在校生提供可信赖的求职指导和职业规划参考。",
     "thumbnail": "/demo-images/案例库.jpg",
     "path": "product-d/index.html"
+  },
+  {
+    "id": "product-f",
+    "title": "中美校友APP",
+    "description": "中美校友APP",
+    "thumbnail": "/product-f/cover.png",
+    "path": "product-f/index.html"
   }
 ] 
