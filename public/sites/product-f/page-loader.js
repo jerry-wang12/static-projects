@@ -38,13 +38,11 @@
                 
                 if (targetUrl && targetUrl !== window.location.href) {
                     // 添加淡出效果
-                    document.body.style.transition = 'opacity 0.2s ease-out';
-                    document.body.style.opacity = '0.7';
+                    document.body.style.transition = 'opacity 0.15s ease-out';
+                    document.body.style.opacity = '0.9';
                     
-                    // 短暂延迟后跳转
-                    setTimeout(() => {
-                        window.location.href = targetUrl;
-                    }, 100);
+                    // 立即跳转，无延迟
+                    window.location.href = targetUrl;
                 }
             }
         });

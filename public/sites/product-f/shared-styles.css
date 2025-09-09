@@ -664,7 +664,6 @@ body {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-xl);
 }
 
 .avatar {
@@ -942,7 +941,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-xs);
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-xl);
   cursor: pointer;
@@ -1683,7 +1681,6 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-lg);
   text-decoration: none;
