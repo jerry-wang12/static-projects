@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南京大学就业网 - 设计概念 (信息门户优化版 - 更新配色)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+            background-color: #f8f9fa;
+        }
+
+        .mockup-container {
+            overflow: hidden;
+        }
+
+        /* NJU 主题色 */
+        .nju-theme-color {
+            color: #82387f;
+        }
+
+        .nju-theme-bg {
+            background-color: #82387f;
+        }
+
+        .nju-theme-border-light {
+            border-color: #c09dc0;
+        }
+
+        /* 一个基于主题色的浅色边框 */
+        .nju-theme-hover-bg-light:hover {
+            background-color: #f0e6f0;
+        }
+
+        /* 一个基于主题色的浅色悬停背景 */
+        .nju-theme-hover-text:hover {
+            color: #82387f;
+        }
+
+
+        .mockup-title {
+            display: none;
+        }
+
+        .mockup-body {
+            background-color: white;
+            padding: 0;
+            min-height: 100vh;
+        }
+
+        .nju-blue {
+            background-color: #003366;
+        }
+
+        /* 保留辅色蓝色，如果需要的话 */
+        .nju-blue-text {
+            color: #003366;
+        }
+
+        .ai-accent-color {
+            color: #00BCD4;
+        }
+
+        /* Cyan for AI accent */
+        .ai-accent-text-hover:hover {
+            color: #008FA1;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            /* 24px */
+            font-weight: 600;
+            color: #82387f;
+            /* NJU 主题色 */
+            margin-bottom: 1rem;
+            /* mb-4 */
+            padding-bottom: 0.5rem;
+            /* pb-2 */
+            border-bottom: 2px solid #c09dc0;
+            /* 基于主题色的浅色边框 */
+        }
+
+        .info-card {
+            background-color: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.375rem;
+            /* rounded-md */
+            padding: 1rem;
+            /* p-4 */
+            margin-bottom: 1rem;
+            /* mb-4 */
+            transition: box-shadow 0.3s ease;
+        }
+
+        .info-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .info-list li:last-child {
+            border-bottom: none;
+        }
+
+        .info-list a {
+            color: #333;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .info-list a:hover {
+            color: #82387f;
+            /* NJU 主题色 */
+        }
+
+        .date-tag {
+            font-size: 0.875rem;
+            /* text-sm */
+            color: #6b7280;
+            /* text-gray-500 */
+        }
+
+        .user-module {
+            background-color: #f9fafb;
+            /* Slightly off-white */
+            border-radius: 0.5rem;
+            /* rounded-lg */
+            padding: 1.5rem;
+            /* p-6 */
+            margin-top: 1.5rem;
+            /* mt-6 */
+        }
+
+        .user-module-title {
+            font-size: 1.25rem;
+            /* text-xl */
+            font-weight: 600;
+            margin-bottom: 1rem;
+            /* mb-4 */
+        }
+
+        .module-icon-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 0.75rem;
+            /* p-3 */
+            border-radius: 0.375rem;
+            /* rounded-md */
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            text-decoration: none;
+            color: #374151;
+            /* text-gray-700 */
+        }
+
+        .module-icon-link:hover {
+            background-color: #f0e6f0;
+            /* 基于主题色的浅色悬停背景 */
+            transform: translateY(-2px);
+        }
+
+        .module-icon-link svg {
+            width: 2.5rem;
+            /* w-10 (40px) */
+            height: 2.5rem;
+            /* h-10 (40px) */
+            margin-bottom: 0.5rem;
+            /* mb-2 */
+        }
+
+        .module-icon-link span {
+            font-size: 0.875rem;
+            /* text-sm */
+        }
+
+        .ai-module-icon-link:hover {
+            background-color: #E0F7FA;
+            /* Light Cyan bg for AI icons */
+        }
+
+        .calendar-placeholder {
+            background-color: #e9ecef;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+            /* Adjust as needed */
+            text-align: center;
+            color: #6c757d;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+            color: #4B5563;
+        }
+
+        .nav-link:hover {
+            background-color: #f0e6f0;
+            /* 基于主题色的浅色悬停背景 */
+            color: #82387f;
+            /* NJU 主题色 */
+        }
+
+        .nav-link-ai {
+            color: #007B8A;
+            /* Darker Cyan for AI nav link, can be adjusted */
+            font-weight: 600;
+        }
+
+        .nav-link-ai:hover {
+            background-color: #E0F7FA;
+            color: #006064;
+        }
+
+        .button-primary {
+            padding: 0.6rem 1.2rem;
+            /* Slightly smaller padding */
+            border-radius: 0.375rem;
+            font-weight: 600;
+            color: white;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .button-primary.nju-theme-bg:hover {
+            background-color: #6a2c66;
+            /* Slightly darker shade of NJU theme for hover */
+        }
+
+        /* 日历样式 */
+        .calendar-day {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .calendar-day.event-day {
+            background-color: #f9f2f8;
+            color: #82387f;
+            font-weight: 600;
+        }
+
+        .calendar-day.today {
+            background-color: #82387f;
+            color: white;
+            font-weight: 600;
+        }
+
+        .calendar-day:hover {
+            background-color: #f0e6f0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mockup-container">
+        <div class="mockup-title">南京大学就业服务平台 (信息门户优化版)</div>
+        <div class="mockup-body">
+            <!-- 双层导航 -->
+            <header class="border-b border-gray-200 mb-6">
+                <!-- 第一层：Logo、搜索和用户信息 -->
+                <div class="flex items-center justify-between p-3">
+                    <div class="flex items-center space-x-3">
+                        <img src="logo.png" alt="南京大学就业Logo" class="h-9">
+                        <h1 class="text-lg font-bold text-gray-800 hidden sm:block">就业服务平台</h1>
+                    </div>
+
+                    <!-- 搜索框 -->
+                    <div class="hidden md:flex flex-1 max-w-md mx-8">
+                        <div class="relative w-full">
+                            <input type="text" placeholder="搜索职位、公司、宣讲会..."
+                                class="w-full py-2 pl-4 pr-10 rounded-full text-gray-800 border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#82387f] focus:border-transparent transition">
+                            <button
+                                class="absolute right-1 top-1/2 -translate-y-1/2 nju-theme-bg text-white rounded-full w-7 h-7 flex items-center justify-center transition">
+                                <i class="fas fa-search text-xs"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-3">
+                        <span class="text-sm text-gray-600 hidden lg:block">学生</span>
+                        <span class="text-sm text-gray-600 hidden lg:block">|</span>
+                        <span class="text-sm text-gray-600 hidden lg:block">教师</span>
+                        <span class="text-sm text-gray-600 hidden lg:block">|</span>
+                        <span class="text-sm text-gray-600 hidden lg:block">用人单位</span>
+                        <button class="button-primary nju-theme-bg">登录</button>
+                    </div>
+                </div>
+
+                <!-- 第二层：主导航 -->
+                <div class="nju-theme-bg">
+                    <nav class="flex items-center justify-center space-x-8 text-sm font-semibold text-white/90 py-3">
+                        <a href="#" class="hover:text-white transition">首页</a>
+                        <a href="#" class="hover:text-white transition">新闻公告</a>
+                        <a href="#" class="hover:text-white transition">生涯规划</a>
+                        <a href="#" class="hover:text-white transition">招聘信息</a>
+                        <a href="#" class="hover:text-white transition">AI服务</a>
+                        <a href="#" class="hover:text-white transition">综合服务</a>
+                    </nav>
+                </div>
+            </header>
+
+            <!-- 头图区域 -->
+            <div class="mb-6 h-64 bg-cover bg-center relative overflow-hidden"
+                style="background-image: url('https://cdn.pixabay.com/photo/2016/12/02/02/10/university-1876790_1280.jpg');">
+                <div class="absolute inset-0 bg-gradient-to-r from-purple-900/60 to-purple-800/30"></div>
+                <div class="relative z-10 h-full flex items-center justify-center text-center text-white">
+                    <div class="max-w-4xl mx-auto px-6">
+                        <h2 class="text-4xl md:text-5xl font-bold mb-4">南京大学就业服务平台</h2>
+                        <p class="text-xl md:text-2xl opacity-90 mb-6">连接梦想，成就未来</p>
+                        <p class="text-lg opacity-80">为南大学子提供全方位就业指导与优质岗位匹配</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 pb-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h2 class="section-title">新闻公告</h2>
+                                <div class="info-card">
+                                    <ul class="info-list">
+                                        <li><a href="#">[重要] 2025届毕业生就业政策解读会通知</a><span class="date-tag">05-20</span>
+                                        </li>
+                                        <li><a href="#">我校学子在全国大学生职业规划大赛中喜获佳绩</a><span class="date-tag">05-18</span>
+                                        </li>
+                                        <li><a href="#">关于开展“访企拓岗促就业”专项行动的通知</a><span class="date-tag">05-15</span></li>
+                                        <li><a href="#">南京大学2025届毕业生秋季校园招聘活动预告</a><span class="date-tag">05-12</span>
+                                        </li>
+                                        <li><a href="#">“就业引航”名企HR面对面活动成功举办</a><span class="date-tag">05-10</span></li>
+                                    </ul>
+                                    <a href="#"
+                                        class="block text-sm nju-theme-text nju-theme-hover-text mt-3 text-right">更多新闻
+                                        &raquo;</a>
+                                </div>
+                            </div>
+                            <div>
+                                <h2 class="section-title">活动通知</h2>
+                                <div class="info-card">
+                                    <ul class="info-list">
+                                        <li><a href="#">【宣讲会】华为技术有限公司专场宣讲（含AI岗）</a><span class="date-tag">05-28</span>
+                                        </li>
+                                        <li><a href="#">【工作坊】AI简历优化与面试技巧提升营</a><span class="date-tag">05-25</span></li>
+                                        <li><a href="#">【招聘会】长三角地区重点产业集群联合招聘会</a><span class="date-tag">05-22</span>
+                                        </li>
+                                        <li><a href="#">【讲座】金融行业职业发展路径与求职策略</a><span class="date-tag">05-20</span></li>
+                                        <li><a href="#">【咨询】一对一职业规划咨询预约（6月批次）</a><span class="date-tag">05-19</span>
+                                        </li>
+                                    </ul>
+                                    <a href="#"
+                                        class="block text-sm nju-theme-text nju-theme-hover-text mt-3 text-right">更多活动
+                                        &raquo;</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h2 class="section-title">近期招聘</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="info-card">
+                                    <h3 class="text-lg font-semibold nju-blue-text mb-2">宣讲会信息</h3>
+                                    <ul class="info-list">
+                                        <li><a href="#">阿里巴巴集团 - 南京大学专场</a><span class="date-tag">06-02 14:00</span>
+                                        </li>
+                                        <li><a href="#">中国商飞 - 航空强国梦想启航</a><span class="date-tag">06-05 10:00</span>
+                                        </li>
+                                        <li><a href="#">字节跳动 - AI Lab专项招聘</a><span class="date-tag">06-08 15:00</span>
+                                        </li>
+                                    </ul>
+                                    <a href="#"
+                                        class="block text-sm nju-blue-text hover:underline mt-3 text-right">所有宣讲会
+                                        &raquo;</a>
+                                </div>
+                                <div class="info-card">
+                                    <h3 class="text-lg font-semibold nju-blue-text mb-2">招聘会/双选会</h3>
+                                    <ul class="info-list">
+                                        <li><a href="#">南京市重点软件企业专场招聘会</a><span class="date-tag">06-10 全天</span></li>
+                                        <li><a href="#">2025届毕业生大型综合双选会（夏季）</a><span class="date-tag">06-15 全天</span>
+                                        </li>
+                                        <li><a href="#">医药生物行业线上招聘周</a><span class="date-tag">06-18至06-22</span></li>
+                                    </ul>
+                                    <a href="#"
+                                        class="block text-sm nju-blue-text hover:underline mt-3 text-right">所有招聘会
+                                        &raquo;</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <h2 class="section-title">活动日历</h2>
+                            <div class="info-card">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-lg font-bold nju-theme-text" id="calendar-title">2025年 9月</h3>
+                                    <div class="flex space-x-2">
+                                        <button id="prev-month"
+                                            class="bg-gray-100 hover:bg-gray-200 text-gray-600 w-8 h-8 rounded-full flex items-center justify-center transition">
+                                            <i class="fas fa-chevron-left text-xs"></i>
+                                        </button>
+                                        <button id="next-month"
+                                            class="bg-gray-100 hover:bg-gray-200 text-gray-600 w-8 h-8 rounded-full flex items-center justify-center transition">
+                                            <i class="fas fa-chevron-right text-xs"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-7 gap-1 text-center text-sm" id="calendar-grid">
+                                    <!-- Calendar will be populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 class="section-title">重要通知</h2>
+                            <div class="info-card">
+                                <ul class="info-list">
+                                    <li><a href="#">关于2025届毕业生生源信息核对的通知</a></li>
+                                    <li><a href="#">毕业生档案转递及户口迁移办理指南</a></li>
+                                    <li><a href="#">求职反诈骗安全提示</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+                    <div class="user-module">
+                        <h3 class="user-module-title nju-theme-text">服务学生</h3>
+                        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                            <a href="#" class="module-icon-link nju-theme-hover-bg-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="nju-theme-text">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                                </svg>
+                                <span>职位搜索</span>
+                            </a>
+                            <a href="#" class="module-icon-link ai-module-icon-link">
+                                <svg class="ai-accent-color" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5">
+                                    <path
+                                        d="M7 12L7.26156 11.7454C7.97094 11.0566 9.02906 11.0566 9.73844 11.7454L10 12M17 12L16.7384 11.7454C16.0291 11.0566 14.9709 11.0566 14.2616 11.7454L14 12M12 12V12.01M9 20L12 17L15 20M7.5 4.5H16.5C17.3284 4.5 18 5.17157 18 6V16C18 16.8284 17.3284 17.5 16.5 17.5H7.5C6.67157 17.5 6 16.8284 6 16V6C6 5.17157 6.67157 4.5 7.5 4.5Z" />
+                                    <path d="M12 8V9M12 15V16" stroke-linecap="round" />
+                                </svg>
+                                <span class="ai-accent-text-hover">AI模拟面试</span>
+                            </a>
+                            <a href="#" class="module-icon-link ai-module-icon-link">
+                                <svg class="ai-accent-color" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.5">
+                                    <path
+                                        d="M19.572,8.62,15.38,4.428A3.122,3.122,0,0,0,13.174,3.5H7.5A2.5,2.5,0,0,0,5,6V18a2.5,2.5,0,0,0,2.5,2.5h9A2.5,2.5,0,0,0,19,18V10.826A3.122,3.122,0,0,0,19.572,8.62Z"
+                                        stroke-linejoin="round" />
+                                    <path d="M15 3.5V7.5A1 1 0 0016 8.5L19.5 8.5" stroke-linejoin="round" />
+                                    <path d="M8.5 12.5H15.5M8.5 15.5H12.5" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <circle cx="10" cy="8" r="0.5" fill="currentColor" />
+                                    <circle cx="12" cy="8" r="0.5" fill="currentColor" />
+                                    <circle cx="14" cy="8" r="0.5" fill="currentColor" />
+                                </svg>
+                                <span class="ai-accent-text-hover">AI简历优化</span>
+                            </a>
+                            <a href="#" class="module-icon-link nju-theme-hover-bg-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="nju-theme-text">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+                                </svg>
+                                <span>生涯测评</span>
+                            </a>
+                            <a href="#" class="module-icon-link nju-theme-hover-bg-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="nju-theme-text">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M7.5 8.25h9m-9 3H12m-6.75 3h9m-9 3h9M3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v13.5c0 1.035-.84 1.875-1.875 1.875h-17.25A1.875 1.875 0 011.5 18.375V4.875C1.5 3.84 2.34 3 3.375 3z" />
+                                </svg>
+                                <span>就业政策</span>
+                            </a>
+                            <a href="#" class="module-icon-link nju-theme-hover-bg-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="nju-theme-text">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-3.741-5.579 3 3 0 00-4.682 2.72m.94 3.198M3 18.72a9.094 9.094 0 013.741-.479 3 3 0 01-4.682-2.72m.94 3.198l-.001.031c0 .225.012.447.037.666A11.944 11.944 0 0012 21c2.17 0 4.207-.576 5.963-1.584A6.062 6.062 0 0018 18.719M12 4.75A3.75 3.75 0 008.25 8.5v.01a3.75 3.75 0 007.5 0V8.5A3.75 3.75 0 0012 4.75z" />
+                                </svg>
+                                <span>咨询辅导</span>
+                            </a>
+                            <a href="#" class="module-icon-link ai-module-icon-link">
+                                <svg class="ai-accent-color" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L1.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.25 12L17 13.75l-1.25-1.75L14.25 12l1.5-1.75L17 8.25l1.25 1.75L19.75 12l-1.5 1.75z" />
+                                </svg>
+                                <span class="ai-accent-text-hover">智能推荐</span>
+                            </a>
+                            <a href="#" class="module-icon-link nju-theme-hover-bg-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="nju-theme-text">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                                </svg>
+                                <span>资料下载</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="user-module">
+                        <h3 class="user-module-title nju-blue-text">服务单位</h3>
+                        <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                            <a href="#" class="module-icon-link nju-theme-hover-bg-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="nju-blue-text">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M12 10.5v6m3-3H9m4.06-7.19l-2.12-2.12a1.5 1.5 0 00-1.061-.44H7.5A2.25 2.25 0 005.25 6v12A2.25 2.25 0 007.5 20.25h9a2.25 2.25 0 002.25-2.25V10.5A2.25 2.25 0 0018.75 8.25h-2.25a2.25 2.25 0 01-2.25-2.25V3.75A1.5 1.5 0 0013.06.44L10.94 2.56a1.5 1.5 0 00-1.06 2.56v2.56" />
+                                </svg>
+                                <span>发布职位</span>
+                            </a>
+                            <a href="#" class="module-icon-link nju-theme-hover-bg-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="nju-blue-text">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                                </svg>
+                                <span>管理简历</span>
+                            </a>
+                            <a href="#" class="module-icon-link nju-theme-hover-bg-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="nju-blue-text">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z" />
+                                </svg>
+                                <span>预订展位</span>
+                            </a>
+                            <a href="#" class="module-icon-link nju-theme-hover-bg-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="nju-blue-text">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h6.75M9 12h6.75M9 17.25h6.75" />
+                                </svg>
+                                <span>校企合作</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <footer class="mt-10 pt-6 border-t border-gray-300 text-center text-sm text-gray-500">
+                        <p>&copy; 2025 南京大学就业服务平台. AI赋能，精准匹配，助力学子与企业共创未来.</p>
+                        <p>技术支持：南京大学信息技术中心 & AI创新实验室</p>
+                    </footer>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                // 日历功能
+                let currentYear = 2025;
+                let currentMonth = 9;
+
+                function generateCalendar(year, month) {
+                    const calendarGrid = document.getElementById('calendar-grid');
+                    const calendarTitle = document.getElementById('calendar-title');
+                    if (!calendarGrid || !calendarTitle) return;
+
+                    calendarGrid.innerHTML = '';
+
+                    // 更新标题
+                    const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月',
+                        '7月', '8月', '9月', '10月', '11月', '12月'];
+                    calendarTitle.textContent = `${year}年 ${monthNames[month - 1]}`;
+
+                    // 添加星期标题
+                    const daysOfWeek = ['日', '一', '二', '三', '四', '五', '六'];
+                    daysOfWeek.forEach(day => {
+                        const dayEl = document.createElement('div');
+                        dayEl.className = 'font-semibold text-gray-400 text-xs py-2';
+                        dayEl.textContent = day;
+                        calendarGrid.appendChild(dayEl);
+                    });
+
+                    const firstDay = new Date(year, month - 1, 1).getDay();
+                    const daysInMonth = new Date(year, month, 0).getDate();
+                    const today = new Date();
+                    // 示例活动日期 - 宣讲会和双选会日期
+                    const events = [5, 8, 10, 15, 18, 22, 25, 28];
+
+                    // 添加空白日期
+                    for (let i = 0; i < firstDay; i++) {
+                        calendarGrid.appendChild(document.createElement('div'));
+                    }
+
+                    // 添加日期
+                    for (let i = 1; i <= daysInMonth; i++) {
+                        const dayEl = document.createElement('div');
+                        dayEl.className = 'calendar-day';
+                        dayEl.textContent = i;
+
+                        if (events.includes(i)) {
+                            dayEl.classList.add('event-day');
+                            dayEl.title = '有活动'; // 鼠标悬停提示
+                        }
+
+                        if (year === today.getFullYear() && month === today.getMonth() + 1 && i === today.getDate()) {
+                            dayEl.classList.add('today');
+                        }
+
+                        calendarGrid.appendChild(dayEl);
+                    }
+                }
+
+                // 初始化日历
+                generateCalendar(currentYear, currentMonth);
+
+                // 上一个月按钮
+                document.getElementById('prev-month')?.addEventListener('click', () => {
+                    currentMonth--;
+                    if (currentMonth < 1) {
+                        currentMonth = 12;
+                        currentYear--;
+                    }
+                    generateCalendar(currentYear, currentMonth);
+                });
+
+                // 下一个月按钮
+                document.getElementById('next-month')?.addEventListener('click', () => {
+                    currentMonth++;
+                    if (currentMonth > 12) {
+                        currentMonth = 1;
+                        currentYear++;
+                    }
+                    generateCalendar(currentYear, currentMonth);
+                });
+            });
+        </script>
+</body>
+
+</html>

@@ -1,280 +1,163 @@
-移动应用设计规范
-概述
-本文档旨在根据提供的UI截图，建立一套统一、清晰的设计规范。规范内容涵盖了色彩、字体、布局、卡片样式及按钮等核心视觉元素，以确保产品在不同界面的视觉风格和用户体验上保持高度一致性。
+设计体系分析 (Design System Analysis)
+本设计体系基于提供的参考图片分析得出，旨在打造一个现代、柔和且富有科技感的界面。
 
-🎨 总体设计理念
-视觉风格
-极简清晰：界面设计遵循极简主义原则，通过大量的留白和简洁的线条，突出核心内容，减少视觉干扰。
+1. 色彩体系 (Color System)
+整体色彩搭配以低饱和度的柔和色调为主，营造出一种舒适、高级的视觉感受。
 
-轻盈通透：采用柔和的背景色、圆角卡片和细腻的阴影，营造出一种轻盈、现代的视觉感受。
+主色调 (Primary Color)
+柔和丁香紫 (Soft Lilac)
 
-焦点突出：通过明亮的强调色（青柠绿）来吸引用户注意力，引导核心操作，使交互路径更加明确。
+#E9D5FF
 
-亲和力：整体色调柔和，字体选择清晰易读，旨在创造一个友好、舒适的用户体验环境。
+用途：作为主要的背景光晕、图标点缀以及关键信息元素的背景色，奠定了整个App的柔和基调。
 
-交互原则
-内容优先：布局设计以内容为中心，确保信息层次分明，易于浏览和理解。
+辅助/强调色 (Accent Colors)
+清新薄荷绿 (Fresh Mint Green)
 
-触摸友好：所有交互元素，如按钮和卡片，都设计了足够大的触摸区域，便于移动端操作。
+#D4EDDA
 
-即时反馈：用户的操作应有清晰的视觉反馈，如按钮点击效果、页面切换等。
+用途：用于信息卡片、功能模块的背景，与主色调形成优雅的对比，区分不同类别的内容。
 
-一致性：在整个应用中保持组件样式和交互模式的一致性，降低用户的学习成本。
+行动号召色 (Call to Action Color)
+活力紫 (Vibrant Purple)
 
-🎨 色彩规范
-应用的色彩体系以中性色为基础，搭配一个鲜明的强调色，构建出既专业又具活力的视觉形象。
+#8B5CF6 (示例值)
 
-主色板
-角色
+用途：用于最重要的操作按钮。这个充满活力的紫色既能提供清晰的视觉引导，又与主色调丁香紫和谐搭配，避免了黑色的沉重感，使整体设计更加协调、现代。
 
-颜色
+中性色 (Neutral Colors)
+背景白 (Background White)
 
-HEX
+#F8F7FA (近似值)
 
-用途
+用途：作为页面的主背景色，比纯白色更柔和，可以更好地衬托前景元素。
 
-背景色 (Background)
-
-极淡灰
-
-#F8F9FA
-
-应用主背景色
-
-卡片/主内容背景
-
-纯白
+卡片白 (Surface White)
 
 #FFFFFF
 
-卡片、弹出层等内容区域背景
+用途：聊天气泡、信息卡片的底色。
 
-主标题/正文
+主文字黑 (Primary Text)
 
-深灰
+#1C1C1E (近似值)
 
-#121212
+用途：标题、正文等主要文字内容。
 
-重要的标题和正文文字
+次要文字灰 (Secondary Text)
 
-次要文字
+#8A8A8E (近似值)
 
-中灰
+用途：辅助性文字、提示信息等。
 
-#6C757D
+2. 卡片投影效果 (Card Shadow Effect)
+这是该设计中的一个亮点。它没有使用传统的灰色硬投影，而是采用了一种加深且柔化的彩色光晕式投影，具体特征如下：
 
-辅助性文字、提示信息
+柔和弥散：投影的边缘非常模糊和柔和，没有清晰的边界，像光晕一样自然地散开。
 
-图标/边框
+色彩呼应：投影的颜色与卡片本身的颜色相呼应。例如，淡紫色的卡片会有一个更深一点的紫色投影，绿色的卡片则有绿色的投影。这大大增强了设计的整体性和精致感。
 
-浅灰
+富有深度：这种投影不仅增加了Z轴上的深度感，让卡片看起来像是悬浮在背景之上，还通过色彩赋予了卡片一种“发光”的质感。
 
-#ADB5BD
+实现思路 (CSS Example)
+要实现这种效果，可以使用 box-shadow 属性，通过设置较大的模糊半径 (blur-radius) 和一个带有透明度的颜色值 (rgba) 来达成。
 
-图标、分割线、输入框边框
-
-强调色 (Accent)
-
-青柠绿
-
-#E0FFC2
-
-主要按钮、高亮状态、关键操作
-
-CSS变量定义示例
-:root {
-  --color-background: #F8F9FA;
-  --color-surface: #FFFFFF;
-  --color-text-primary: #121212;
-  --color-text-secondary: #6C757D;
-  --color-icon-and-border: #ADB5BD;
-  --color-accent: #E0FFC2;
+.purple-card {
+  box-shadow: 0px 10px 30px -5px rgba(160, 100, 220, 0.2);
 }
 
-📝 文字规范
-为了保证信息的易读性，我们选用现代无衬线字体（如 Inter, San Francisco, Helvetica Neue），并定义了清晰的字体层级。
-
-字体层级
-用途
-
-字号
-
-字重 (Font Weight)
-
-示例
-
-一级标题 (H1)
-
-32px
-
-Bold (700)
-
-Hello, Younes Mouri
-
-二级标题 (H2)
-
-20px
-
-Bold (700)
-
-Web Search
-
-三级标题 (H3)
-
-16px
-
-Medium (500)
-
-Recent, See all
-
-卡片标题/正文
-
-14px
-
-Regular (400)
-
-Chat with AI, I need some...
-
-按钮文字
-
-15px
-
-Medium (500)
-
-Explore AI Tools
-
-CSS样式示例
-.h1-title {
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--color-text-primary);
+.green-card {
+  box-shadow: 0px 10px 30px -5px rgba(100, 180, 120, 0.2);
 }
 
-.card-title {
-  font-size: 14px;
-  font-weight: 400;
-  color: var(--color-text-secondary);
-}
+通过应用这个设计体系，你的App界面将在视觉上获得显著的提升，变得更加专业和吸引人。
 
-🎴 卡片组件规范
-卡片是承载信息的核心容器。我们设计了两种不同类型的卡片以适应不同的业务场景。
+3. 字体系统 (Typography System)
+主页面采用了优雅的中文字体栈，提供了跨平台的优质阅读体验。
 
-核心功能卡片
-用于展示应用的核心功能入口，如“Web Search”, "Chat with AI"等。
+主字体栈 (Primary Font Stack)
+```css
+font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 
+             'Noto Sans CJK SC', 'Source Han Sans SC', 'Microsoft YaHei', '微软雅黑', sans-serif;
+```
 
-视觉特征：
+字体层级 (Typography Hierarchy)
+- 主标题：26px，font-weight: 600，用于欢迎语等重要标题
+- 章节标题：16px，font-weight: 500，letter-spacing: 0.5px，用于"试试这些"等分组标题  
+- 正文：16px，line-height: 1.5，用于描述性文字
+- 辅助文字：14px，用于次要信息
 
-背景: var(--color-surface)
+4. 圆角系统 (Border Radius System)
+统一的圆角设计语言，营造现代柔和的视觉感受。
 
-圆角: 16px
+- 大圆角：24px，用于主要卡片、功能模块
+- 中圆角：16px，用于弹窗、模态框
+- 小圆角：12px，用于列表项、次级元素
+- 微圆角：8px，用于按钮、标签等小元素
 
-阴影: 0px 4px 12px rgba(0, 0, 0, 0.05)，营造轻微的悬浮感。
+5. 间距系统 (Spacing System)
+基于8px网格的间距体系，确保布局的一致性。
 
-内边距: 16px
+- 微间距：4px，用于内联元素
+- 小间距：8px，用于相关元素
+- 标准间距：12px，用于卡片内部padding
+- 大间距：16px，用于元素间隔
+- 超大间距：24px，用于模块分组
 
-交互: 点击时应有轻微的缩放或透明度变化作为反馈。
+6. 交互动画 (Animation System)
+统一的动画语言，提供流畅的用户体验。
 
-CSS实现参考：
+缓动函数 (Easing Functions)
+```css
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* 主要过渡 */
+transition: background 0.2s ease; /* 简单状态切换 */
+```
 
-.feature-card {
-  background-color: var(--color-surface);
-  border-radius: 16px;
-  padding: 16px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease-in-out;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+悬停效果 (Hover Effects)
+- 卡片悬停：translateY(-4px) + 增强阴影
+- 按钮悬停：轻微提升 + 颜色加深
+- 列表项悬停：背景色变化
 
-.feature-card:active {
-  transform: scale(0.98);
-}
+7. 装饰元素系统 (Decoration System)
+独特的装饰元素增强视觉层次感。
 
-.feature-card .icon {
-  color: var(--color-icon-and-border);
-  font-size: 24px;
-}
+弥散光效果 (Aurora Effects)
+- 多层径向渐变
+- 动态旋转和缩放动画
+- 透明度控制在0.25-0.4之间
 
-.feature-card .title {
-  font-size: 14px;
-  color: var(--color-text-primary);
-}
+装饰线条 (Decorative Lines)
+- 细长设计：高度16-22px，宽度280-320px
+- 不同旋转角度：25°, -15°, 35°, -25°等
+- 透明度：rgba(color, 0.3)
+- 贯穿卡片的对角线布局
 
-近期项目卡片
-用于展示用户的历史记录或最近使用的项目。
+8. 层级系统 (Z-Index System)
+清晰的层级管理，确保元素正确显示。
 
-视觉特征：
+- z-index: 0 - 装饰背景层（弥散光、装饰线）
+- z-index: 1 - 半透明覆盖层
+- z-index: 2 - 装饰元素层  
+- z-index: 3 - 内容层（文字、按钮、图标）
+- z-index: 4 - 输入区域
+- z-index: 10 - 侧边栏
+- z-index: 1000+ - 模态层
 
-样式: 与核心功能卡片保持一致的背景、圆角和阴影。
+9. 设计应用原则 (Application Guidelines)
+将以上设计系统应用到所有界面元素：
 
-布局: 横向布局，左侧为图标，中间为文字，右侧为操作按钮（如“更多”）。
+一致性原则
+- 所有卡片都使用24px圆角
+- 统一的字体栈和字号体系
+- 相同的颜色主题和透明度设置
+- 统一的交互动画时长和缓动函数
 
-内容截断: 当文字内容过长时，应使用省略号(...)进行截断。
+层次感原则
+- 通过颜色、阴影、装饰元素建立视觉层次
+- 重要内容使用更强的对比度和装饰效果
+- 次要内容使用更柔和的视觉处理
 
-CSS实现参考：
-
-.recent-item-card {
-  background-color: var(--color-surface);
-  border-radius: 16px;
-  padding: 12px 16px;
-  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.05);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.recent-item-card .text-content {
-  flex-grow: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  color: var(--color-text-secondary);
-}
-
-.recent-item-card .action-icon {
-  color: var(--color-icon-and-border);
-  cursor: pointer;
-}
-
-🔳 按钮规范
-主要操作按钮 (Call to Action)
-用于引导用户进行最主要的操作，如“Explore AI Tools”。
-
-视觉特征：
-
-形状: 胶囊形状，圆角为 999px。
-
-背景色: var(--color-accent)
-
-文字颜色: var(--color-text-primary)
-
-内边距: 14px 24px (垂直/水平)
-
-阴影: 0px 4px 10px rgba(224, 255, 194, 0.5)，使用强调色作为阴影色，增强视觉吸引力。
-
-CSS实现参考：
-
-.cta-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 14px 24px;
-  border-radius: 999px;
-  background-color: var(--color-accent);
-  color: var(--color-text-primary);
-  font-size: 15px;
-  font-weight: 500;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0px 4px 10px rgba(224, 255, 194, 0.5);
-  transition: all 0.2s ease-in-out;
-}
-
-.cta-button:active {
-  transform: scale(0.97);
-  box-shadow: 0px 2px 5px rgba(224, 255, 194, 0.5);
-}
+用户体验原则
+- 流畅的过渡动画提升操作反馈
+- 合理的间距系统提升可读性
+- 统一的交互模式降低学习成本

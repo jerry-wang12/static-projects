@@ -28,10 +28,24 @@
     "path": "product-d/index.html"
   },
   {
+    "id": "product-e",
+    "title": "小程序产品",
+    "description": "小程序产品",
+    "thumbnail": "/sites/product-e/cover.png",
+    "path": "product-e/首屏.html"
+  },
+  {
     "id": "product-f",
     "title": "中美校友APP",
     "description": "中美校友APP",
     "thumbnail": "/sites/product-f/cover.png",
     "path": "product-f/index.html"
+  },
+  {
+    "id": "product-g",
+    "title": "南京大学就业门户系统",
+    "description": "南京大学就业服务与信息门户平台，包含就业服务平台和优化版信息门户，为师生提供全面的就业指导和服务。",
+    "thumbnail": "/placeholder-image.svg",
+    "path": "product-g/entry.html"
   }
 ] 

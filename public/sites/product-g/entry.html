@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南京大学就业服务平台 - 设计方案选择</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        .card-hover {
+            transition: all 0.2s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <header class="text-center py-12">
+        <div class="container mx-auto px-4">
+            <img src="logo.png" alt="南京大学" class="h-16 mx-auto mb-6">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                南京大学就业服务平台
+            </h1>
+            <p class="text-gray-600">
+                设计方案预览
+            </p>
+        </div>
+    </header>
+
+    <!-- Design Options -->
+    <main class="container mx-auto px-4 pb-16">
+        <div class="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <!-- 方案一：现代化设计 -->
+            <div class="card-hover bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">现代化设计</h3>
+                    <p class="text-sm text-gray-600 mb-4">全屏滚动 + 现代交互体验</p>
+                    <a href="index.html" class="block w-full bg-purple-600 hover:bg-purple-700 text-white text-center py-2 px-4 rounded-md text-sm font-medium transition-colors">
+                        预览方案
+                    </a>
+                </div>
+            </div>
+
+            <!-- 方案二：信息门户 -->
+            <div class="card-hover bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">信息门户</h3>
+                    <p class="text-sm text-gray-600 mb-4">传统门户 + 双层导航设计</p>
+                    <a href="index2.html" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded-md text-sm font-medium transition-colors">
+                        预览方案
+                    </a>
+                </div>
+            </div>
+
+            <!-- 方案三：仪表盘布局 -->
+            <div class="card-hover bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div class="p-6">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">仪表盘布局</h3>
+                    <p class="text-sm text-gray-600 mb-4">卡片式 + 数据可视化设计</p>
+                    <a href="index3.html" class="block w-full bg-green-600 hover:bg-green-700 text-white text-center py-2 px-4 rounded-md text-sm font-medium transition-colors">
+                        预览方案
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="mt-12 text-center">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 max-w-2xl mx-auto">
+                <p class="text-sm text-gray-600">
+                    以上为三种不同的设计方案，每种方案都有其独特的特点和适用场景。请选择您想要预览的方案。
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 text-sm text-gray-500">
+        <p>&copy; 2025 南京大学就业服务平台</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>南京大学就业服务平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', 'Microsoft YaHei', sans-serif;
+            background-color: #f4f5f7;
+            color: #374151;
+        }
+
+        /* 整体垂直滚动容器 */
+        .onepage-container {
+            height: 100vh;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+        }
+
+        /* 每一个垂直滚动的区域 */
+        .scroll-section {
+            height: 100vh;
+            width: 100%;
+            scroll-snap-align: start;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        /* 第一个区域特殊处理，内部有横向滚动 */
+        #home {
+            padding: 0;
+            overflow: hidden;
+        }
+
+        /* 横向滚动容器 */
+        .horizontal-scroll-container {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+        }
+
+        /* 横向滚动的每一屏 */
+        .horizontal-slide {
+            flex: 0 0 100vw;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+        }
+
+        .card-hover-effect {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card-hover-effect:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* 右侧垂直导航点 */
+        .vertical-nav-dots {
+            position: fixed;
+            right: 30px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 50;
+        }
+
+        .vertical-nav-dots .dot {
+            width: 12px;
+            height: 12px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .vertical-nav-dots .dot.active {
+            background-color: #82387f;
+            transform: scale(1.2);
+            border-color: #82387f;
+        }
+
+        /* 首页横向导航点 */
+        .horizontal-nav-dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 20;
+        }
+
+        .horizontal-nav-dots .dot {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .horizontal-nav-dots .dot.active {
+            background-color: white;
+            transform: scale(1.2);
+        }
+
+        /* 自定义主题色 */
+        .nju-purple {
+            background-color: #82387f;
+        }
+
+        .nju-purple-text {
+            color: #82387f;
+        }
+
+        .nju-purple-hover:hover {
+            background-color: #6f2f6c;
+        }
+
+        .nju-purple-text-hover:hover {
+            color: #6f2f6c;
+        }
+
+        .theme-bg {
+            background-color: #82387f;
+        }
+
+        .theme-text {
+            color: #82387f;
+        }
+
+        .hover-theme-bg:hover {
+            background-color: #6f2f6c;
+        }
+
+        .hover-theme-text:hover {
+            color: #6f2f6c;
+        }
+
+        .other-sections {
+            padding: 120px 24px 24px 24px;
+            /* 为其他section保留顶部padding（双层头部需要更多空间） */
+        }
+
+        .calendar-highlight::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background-color: #82387f;
+        }
+
+        /* 导航选中状态 */
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link.active {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #ffffff, transparent);
+            border-radius: 1px;
+        }
+        
+        .nav-link:hover:not(.active) {
+            color: #ffffff !important;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            transform: translateY(-0.5px);
+        }
+
+        /* 全屏滚动优化 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .onepage-container {
+            scroll-snap-type: y mandatory;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        .scroll-section {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+        }
+
+        /* Banner背景图片样式 */
+    </style>
+</head>
+
+<body class="onepage-container">
+    <!-- 顶部固定导航栏 -->
+    <header class="fixed top-0 left-0 right-0 z-40 bg-white shadow-md">
+        <!-- First layer: Logo, Search, Roles, Login -->
+        <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-4">
+                <img src="logo.png" alt="南京大学就业服务平台" class="h-10 w-auto">
+            </div>
+
+            <!-- 全局搜索 -->
+            <div class="hidden md:flex flex-1 max-w-lg mx-8">
+                <div class="relative w-full">
+                    <input type="text" placeholder="搜索职位、公司、宣讲会..."
+                        class="w-full py-2 pl-4 pr-12 rounded-full text-gray-800 border-2 border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#82387f] focus:border-transparent transition">
+                    <button
+                        class="absolute right-1 top-1/2 -translate-y-1/2 nju-purple nju-purple-hover text-white rounded-full w-8 h-8 flex items-center justify-center transition">
+                        <i class="fas fa-search text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-6">
+                <div class="hidden lg:flex items-center space-x-4 text-sm font-semibold text-gray-600">
+                    <a href="#" class="flex items-center space-x-1 hover:text-[#82387f] transition-all">
+                        <i class="fas fa-user-graduate"></i><span>学生</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-1 hover:text-[#82387f] transition-all">
+                        <i class="fas fa-chalkboard-teacher"></i><span>教师</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-1 hover:text-[#82387f] transition-all">
+                        <i class="fas fa-users"></i><span>校友</span>
+                    </a>
+                    <a href="#" class="flex items-center space-x-1 hover:text-[#82387f] transition-all">
+                        <i class="fas fa-building"></i><span>用人单位</span>
+                    </a>
+                </div>
+
+                <div class="relative">
+                    <button id="login-btn"
+                        class="nju-purple nju-purple-hover text-white font-semibold py-2 px-4 rounded-lg transition text-sm flex items-center space-x-2">
+                        <span>登录</span>
+                        <i class="fas fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="login-dropdown"
+                        class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-50">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">单位登录</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">校友登录</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">校内统一身份登录</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second layer: Main Navigation -->
+        <div class="nju-purple relative overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-r from-[#82387f] via-[#904090] to-[#82387f] opacity-50"></div>
+            <nav
+                class="relative z-10 container mx-auto px-6 flex items-center justify-center space-x-8 text-sm font-semibold text-white/90">
+                <a href="#home" class="py-3 px-4 nav-link">首页</a>
+                <a href="#news" class="py-3 px-4 nav-link">新闻公告</a>
+                <a href="#recruitment" class="py-3 px-4 nav-link">招聘活动</a>
+                <a href="#featured" class="py-3 px-4 nav-link">特色就业</a>
+                <a href="#guidance" class="py-3 px-4 nav-link">指导分享</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 右侧垂直导航点 -->
+    <div class="vertical-nav-dots">
+        <div class="dot active" data-target="home"></div>
+        <div class="dot" data-target="news"></div>
+        <div class="dot" data-target="recruitment"></div>
+        <div class="dot" data-target="featured"></div>
+        <div class="dot" data-target="guidance"></div>
+    </div>
+
+    <!-- 第1屏: 欢迎页 (内部横向滚动) -->
+    <section id="home" class="scroll-section">
+        <div id="horizontal-container" class="horizontal-scroll-container">
+            <div class="horizontal-slide bg-cover bg-center"
+                style="background-image: url('https://images.unsplash.com/photo-1562774053-701939374585?q=80&w=1920&auto=format&fit=crop');">
+                <div class="relative z-10 p-8 flex flex-col items-center text-center max-w-4xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-lg" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">开启你的职业新篇章</h2>
+                    <p class="text-lg text-white mb-8 drop-shadow-md" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">在南京大学，与世界顶尖企业相遇</p>
+                </div>
+            </div>
+            <div class="horizontal-slide bg-cover bg-center"
+                style="background-image: url('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1920&auto=format&fit=crop');">
+                <div class="relative z-10 p-8 flex flex-col items-center text-center max-w-4xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-lg" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">诚耀百廿，雄创一流</h2>
+                    <p class="text-lg text-white mb-8 drop-shadow-md" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">把握时代机遇，投身国家建设</p>
+                </div>
+            </div>
+            <div class="horizontal-slide bg-cover bg-center"
+                style="background-image: url('https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=1920&auto=format&fit=crop');">
+                <div class="relative z-10 p-8 flex flex-col items-center text-center max-w-4xl mx-auto">
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-white mb-4 drop-shadow-lg" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">就业服务，助你远航</h2>
+                    <p class="text-lg text-white mb-8 drop-shadow-md" style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8);">我们为你提供全方位的职业支持</p>
+                </div>
+            </div>
+        </div>
+        <div id="horizontal-dots" class="horizontal-nav-dots">
+            <div class="dot active" data-slide="0"></div>
+            <div class="dot" data-slide="1"></div>
+            <div class="dot" data-slide="2"></div>
+        </div>
+    </section>
+
+    <!-- 第2屏: 新闻公告 -->
+    <section id="news" class="scroll-section other-sections bg-gray-50">
+        <div class="container mx-auto px-6 w-full max-w-7xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- 左侧主新闻 -->
+                <div class="lg:col-span-8">
+                    <div class="flex justify-between items-baseline border-b-2 pb-2 mb-4">
+                        <h2 class="text-3xl font-bold text-gray-800">南大新闻<span class="theme-text">.</span></h2>
+                        <a href="news-detail.html" class="text-sm theme-text hover-theme-text font-medium">查看更多
+                            &rarr;</a>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover-effect">
+                        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=2070&auto=format&fit=crop"
+                            alt="主新闻图片" class="w-full h-64 object-cover">
+                        <div class="p-6">
+                            <p class="text-sm text-gray-500 mb-2">2025年09月29日</p>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-4">[置顶] "聚力前行，共筑未来"...</h3>
+                            <p class="text-gray-600 mb-4 text-sm">我校举办2025届毕业生秋季大型招聘会，吸引了来自全国各地的500余家知名企业参加，提供岗位超过2万个...
+                            </p>
+                            <a href="news-detail.html"
+                                class="theme-text hover-theme-text font-bold transition duration-300">阅读全文</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- 右侧动态列表 -->
+                <div class="lg:col-span-4">
+                     <div class="flex justify-between items-baseline border-b-2 pb-2 mb-4">
+                        <h2 class="text-3xl font-bold text-gray-800">媒体南大<span class="theme-text">.</span></h2>
+                        <a href="#" class="text-sm theme-text hover-theme-text font-medium">查看更多 &rarr;</a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="p-4 bg-white rounded-xl shadow-lg">
+                             <ul class="space-y-3">
+                                <li class="border-b border-dashed pb-2"><a href="#"
+                                        class="text-gray-700 hover:theme-text font-semibold">安徽出版集团有限责任公司...</a></li>
+                                <li class="border-b border-dashed py-2"><a href="#"
+                                        class="text-gray-700 hover:theme-text font-semibold">南京大学2024"行走课堂"...</a></li>
+                                <li class="py-2"><a href="#"
+                                        class="text-gray-700 hover:theme-text font-semibold">攻坚克难促就业，扬帆领航启生涯</a></li>
+                            </ul>
+                        </div>
+                        <div class="p-4 bg-white rounded-xl shadow-lg">
+                             <h4 class="text-xl font-bold text-gray-800 border-b pb-3 mb-4">校园动态</h4>
+                            <div class="flex items-start space-x-4 group cursor-pointer"
+                                onclick="window.location.href='news-detail.html'">
+                                <div class="flex-shrink-0 text-center">
+                                    <p class="text-2xl font-bold text-gray-800">23</p>
+                                    <p class="text-sm text-gray-500">五月</p>
+                                </div>
+                                <div>
+                                    <h5 class="font-bold text-gray-800 group-hover:theme-text transition">“职通央企”系列活动圆满结束
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第3屏: 招聘信息 -->
+    <section id="recruitment" class="scroll-section other-sections bg-white">
+        <div class="container mx-auto px-6 w-full max-w-7xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- 左侧招聘信息 -->
+                <div class="lg:col-span-8 space-y-8">
+                    <!-- 宣讲会 -->
+                    <div>
+                        <div class="flex justify-between items-baseline border-b-2 pb-2 mb-4">
+                            <h3 class="text-2xl font-bold text-gray-800">宣讲会</h3>
+                            <a href="#" class="text-sm theme-text hover-theme-text font-medium">更多 &rarr;</a>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                            <div
+                                class="bg-gray-50 hover:bg-gray-100 transition p-4 rounded-lg cursor-pointer flex items-center space-x-4">
+                                <div
+                                    class="flex-shrink-0 text-center w-16 p-2 rounded-lg bg-[#f9f2f8] border border-[#e5d1e4]">
+                                    <span class="text-xs nju-purple-text">09月</span>
+                                    <div class="text-xl font-bold nju-purple-text">15</div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">中国科学院光电技术研究所2026届...</p>
+                                    <p class="text-sm text-gray-500">16:00 | 仙林校区活动中心</p>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-gray-50 hover:bg-gray-100 transition p-4 rounded-lg cursor-pointer flex items-center space-x-4">
+                                <div
+                                    class="flex-shrink-0 text-center w-16 p-2 rounded-lg bg-[#f9f2f8] border border-[#e5d1e4]">
+                                    <span class="text-xs nju-purple-text">09月</span>
+                                    <div class="text-xl font-bold nju-purple-text">15</div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">中国航空工业集团...</p>
+                                    <p class="text-sm text-gray-500">18:00 | 鼓楼校区报告厅</p>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-gray-50 hover:bg-gray-100 transition p-4 rounded-lg cursor-pointer flex items-center space-x-4">
+                                <div
+                                    class="flex-shrink-0 text-center w-16 p-2 rounded-lg bg-[#f9f2f8] border border-[#e5d1e4]">
+                                    <span class="text-xs nju-purple-text">09月</span>
+                                    <div class="text-xl font-bold nju-purple-text">16</div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">OPPO 2026届全球校园招聘宣讲会</p>
+                                    <p class="text-sm text-gray-500">14:00 | 仙林校区活动中心</p>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-gray-50 hover:bg-gray-100 transition p-4 rounded-lg cursor-pointer flex items-center space-x-4">
+                                <div
+                                    class="flex-shrink-0 text-center w-16 p-2 rounded-lg bg-[#f9f2f8] border border-[#e5d1e4]">
+                                    <span class="text-xs nju-purple-text">09月</span>
+                                    <div class="text-xl font-bold nju-purple-text">16</div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">华为26届应届生招聘...</p>
+                                    <p class="text-sm text-gray-500">18:30 | 仙林校区报告厅</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- 大型双选会 -->
+                    <div>
+                        <div class="flex justify-between items-baseline border-b-2 pb-2 mb-4">
+                            <h3 class="text-2xl font-bold text-gray-800">大型双选会</h3>
+                             <a href="#" class="text-sm theme-text hover-theme-text font-medium">更多 &rarr;</a>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+                            <div
+                                class="bg-gray-50 hover:bg-gray-100 transition p-4 rounded-lg cursor-pointer flex items-center space-x-4">
+                                <div
+                                    class="flex-shrink-0 text-center w-16 p-2 rounded-lg bg-[#f9f2f8] border border-[#e5d1e4]">
+                                    <span class="text-xs nju-purple-text">10月</span>
+                                    <div class="text-xl font-bold nju-purple-text">12</div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">2025届毕业生秋季大型招聘会</p>
+                                    <p class="text-sm text-gray-500">09:00 | 仙林校区体育馆</p>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-gray-50 hover:bg-gray-100 transition p-4 rounded-lg cursor-pointer flex items-center space-x-4">
+                                <div
+                                    class="flex-shrink-0 text-center w-16 p-2 rounded-lg bg-[#f9f2f8] border border-[#e5d1e4]">
+                                    <span class="text-xs nju-purple-text">11月</span>
+                                    <div class="text-xl font-bold nju-purple-text">08</div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">2025届理工科专场招聘会</p>
+                                    <p class="text-sm text-gray-500">14:00 | 鼓楼校区体育馆</p>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-gray-50 hover:bg-gray-100 transition p-4 rounded-lg cursor-pointer flex items-center space-x-4">
+                                <div
+                                    class="flex-shrink-0 text-center w-16 p-2 rounded-lg bg-[#f9f2f8] border border-[#e5d1e4]">
+                                    <span class="text-xs nju-purple-text">11月</span>
+                                    <div class="text-xl font-bold nju-purple-text">15</div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">2025届文科专场招聘会</p>
+                                    <p class="text-sm text-gray-500">09:00 | 仙林校区活动中心</p>
+                                </div>
+                            </div>
+                            <div
+                                class="bg-gray-50 hover:bg-gray-100 transition p-4 rounded-lg cursor-pointer flex items-center space-x-4">
+                                <div
+                                    class="flex-shrink-0 text-center w-16 p-2 rounded-lg bg-[#f9f2f8] border border-[#e5d1e4]">
+                                    <span class="text-xs nju-purple-text">12月</span>
+                                    <div class="text-xl font-bold nju-purple-text">01</div>
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">冬季综合类大型招聘会</p>
+                                    <p class="text-sm text-gray-500">09:00 | 仙林校区体育馆</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- 右侧招聘日历 -->
+                <div class="lg:col-span-4">
+                     <div class="p-6 bg-white rounded-xl shadow-lg h-full">
+                        <div class="flex justify-between items-baseline border-b-2 pb-2 mb-4">
+                            <h3 class="text-2xl font-bold text-gray-800">招聘日历</h3>
+                        </div>
+                        <div class="bg-white rounded-lg">
+                            <div class="flex justify-between items-center mb-4"><button
+                                    class="text-gray-500 hover:theme-text">&lt;</button>
+                                <h4 class="font-bold">2025 年 6 月</h4><button
+                                    class="text-gray-500 hover:theme-text">&gt;</button>
+                            </div>
+                            <div class="grid grid-cols-7 text-center text-xs text-gray-500">
+                                <div class="py-2">日</div>
+                                <div class="py-2">一</div>
+                                <div class="py-2">二</div>
+                                <div class="py-2">三</div>
+                                <div class="py-2">四</div>
+                                <div class="py-2">五</div>
+                                <div class="py-2">六</div>
+                            </div>
+                            <div class="grid grid-cols-7 text-center text-sm">
+                                <div class="py-2 text-gray-400">1</div>
+                                <div class="py-2">2</div>
+                                <div class="py-2">3</div>
+                                <div class="py-2">4</div>
+                                <div class="py-2">5</div>
+                                <div class="py-2">6</div>
+                                <div class="py-2">7</div>
+                                <div class="py-2">8</div>
+                                <div class="py-2 relative calendar-highlight">9</div>
+                                <div class="py-2 relative calendar-highlight">10</div>
+                                <div class="py-2 relative calendar-highlight">11</div>
+                                <div class="py-2 relative calendar-highlight">12</div>
+                                <div class="py-2">13</div>
+                                <div class="py-2">14</div>
+                                <div class="py-2">15</div>
+                                <div class="py-2">16</div>
+                                <div class="py-2">17</div>
+                                <div class="py-2">18</div>
+                                <div class="py-2">19</div>
+                                <div class="py-2">20</div>
+                                <div class="py-2">21</div>
+                                <div class="py-2">22</div>
+                                <div class="py-2">23</div>
+                                <div class="py-2">24</div>
+                                <div class="py-2">25</div>
+                                <div class="py-2">26</div>
+                                <div class="py-2">27</div>
+                                <div class="py-2">28</div>
+                                <div class="py-2">29</div>
+                                <div class="py-2">30</div>
+                                <div class="py-2 text-gray-400"></div>
+                                <div class="py-2 text-gray-400"></div>
+                                <div class="py-2 text-gray-400"></div>
+                                <div class="py-2 text-gray-400"></div>
+                                <div class="py-2 text-gray-400"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第4屏: 特色就业 -->
+    <section id="featured" class="scroll-section other-sections bg-white">
+        <div class="container mx-auto px-6 w-full max-w-7xl">
+            <h2 class="text-4xl font-bold text-gray-800 text-center mb-12">特色就业<span class="theme-text">.</span></h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- 基层就业 -->
+                <div class="bg-gray-50 rounded-2xl p-8 card-hover-effect">
+                    <div class="flex justify-between items-baseline border-b-2 pb-2 mb-4">
+                        <h3 class="text-2xl font-bold text-gray-800">基层就业</h3>
+                        <a href="#" class="text-sm theme-text hover-theme-text font-medium">更多 &rarr;</a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="border-b border-dashed pb-3">
+                            <a href="#" class="text-gray-700 hover:theme-text font-semibold block mb-1">[选调公告]
+                                上海市2026年度选调应届...</a>
+                            <span class="text-gray-400 text-sm">09-08</span>
+                        </div>
+                        <div class="border-b border-dashed pb-3">
+                            <a href="#" class="text-gray-700 hover:theme-text font-semibold block mb-1">[选调公告]
+                                黑龙江省2026年度定向选调...</a>
+                            <span class="text-gray-400 text-sm">09-05</span>
+                        </div>
+                        <div class="pb-3">
+                            <a href="#"
+                                class="text-gray-700 hover:theme-text font-semibold block mb-1">我校学子暑期赴各地党政机关开展实践</a>
+                            <span class="text-gray-400 text-sm">09-01</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 国际组织 -->
+                <div class="bg-gray-50 rounded-2xl p-8 card-hover-effect">
+                    <div class="flex justify-between items-baseline border-b-2 pb-2 mb-4">
+                        <h3 class="text-2xl font-bold text-gray-800">国际组织</h3>
+                        <a href="#" class="text-sm theme-text hover-theme-text font-medium">更多 &rarr;</a>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="border-b border-dashed pb-3">
+                            <a href="#" class="text-gray-700 hover:theme-text font-semibold block mb-1">[置顶]
+                                南京大学学生赴国际组织实习...</a>
+                            <span class="text-gray-400 text-sm">11-03</span>
+                        </div>
+                        <div class="border-b border-dashed pb-3">
+                            <a href="#" class="text-gray-700 hover:theme-text font-semibold block mb-1">NAIO实训 | 多维素养实训,
+                                IO任证扬帆...</a>
+                            <span class="text-gray-400 text-sm">09-12</span>
+                        </div>
+                        <div class="pb-3">
+                            <a href="#"
+                                class="text-gray-700 hover:theme-text font-semibold block mb-1">2021国际组织菁英训练营结营仪式...</a>
+                            <span class="text-gray-400 text-sm">09-12</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 生涯服务工具 -->
+                <div class="bg-gray-50 rounded-2xl p-8 card-hover-effect min-h-[300px] flex flex-col">
+                    <div class="flex justify-between items-baseline border-b-2 pb-2 mb-6">
+                        <h3 class="text-2xl font-bold text-gray-800">生涯服务工具</h3>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center flex-1">
+                        <a href="#" class="p-4 bg-[#f9f2f8] hover:bg-[#f2e5f1] rounded-lg transition h-20 flex flex-col items-center justify-center">
+                            <i class="fas fa-file-alt text-2xl nju-purple-text"></i>
+                            <p class="font-semibold text-xs mt-2">我的简历</p>
+                        </a>
+                        <a href="#" class="p-4 bg-[#f9f2f8] hover:bg-[#f2e5f1] rounded-lg transition h-20 flex flex-col items-center justify-center">
+                            <i class="fas fa-paper-plane text-2xl nju-purple-text"></i>
+                            <p class="font-semibold text-xs mt-2">我的投递</p>
+                        </a>
+                        <a href="#" class="p-4 bg-[#f9f2f8] hover:bg-[#f2e5f1] rounded-lg transition h-20 flex flex-col items-center justify-center">
+                            <i class="fas fa-robot text-2xl nju-purple-text"></i>
+                            <p class="font-semibold text-xs mt-2">AI简历</p>
+                        </a>
+                        <a href="#" class="p-4 bg-[#f9f2f8] hover:bg-[#f2e5f1] rounded-lg transition h-20 flex flex-col items-center justify-center">
+                            <i class="fas fa-handshake text-2xl nju-purple-text"></i>
+                            <p class="font-semibold text-xs mt-2">签约系统</p>
+                        </a>
+                        <a href="#" class="p-4 bg-[#f9f2f8] hover:bg-[#f2e5f1] rounded-lg transition h-20 flex flex-col items-center justify-center">
+                            <i class="fas fa-comments text-2xl nju-purple-text"></i>
+                            <p class="font-semibold text-xs mt-2">预约咨询</p>
+                        </a>
+                        <a href="#" class="p-4 bg-[#f9f2f8] hover:bg-[#f2e5f1] rounded-lg transition h-20 flex flex-col items-center justify-center">
+                            <i class="fas fa-video text-2xl nju-purple-text"></i>
+                            <p class="font-semibold text-xs mt-2">AI面试</p>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 重点合作企业 -->
+                <div class="bg-gray-50 rounded-2xl p-8 card-hover-effect min-h-[300px] flex flex-col">
+                    <div class="flex justify-between items-baseline border-b-2 pb-2 mb-6">
+                        <h3 class="text-2xl font-bold text-gray-800">重点合作企业</h3>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 flex-1 content-start">
+                        <div
+                            class="border border-gray-200 rounded-lg p-4 flex items-center justify-center h-16 bg-white hover:shadow-md transition-all duration-200">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Huawei_Standard_logo.svg/320px-Huawei_Standard_logo.svg.png"
+                                alt="华为" class="h-7 object-contain">
+                        </div>
+                        <div
+                            class="border border-gray-200 rounded-lg p-4 flex items-center justify-center h-16 bg-white hover:shadow-md transition-all duration-200">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Tencent_Logo.svg/320px-Tencent_Logo.svg.png"
+                                alt="腾讯" class="h-7 object-contain">
+                        </div>
+                        <div
+                            class="border border-gray-200 rounded-lg p-4 flex items-center justify-center h-16 bg-white hover:shadow-md transition-all duration-200">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/40/Alibaba-red-logo.svg/320px-Alibaba-red-logo.svg.png"
+                                alt="阿里巴巴" class="h-7 object-contain">
+                        </div>
+                        <div
+                            class="border border-gray-200 rounded-lg p-4 flex items-center justify-center h-16 bg-white hover:shadow-md transition-all duration-200">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/ByteDance_Logo_%28cropped%29.svg/320px-ByteDance_Logo_%28cropped%29.svg.png"
+                                alt="字节跳动" class="h-7 object-contain">
+                        </div>
+                        <div
+                            class="border border-gray-200 rounded-lg p-4 flex items-center justify-center h-16 bg-white hover:shadow-md transition-all duration-200">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/SenseTime_logo.svg/320px-SenseTime_logo.svg.png"
+                                alt="商汤科技" class="h-6 object-contain">
+                        </div>
+                        <div
+                            class="border border-gray-200 rounded-lg p-4 flex items-center justify-center h-16 bg-white hover:shadow-md transition-all duration-200">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Bank_of_China_Logo.svg/320px-Bank_of_China_Logo.svg.png"
+                                alt="中国银行" class="h-7 object-contain">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 第5屏: 就业指导与咨询 -->
+    <section id="guidance" class="scroll-section other-sections bg-white">
+        <div class="container mx-auto px-6 w-full max-w-7xl">
+            <h2 class="text-4xl font-bold text-gray-800 text-center mb-12">指导分享<span class="theme-text">.</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="bg-gray-50 p-8 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-baseline border-b-2 pb-2 mb-4">
+                        <h3 class="text-2xl font-bold text-gray-800">就业指导</h3>
+                        <a href="#" class="text-sm theme-text hover-theme-text font-medium">更多 &rarr;</a>
+                    </div>
+                    <div class="space-y-4">
+                        <a href="#" class="block hover:theme-text py-2">
+                            <p class="font-semibold text-gray-800">简历面试 | 2025秋招指导训练营(第七周)</p>
+                            <p class="text-xs text-gray-400 mt-1 flex items-center"><i
+                                    class="far fa-clock mr-1.5"></i>2025-09-04</p>
+                        </a>
+                        <a href="#" class="block hover:theme-text py-2">
+                            <p class="font-semibold text-gray-800">行业解析 | 求是学长带你走进互联网</p>
+                            <p class="text-xs text-gray-400 mt-1 flex items-center"><i
+                                    class="far fa-clock mr-1.5"></i>2025-08-15</p>
+                        </a>
+                        <a href="#" class="block hover:theme-text py-2">
+                            <p class="font-semibold text-gray-800">模拟面试 | "面霸"养成计划工作坊</p>
+                            <p class="text-xs text-gray-400 mt-1 flex items-center"><i
+                                    class="far fa-clock mr-1.5"></i>2025-09-10</p>
+                        </a>
+                        <a href="#" class="block hover:theme-text py-2">
+                            <p class="font-semibold text-gray-800">职业规划 | 一对一咨询服务（第九期）</p>
+                            <p class="text-xs text-gray-400 mt-1 flex items-center"><i
+                                    class="far fa-clock mr-1.5"></i>2025-09-11</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="bg-gray-50 p-8 rounded-2xl shadow-sm">
+                    <div class="flex justify-between items-baseline border-b-2 pb-2 mb-4">
+                        <h3 class="text-2xl font-bold text-gray-800">经验分享</h3>
+                        <a href="#" class="text-sm theme-text hover-theme-text font-medium">更多 &rarr;</a>
+                    </div>
+                    <div class="space-y-3">
+                        <a href="#"
+                            class="block p-3 bg-white hover:bg-gray-100 rounded-lg text-sm font-semibold text-gray-700 transition">
+                            【科研单位】甘于坐冷板凳，功不唐捐
+                        </a>
+                        <a href="#"
+                            class="block p-3 bg-white hover:bg-gray-100 rounded-lg text-sm font-semibold text-gray-700 transition">
+                            【科研单位】航空航天所的求职经验分享
+                        </a>
+                        <a href="#"
+                            class="block p-3 bg-white hover:bg-gray-100 rounded-lg text-sm font-semibold text-gray-700 transition">
+                            【金融行业】从校园到投行的职业转换之路
+                        </a>
+                        <a href="#"
+                            class="block p-3 bg-white hover:bg-gray-100 rounded-lg text-sm font-semibold text-gray-700 transition">
+                            【互联网】技术岗位面试经验分享
+                        </a>
+                    </div>
+                    <div class="mt-6 text-center">
+                        <button
+                            class="theme-bg hover-theme-bg text-white font-bold py-3 px-6 rounded-lg transition">预约一对一咨询</button>
+                    </div>
+                </div>
+            </div>
+            <footer class="mt-12 pt-8 border-t text-center text-gray-500">
+                <p>&copy; 2025 南京大学就业服务平台. All Rights Reserved.</p>
+                <p class="text-sm mt-2">地址：南京市栖霞区仙林大道163号 | 电话：025-89688888</p>
+            </footer>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 登录下拉菜单 ---
+            const loginBtn = document.getElementById('login-btn');
+            const loginDropdown = document.getElementById('login-dropdown');
+
+            if (loginBtn && loginDropdown) {
+                loginBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    loginDropdown.classList.toggle('hidden');
+                });
+
+                // 点击其他地方关闭下拉菜单
+                document.addEventListener('click', () => {
+                    loginDropdown.classList.add('hidden');
+                });
+
+                loginDropdown.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+
+            const verticalSections = document.querySelectorAll('.scroll-section');
+            const verticalDots = document.querySelectorAll('.vertical-nav-dots .dot');
+            const navLinks = document.querySelectorAll('.nav-link');
+            
+            const horizontalContainer = document.getElementById('horizontal-container');
+            const horizontalDots = document.querySelectorAll('#horizontal-dots .dot');
+
+            // --- 垂直滚动逻辑 ---
+            const scrollToSection = (id) => {
+                const section = document.getElementById(id);
+                if (section) section.scrollIntoView({ behavior: 'smooth' });
+            };
+
+            // --- 滚轮增强滚动 ---
+            let isScrolling = false;
+            const handleWheelScroll = (e) => {
+                if (isScrolling) return;
+                isScrolling = true;
+
+                setTimeout(() => {
+                    isScrolling = false;
+                }, 1000);
+
+                const delta = e.deltaY;
+                const sections = Array.from(verticalSections);
+                const currentSection = sections.find(section => {
+                    const rect = section.getBoundingClientRect();
+                    return rect.top >= 0 && rect.top < window.innerHeight / 2;
+                });
+
+                if (currentSection) {
+                    const currentIndex = sections.indexOf(currentSection);
+                    let targetIndex;
+
+                    if (delta > 0 && currentIndex < sections.length - 1) {
+                        targetIndex = currentIndex + 1;
+                    } else if (delta < 0 && currentIndex > 0) {
+                        targetIndex = currentIndex - 1;
+                    }
+
+                    if (targetIndex !== undefined) {
+                        e.preventDefault();
+                        sections[targetIndex].scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            };
+
+            // 添加滚轮事件监听
+            document.addEventListener('wheel', handleWheelScroll, { passive: false });
+            
+            const verticalObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.id;
+                        verticalDots.forEach(dot => {
+                            dot.classList.toggle('active', dot.dataset.target === id);
+                        });
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === id);
+                        });
+                    }
+                });
+            }, { threshold: 0.6 });
+
+            verticalSections.forEach(section => verticalObserver.observe(section));
+
+            verticalDots.forEach(dot => {
+                dot.addEventListener('click', () => scrollToSection(dot.dataset.target));
+            });
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    scrollToSection(link.getAttribute('href').substring(1));
+                });
+            });
+
+            // --- 横向滚动逻辑 ---
+            horizontalContainer.addEventListener('scroll', () => {
+                const scrollLeft = horizontalContainer.scrollLeft;
+                const slideWidth = window.innerWidth;
+                const activeSlide = Math.round(scrollLeft / slideWidth);
+                
+                horizontalDots.forEach(dot => {
+                    dot.classList.toggle('active', parseInt(dot.dataset.slide) === activeSlide);
+                });
+            });
+
+            horizontalDots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const slideIndex = parseInt(dot.dataset.slide);
+                    horizontalContainer.scrollTo({
+                        left: slideIndex * window.innerWidth,
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
